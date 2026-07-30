@@ -1,0 +1,10 @@
+FROM condaforge/miniforge3:24.11.3-0
+WORKDIR /workspace
+COPY envs/analysis.yml /tmp/environment.yml
+RUN conda env create -p /opt/conda/envs/cas13-analysis -f /tmp/environment.yml \
+    && conda clean --all --yes
+ENV PATH=/opt/conda/envs/cas13-analysis/bin:${PATH}
+COPY . /workspace
+RUN pip install --no-deps -e .
+CMD ["cas13-if", "--help"]
+

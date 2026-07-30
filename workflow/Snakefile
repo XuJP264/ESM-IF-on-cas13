@@ -1,0 +1,42 @@
+"""Formal reproducible workflow for ESM-IF-on-Cas13.
+
+Large assets and genuine models are explicit prerequisites. The default target
+is fixture-only and safe for CPU CI.
+"""
+
+configfile: "configs/benchmark_experimental.yaml"
+
+rule all:
+    input:
+        "artifacts/workflow/fixture.SUCCESS"
+
+rule fixture_preflight:
+    output:
+        touch("artifacts/workflow/fixture.SUCCESS")
+    shell:
+        "cas13-if preflight --config configs/benchmark_experimental.yaml --fixture"
+
+rule fetch_structures:
+    output:
+        "data/experimental_structures/6e9f.cif",
+        "data/experimental_structures/5xwp.cif"
+    shell:
+        "bash scripts/fetch_experimental_structures.sh"
+
+rule process_atlas:
+    input:
+        "data/raw/atlas/v1.0/crispr-cas-atlas-v1.0.json"
+    output:
+        "data/processed/atlas/data_funnel.json"
+    shell:
+        "cas13-if build-dataset --config configs/atlas_processing.yaml"
+
+rule benchmark_experimental:
+    input:
+        "data/experimental_structures/6e9f.cif",
+        "data/experimental_structures/5xwp.cif"
+    output:
+        "reports/tables/experimental_structure_benchmark.csv"
+    shell:
+        "cas13-if benchmark --config configs/benchmark_experimental.yaml"
+

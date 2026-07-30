@@ -1,0 +1,18 @@
+experiment:
+  name: ligandmpnn-pilot
+  evidence_level_max: 2
+  is_mock: false
+  seed: 20260731
+model:
+  backend: ligandmpnn
+  checkpoint: models/ligandmpnn/ligandmpnn_v_32_010_25.pt
+  offline: true
+context:
+  preserve_rna_atoms: true
+  design_protein_chains_only: true
+  pack_side_chains: false
+sampling:
+  temperatures: [0.1, 0.5, 1.0]
+  samples_per_scaffold: 16
+  store_position_probabilities: true
+

@@ -1,0 +1,72 @@
+# Python and test state
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Local environments and tools
+.venv/
+.tools/
+.conda/
+
+# Local configuration and credentials
+configs/local.yaml
+.env
+.env.*
+*.pem
+*.key
+*token*
+*secret*
+
+# Large/raw data (retain manifests, READMEs, and placeholders)
+data/raw/**
+!data/raw/**/.gitkeep
+!data/raw/**/README.md
+data/interim/**
+!data/interim/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+data/experimental_structures/**
+!data/experimental_structures/.gitkeep
+
+# Model weights
+models/**
+!models/README.md
+!models/manifest.yaml
+!models/.gitkeep
+
+# Paper PDFs
+references/papers/**
+!references/papers/.gitkeep
+
+# Fetched third-party repositories
+third_party/esm/
+third_party/SynTnpBs/
+third_party/ProteinMPNN/
+third_party/LigandMPNN/
+
+# Runtime products
+results/**
+!results/.gitkeep
+reports/runs/**
+!reports/runs/.gitkeep
+reports/latest
+reports/figures/*.png
+reports/figures/*.pdf
+reports/tables/*.csv
+artifacts/bundles/**
+!artifacts/bundles/.gitkeep
+artifacts/downloads/**
+!artifacts/downloads/.gitkeep
+
+# Editor and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+

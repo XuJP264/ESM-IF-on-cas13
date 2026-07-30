@@ -1,0 +1,28 @@
+registered_at: 2026-07-31
+registered_before_final_test_metrics: true
+random_seed: 20260731
+unit: mmseqs_sequence_cluster
+primary:
+  minimum_identity: 0.4
+  minimum_coverage: 0.8
+  coverage_mode: 0
+  cluster_mode: 2
+  purpose: strict_generalization_test
+auxiliary:
+  - minimum_identity: 0.5
+    purpose: subtype_coverage_sensitivity
+  - minimum_identity: 0.7
+    purpose: structure_coverage_sensitivity
+required_splits:
+  - sequence_cluster
+  - subtype_held_out
+  - scaffold_held_out
+future:
+  - foldseek_structure_cluster
+leakage_policy:
+  fail_closed: true
+  test_use_for_thresholds: forbidden
+  test_use_for_mask_tuning: forbidden
+  test_use_for_model_selection: forbidden
+  test_use_for_temperature_selection: forbidden
+

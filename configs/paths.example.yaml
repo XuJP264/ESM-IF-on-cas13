@@ -1,0 +1,13 @@
+project:
+  root: /absolute/path/to/ESM-IF
+paths:
+  data: ${project.root}/data
+  models: ${project.root}/models
+  third_party: ${project.root}/third_party
+  results: ${project.root}/results
+  reports: ${project.root}/reports
+  artifacts: ${project.root}/artifacts
+runtime:
+  offline_inference: true
+  seed: 20260731
+

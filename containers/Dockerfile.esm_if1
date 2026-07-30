@@ -1,0 +1,12 @@
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git ca-certificates curl bzip2 \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /workspace
+COPY envs/esm_if1.yml /tmp/environment.yml
+# Environment creation is intentionally performed by bootstrap_gpu_node.sh so
+# the resolved CUDA/PyTorch combination is logged on the target node.
+COPY . /workspace
+CMD ["bash", "scripts/bootstrap_gpu_node.sh", "esm-if1"]
+

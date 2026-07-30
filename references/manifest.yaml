@@ -1,0 +1,158 @@
+schema_version: "1.0"
+updated: 2026-07-31
+papers:
+  - id: hsu2022_esm_if1
+    title: Learning inverse folding from millions of predicted structures
+    authors: [Chloe Hsu, Robert Verkuil, Jason Liu, Zeming Lin, Brian Hie, Tom Sercu, Adam Lerer, Alexander Rives]
+    year: 2022
+    venue: PMLR 162 (ICML 2022)
+    doi: null
+    official_url: https://proceedings.mlr.press/v162/hsu22a.html
+    pdf_url: https://proceedings.mlr.press/v162/hsu22a/hsu22a.pdf
+    local_pdf: references/papers/hsu2022_esm_if1.pdf
+    sha256: null
+    access_status: open_access_not_fetched
+    license: PMLR open access; verify paper notice before redistribution
+    relevance: Primary ESM-IF1 architecture, training, scoring, and evaluation reference
+    notes_path: references/notes/hsu2022_esm_if1.md
+  - id: dauparas2022_proteinmpnn
+    title: Robust deep learning-based protein sequence design using ProteinMPNN
+    authors: [Justas Dauparas, Ivan Anishchenko, Nathaniel Bennett, Hua Bai, Robert J. Ragotte, Lukas F. Milles, Basile I. M. Wicky, Alexis Courbet, Rob J. de Haas, Neville Bethel, et al.]
+    year: 2022
+    venue: Science 378(6615), 49-56
+    doi: 10.1126/science.add2187
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC9997061/
+    pdf_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC9997061/pdf/nihms-1879567.pdf
+    local_pdf: references/papers/dauparas2022_proteinmpnn.pdf
+    sha256: null
+    access_status: public_author_manuscript_not_fetched
+    license: NIH/PMC manuscript terms; upstream code is MIT
+    relevance: Protein-backbone graph baseline and fixed-position semantics
+    notes_path: references/notes/dauparas2022_proteinmpnn.md
+  - id: dauparas2025_ligandmpnn
+    title: Atomic context-conditioned protein sequence design using LigandMPNN
+    authors: [Justas Dauparas, Gyu Rie Lee, Robert Pecoraro, Linna An, Ivan Anishchenko, Cameron Glasscock, David Baker]
+    year: 2025
+    venue: Nature Methods
+    doi: 10.1038/s41592-025-02626-1
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11978504/
+    pdf_url: https://www.bakerlab.org/wp-content/uploads/2025/03/s41592-025-02626-1.pdf
+    local_pdf: references/papers/dauparas2025_ligandmpnn.pdf
+    sha256: null
+    access_status: public_author_version_not_fetched
+    license: article terms differ from upstream MIT code; verify before redistribution
+    relevance: RNA atomic-context sequence design baseline
+    notes_path: references/notes/dauparas2025_ligandmpnn.md
+  - id: ruffolo2025_opencrispr
+    title: Design of highly functional genome editors by modelling CRISPR-Cas sequences
+    authors: [Jeffrey A. Ruffolo, Stephen Nayfach, Joseph Gallagher, Aadyot Bhatnagar, Joel Beazer, Riffat Hussain, Jordan Russ, Jennifer Yip, Emily Hill, Martin Pacesa, et al.]
+    year: 2025
+    venue: Nature 645, 519-527
+    doi: 10.1038/s41586-025-09298-z
+    official_url: https://www.nature.com/articles/s41586-025-09298-z
+    pdf_url: https://www.nature.com/articles/s41586-025-09298-z.pdf
+    local_pdf: references/papers/ruffolo2025_opencrispr.pdf
+    sha256: null
+    access_status: official_public_pdf_not_fetched
+    license: article terms; Atlas data/code CC BY-NC 4.0
+    relevance: CRISPR-Cas Atlas construction, scope, and OpenCRISPR benchmark context
+    notes_path: references/notes/ruffolo2025_opencrispr.md
+  - id: skopintsev2026_syntnpb
+    title: Structure and evolution-guided design of minimal RNA-guided nucleases
+    authors: [Petr Skopintsev, Isabel Esain-Garcia, Evan C. DeTurk, Peter H. Yoon, Zehan Zhou, Trevor Weiss, Maris Kamalu, Ajit Chamraj, Kenneth J. Loi, Conner J. Langeberg, et al.]
+    year: 2026
+    venue: Science 393(6808), 313-318
+    doi: 10.1126/science.aed6123
+    official_url: https://pubmed.ncbi.nlm.nih.gov/42462008/
+    pdf_url: null
+    local_pdf: null
+    sha256: null
+    access_status: metadata_only_access_not_confirmed
+    license: publisher copyright; repository code MIT
+    relevance: Evolution-constrained ESM-IF1 and partial-sequence implementation case study
+    notes_path: references/notes/skopintsev2026_syntnpb.md
+  - id: zhang2018_cas13d
+    title: Structural Basis for the RNA-Guided Ribonuclease Activity of CRISPR-Cas13d
+    authors: [Cheng Zhang, Silvana Konermann, Nicholas J. Brideau, Peter Lotfy, Xuebing Wu, Scott J. Novick, Timothy Strutzenberg, Patrick R. Griffin, Patrick D. Hsu, Dmitry Lyumkis]
+    year: 2018
+    venue: Cell 175(1), 212-223.e17
+    doi: 10.1016/j.cell.2018.09.001
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6179368/
+    pdf_url: https://escholarship.org/content/qt2n23w39j/qt2n23w39j.pdf
+    local_pdf: references/papers/zhang2018_cas13d.pdf
+    sha256: null
+    access_status: public_author_manuscript_not_fetched
+    license: HHS public access manuscript; publisher copyright
+    relevance: Cas13d apo/binary/ternary states and 6E9F structural interpretation
+    notes_path: references/notes/zhang2018_cas13d.md
+  - id: liu2017_cas13a
+    title: The Molecular Architecture for RNA-Guided RNA Cleavage by Cas13a
+    authors: [Liang Liu, Xueyan Li, Jun Ma, Zongqiang Li, Lilan You, Jiuyu Wang, Min Wang, Xinzheng Zhang, Yanli Wang]
+    year: 2017
+    venue: Cell 170(4), 714-726.e10
+    doi: 10.1016/j.cell.2017.06.050
+    official_url: https://pubmed.ncbi.nlm.nih.gov/28757251/
+    pdf_url: null
+    local_pdf: null
+    sha256: null
+    access_status: metadata_only_free_article_link_not_automated
+    license: Elsevier copyright
+    relevance: Cas13a ternary architecture, HEPN activation, and 5XWP interpretation
+    notes_path: references/notes/liu2017_cas13a.md
+  - id: hoie2025_antifold
+    title: "AntiFold: improved structure-based antibody design using inverse folding"
+    authors: [Magnus Haraldson Høie, Alissa M. Hummer, Tobias H. Olsen, Broncio Aguilar-Sanjuan, Morten Nielsen, Charlotte M. Deane]
+    year: 2025
+    venue: Bioinformatics Advances 5(1), vbae202
+    doi: 10.1093/bioadv/vbae202
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11961221/
+    pdf_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11961221/pdf/vbae202.pdf
+    local_pdf: references/papers/hoie2025_antifold.pdf
+    sha256: null
+    access_status: open_access_not_fetched
+    license: open-access article; upstream software BSD-3-Clause
+    relevance: Example of evidence-driven ESM-IF1 domain adaptation
+    notes_path: references/notes/hoie2025_antifold.md
+  - id: dunn2008_apc
+    title: Mutual information without the influence of phylogeny or entropy dramatically improves residue contact prediction
+    authors: [Simon D. Dunn, Lindi M. Wahl, Gregory B. Gloor]
+    year: 2008
+    venue: Bioinformatics 24(3), 333-340
+    doi: 10.1093/bioinformatics/btm604
+    official_url: https://academic.oup.com/bioinformatics/article/24/3/333/253952
+    pdf_url: null
+    local_pdf: null
+    sha256: null
+    access_status: metadata_only
+    license: publisher copyright
+    relevance: Average product correction for MI baseline
+    notes_path: references/notes/dunn2008_apc.md
+  - id: kamisetty2013_gremlin
+    title: Assessing the utility of coevolution-based residue-residue contact predictions in a sequence- and structure-rich era
+    authors: [Hetunandan Kamisetty, Sergey Ovchinnikov, David Baker]
+    year: 2013
+    venue: PNAS 110(39), 15674-15679
+    doi: 10.1073/pnas.1314045110
+    official_url: https://www.pnas.org/doi/10.1073/pnas.1314045110
+    pdf_url: https://www.bakerlab.org/wp-content/uploads/2015/12/Kamisetty_PNAS_2013.pdf
+    local_pdf: references/papers/kamisetty2013_gremlin.pdf
+    sha256: null
+    access_status: public_author_copy_not_fetched
+    license: PNAS article terms
+    relevance: Formal pseudolikelihood coupling baseline and contact validation
+    notes_path: references/notes/kamisetty2013_gremlin.md
+  - id: weinreb2016_rna_ec
+    title: 3D RNA and Functional Interactions from Evolutionary Couplings
+    authors: [Caleb Weinreb, Adam J. Riesselman, John B. Ingraham, Torsten Gross, Kalli K. Sander, Debora S. Marks]
+    year: 2016
+    venue: Cell 165(4), 963-975
+    doi: 10.1016/j.cell.2016.03.030
+    official_url: https://www.cell.com/cell/fulltext/S0092-8674(16)30328-2
+    pdf_url: null
+    local_pdf: null
+    sha256: null
+    access_status: metadata_only
+    license: publisher copyright
+    relevance: Nucleotide-amino-acid evolutionary coupling in RNA-protein complexes
+    notes_path: references/notes/weinreb2016_rna_ec.md
+

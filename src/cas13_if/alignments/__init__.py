@@ -1,0 +1,1 @@
+"""Alignment construction and validation."""

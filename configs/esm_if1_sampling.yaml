@@ -1,0 +1,16 @@
+experiment:
+  name: esm-if1-pilot
+  evidence_level_max: 2
+  is_mock: false
+  seed: 20260731
+model:
+  backend: esm_if1_constrained
+  checkpoint: models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt
+  offline: true
+sampling:
+  temperatures: [0.1, 0.5, 1.0]
+  samples_per_scaffold: 16
+  mode: hard_fixed
+  store_position_trace: true
+  reject_homopolymer_length: 8
+

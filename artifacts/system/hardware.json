@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-07-30T17:09:17+00:00",
+  "captured_at_local": "2026-07-31T01:09:17+08:00",
+  "is_mock": false,
+  "platform": {
+    "kernel": "Linux Metallica 6.6.114.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Mon Dec 1 20:46:23 UTC 2025 x86_64 GNU/Linux",
+    "virtualization": "Microsoft WSL2"
+  },
+  "cpu": {
+    "model": "13th Gen Intel(R) Core(TM) i9-13900HX",
+    "logical_cpus": 32,
+    "cores_visible": 16,
+    "threads_per_core": 2
+  },
+  "memory": {
+    "ram_total_bytes": 16628334592,
+    "ram_available_bytes": 14318108672,
+    "swap_total_bytes": 4294967296
+  },
+  "storage": {
+    "root_total_bytes": 1081101176832,
+    "root_used_bytes": 234590322688,
+    "root_available_bytes": 791518498816,
+    "root_use_percent": 23
+  },
+  "gpu": [
+    {
+      "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "memory_total_mib": 8188,
+      "driver_version": "560.94",
+      "nvidia_smi_cuda_version": "12.6",
+      "memory_used_mib_at_audit": 3751,
+      "utilization_percent_at_audit": 91
+    }
+  ],
+  "cuda": {
+    "driver_library": "/usr/lib/wsl/lib/libcuda.so.1",
+    "nvcc_available": false,
+    "note": "nvidia-smi reports driver API compatibility; no local CUDA compiler was found."
+  }
+}

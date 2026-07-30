@@ -1,0 +1,16 @@
+Bootstrap: docker
+From: condaforge/miniforge3:24.11.3-0
+
+%files
+    envs/analysis.yml /tmp/environment.yml
+    . /workspace
+
+%post
+    conda env create -p /opt/conda/envs/cas13-analysis -f /tmp/environment.yml
+    /opt/conda/envs/cas13-analysis/bin/pip install --no-deps -e /workspace
+
+%environment
+    export PATH=/opt/conda/envs/cas13-analysis/bin:$PATH
+
+%runscript
+    exec cas13-if "$@"

@@ -1,0 +1,59 @@
+schema_version: "1.0"
+updated: 2026-07-31
+models:
+  - name: ESM-IF1 142M
+    source: https://dl.fbaipublicfiles.com/fair-esm/models/esm_if1_gvp4_t16_142M_UR50.pt
+    filename: models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt
+    version: esm_if1_gvp4_t16_142M_UR50
+    commit: 2b369911bb5b4b0dda914521b9475cad1656b2ac
+    sha256: null
+    size_bytes: null
+    license: upstream ESM model license/terms; verify before redistribution
+    downloaded_at: null
+    test_status: not_fetched
+    environment: envs/esm_if1.yml
+  - name: ProteinMPNN vanilla v48_020
+    source: pinned dauparas/ProteinMPNN repository
+    filename: models/proteinmpnn/v_48_020.pt
+    version: v_48_020
+    commit: 8907e6671bfbfc92303b5f79c4b5e6ce47cdef57
+    sha256: null
+    size_bytes: null
+    license: MIT repository; checkpoint terms to verify upstream
+    downloaded_at: null
+    test_status: not_fetched
+    environment: envs/ligandmpnn.yml
+  - name: LigandMPNN protein_mpnn
+    source: pinned dauparas/LigandMPNN repository release assets
+    filename: models/ligandmpnn/proteinmpnn_v_48_020.pt
+    version: v_48_020
+    commit: 26ec57ac976ade5379920dbd43c7f97a91cf82de
+    sha256: null
+    size_bytes: null
+    license: MIT repository; checkpoint terms to verify upstream
+    downloaded_at: null
+    test_status: not_fetched
+    environment: envs/ligandmpnn.yml
+  - name: LigandMPNN ligand_mpnn
+    source: pinned dauparas/LigandMPNN repository release assets
+    filename: models/ligandmpnn/ligandmpnn_v_32_010_25.pt
+    version: v_32_010_25
+    commit: 26ec57ac976ade5379920dbd43c7f97a91cf82de
+    sha256: null
+    size_bytes: null
+    license: MIT repository; checkpoint terms to verify upstream
+    downloaded_at: null
+    test_status: not_fetched
+    environment: envs/ligandmpnn.yml
+  - name: LigandMPNN soluble_mpnn
+    source: pinned dauparas/LigandMPNN repository release assets
+    filename: models/ligandmpnn/solublempnn_v_48_020.pt
+    version: v_48_020
+    commit: 26ec57ac976ade5379920dbd43c7f97a91cf82de
+    sha256: null
+    size_bytes: null
+    license: MIT repository; checkpoint terms to verify upstream
+    downloaded_at: null
+    test_status: optional_not_fetched
+    environment: envs/ligandmpnn.yml
+

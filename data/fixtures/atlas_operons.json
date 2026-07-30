@@ -1,0 +1,53 @@
+[
+  {
+    "operon_id": "fixture-VI-D-001",
+    "summary": {
+      "subtype": "VI-D",
+      "n_crispr": 1,
+      "n_cas": 1
+    },
+    "metadata": {
+      "source_db": "FIXTURE",
+      "taxonomy": "d__Bacteria;p__Fixture"
+    },
+    "crispr": [
+      {
+        "crispr_repeat": "GAAACACCGUUGAAAGUG",
+        "crispr_spacers": ["ACGUACGU"]
+      }
+    ],
+    "cas": [
+      {
+        "gene_name": "Cas13d",
+        "hmm_name": "Cas13d_fixture",
+        "protein": "ACDEFGHIKLMNPQRSTVWY",
+        "length": 20
+      }
+    ]
+  },
+  {
+    "operon_id": "fixture-VI-A-ambiguous",
+    "summary": {
+      "subtype": "VI-A",
+      "n_crispr": 2,
+      "n_cas": 1
+    },
+    "metadata": {
+      "source_db": "FIXTURE",
+      "taxonomy": "d__Bacteria;p__Fixture"
+    },
+    "crispr": [
+      {"crispr_repeat": "GAAAAC", "crispr_spacers": ["AAAA"]},
+      {"crispr_repeat": "GUUUUC", "crispr_spacers": ["CCCC"]}
+    ],
+    "cas": [
+      {
+        "gene_name": "Cas13a",
+        "hmm_name": "Cas13a_fixture",
+        "protein": "ACDEFGHIKLMNPQRSTVWYACDEFGHIK",
+        "length": 29
+      }
+    ]
+  }
+]
+

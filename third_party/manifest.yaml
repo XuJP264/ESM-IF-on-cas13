@@ -1,0 +1,53 @@
+schema_version: "1.0"
+updated: 2026-07-31
+policy: Upstream source is unmodified; adapters live under src/cas13_if/backends.
+projects:
+  - name: facebookresearch/esm
+    official_url: https://github.com/facebookresearch/esm
+    commit: 2b369911bb5b4b0dda914521b9475cad1656b2ac
+    tag: null
+    resolved_at: 2026-07-31
+    fetched_at: null
+    license: MIT
+    license_path: third_party/LICENSES/esm-LICENSE
+    local_path: third_party/esm
+    modified: false
+    checksum: null
+    purpose: ESM-IF1 genuine inference and API reference
+  - name: pyskop/SynTnpBs
+    official_url: https://github.com/pyskop/SynTnpBs
+    commit: f3ea8e69c6f71baa56c4bb388e9df0489720f968
+    tag: null
+    resolved_at: 2026-07-31
+    fetched_at: null
+    license: MIT
+    license_path: third_party/LICENSES/SynTnpBs-LICENSE
+    local_path: third_party/SynTnpBs
+    modified: false
+    checksum: null
+    purpose: Partial-sequence semantics and constrained-decoder regression reference
+  - name: dauparas/ProteinMPNN
+    official_url: https://github.com/dauparas/ProteinMPNN
+    commit: 8907e6671bfbfc92303b5f79c4b5e6ce47cdef57
+    tag: null
+    resolved_at: 2026-07-31
+    fetched_at: null
+    license: MIT
+    license_path: third_party/LICENSES/ProteinMPNN-LICENSE
+    local_path: third_party/ProteinMPNN
+    modified: false
+    checksum: null
+    purpose: Protein-only graph sequence-design baseline
+  - name: dauparas/LigandMPNN
+    official_url: https://github.com/dauparas/LigandMPNN
+    commit: 26ec57ac976ade5379920dbd43c7f97a91cf82de
+    tag: null
+    resolved_at: 2026-07-31
+    fetched_at: null
+    license: MIT
+    license_path: third_party/LICENSES/LigandMPNN-LICENSE
+    local_path: third_party/LigandMPNN
+    modified: false
+    checksum: null
+    purpose: RNA atomic-context sequence-design baseline
+

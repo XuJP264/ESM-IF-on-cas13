@@ -1,0 +1,15 @@
+name: cas13-bioinformatics
+channels: [conda-forge, bioconda]
+dependencies:
+  - python=3.11
+  - mmseqs2
+  - mafft
+  - hmmer
+  - infernal
+  - seqkit
+  - foldseek
+  - tmalign
+  - biopython
+  - pandas
+  - pyarrow
+

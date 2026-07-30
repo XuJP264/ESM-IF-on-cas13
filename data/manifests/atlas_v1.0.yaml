@@ -1,0 +1,13 @@
+name: CRISPR-Cas Atlas
+version: "1.0"
+official_url: https://storage.googleapis.com/crispr-cas-atlas-xy7q13lmk9/crispr-cas-atlas-v1.0.json
+documentation_url: https://github.com/Profluent-AI/CRISPR-Cas-Atlas
+license: CC BY-NC 4.0
+local_path: data/raw/atlas/v1.0/crispr-cas-atlas-v1.0.json
+content_length: null
+size_bytes: null
+sha256: null
+downloaded_at: null
+status: not_fetched
+notes: Academic/non-commercial use; raw JSON is ignored by Git.
+

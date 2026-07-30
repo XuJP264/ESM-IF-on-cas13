@@ -1,0 +1,123 @@
+ESM-IF-on-Cas13 initial machine audit
+captured_at_utc: 2026-07-30T17:09:17+00:00
+captured_at_local: 2026-07-31T01:09:17+08:00
+working_directory: /home/junpeng/ESM-IF
+is_mock: false
+
+$ nvidia-smi
+Fri Jul 31 01:09:06 2026
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.02              Driver Version: 560.94         CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4060 ...    On  |   00000000:01:00.0 Off |                  N/A |
+| N/A   70C    P0             53W /  116W |    3751MiB /   8188MiB |     91%      Default |
++-----------------------------------------------------------------------------------------+
+exit_code: 0
+
+$ nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+NVIDIA GeForce RTX 4060 Laptop GPU, 8188 MiB, 560.94
+exit_code: 0
+
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       2.0Gi        13Gi       2.0Mi       489Mi        13Gi
+Swap:          4.0Gi          0B       4.0Gi
+exit_code: 0
+
+$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G  219G  738G  23% /
+drivers         201G  175G   26G  88% /usr/lib/wsl/drivers
+C:\             201G  175G   26G  88% /mnt/c
+D:\             1.7T  1.3T  453G  74% /mnt/d
+exit_code: 0
+
+$ lscpu
+Architecture:                            x86_64
+CPU(s):                                  32
+On-line CPU(s) list:                     0-31
+Vendor ID:                               GenuineIntel
+Model name:                              13th Gen Intel(R) Core(TM) i9-13900HX
+Thread(s) per core:                      2
+Core(s) per socket:                      16
+Socket(s):                               1
+Hypervisor vendor:                       Microsoft
+Virtualization type:                     full
+exit_code: 0
+
+$ uname -a
+Linux Metallica 6.6.114.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Mon Dec 1 20:46:23 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+exit_code: 0
+
+$ python3 --version
+Python 3.10.12
+exit_code: 0
+
+$ git --version
+git version 2.34.1
+exit_code: 0
+
+$ docker --version
+Docker version 28.5.1, build e180ab8
+exit_code: 0
+
+$ apptainer --version
+apptainer version 1.4.5
+exit_code: 0
+
+$ micromamba --version
+/bin/bash: line 1: micromamba: command not found
+exit_code: 127
+
+$ conda --version
+conda 26.3.2
+exit_code: 0
+
+$ nvcc --version
+/bin/bash: line 1: nvcc: command not found
+exit_code: 127
+
+$ gh auth status
+/bin/bash: line 1: gh: command not found
+exit_code: 127
+
+$ git lfs version
+fatal: 'lfs' appears to be a git command, but the executable could not be run
+exit_code: 128
+
+$ ldconfig -p | rg 'libcuda\.so|libcudart\.so'
+libcuda.so.1 (libc6,x86-64) => /usr/lib/wsl/lib/libcuda.so.1
+exit_code: 0
+
+$ bioinformatics tool audit
+mmseqs: FOUND
+mafft: NOT_FOUND
+hmmsearch: NOT_FOUND
+cmsearch: NOT_FOUND
+seqkit: NOT_FOUND
+foldseek: NOT_FOUND
+USalign: NOT_FOUND
+TMalign: NOT_FOUND
+exit_code: 0
+
+$ curl --fail --location --head --max-time 20 https://github.com
+HTTP/2 200
+exit_code: 0
+
+$ curl --fail --location --head --max-time 20 https://data.rcsb.org
+HTTP/2 200
+content-length: 43261
+exit_code: 0
+
+Audit interpretation:
+- The measured GPU capacity is 8188 MiB, not 32 GB.
+- nvidia-smi reports CUDA 12.6 driver compatibility, but no nvcc compiler is
+  installed.
+- The root filesystem had 791,518,498,816 bytes available.
+- GitHub and RCSB HTTPS access worked.
+- GitHub CLI authentication could not be checked because gh is missing.
+- Git LFS is not operational.
+- Missing local tools require isolated Conda installation, containers, or
+  explicit GPU/HPC bootstrap; they are not recorded as successful.

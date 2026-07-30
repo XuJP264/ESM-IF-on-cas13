@@ -1,0 +1,9 @@
+schema_version: "1.0"
+experiments:
+  - id: bootstrap-real-baselines
+    execplan: docs/execplans/0001_bootstrap_and_real_baselines.md
+    status: in_progress
+    evidence_level_max: 2
+    preregistrations:
+      - experiments/preregistered/split_protocol.yaml
+

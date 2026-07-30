@@ -1,0 +1,29 @@
+experiment:
+  name: benchmark-experimental
+  evidence_level_max: 2
+  is_mock: false
+  seed: 20260731
+structures:
+  pdb_ids: [6E9F, 5XWP]
+  format: mmcif
+  biological_assembly: 1
+  require_backbone_atoms: [N, CA, C]
+  rna_contact_cutoff_angstrom: 5.0
+  second_shell_cutoff_angstrom: 8.0
+  exclude_unresolved_design_positions: true
+backends:
+  - esm_if1
+  - esm_if1_constrained
+  - proteinmpnn
+  - ligandmpnn
+  - msa_profile
+  - matched_random_mutation
+sampling:
+  temperatures: [0.1, 0.5, 1.0]
+  samples_per_condition: 4
+  reject_homopolymer_length: 8
+statistics:
+  bootstrap_replicates: 1000
+  permutation_replicates: 1000
+  independent_unit: scaffold
+

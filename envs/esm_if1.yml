@@ -1,0 +1,12 @@
+name: cas13-esm-if1
+channels: [pytorch, nvidia, pyg, conda-forge]
+dependencies:
+  - python=3.10
+  - pip
+  - pytorch=2.4
+  - pytorch-cuda=12.1
+  - pyg
+  - numpy<2
+  - biopython>=1.80,<2
+  - pip:
+      - fair-esm==2.0.0

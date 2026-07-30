@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite this repository and the upstream models and datasets listed in the manifests."
+title: "ESM-IF-on-Cas13"
+type: software
+authors:
+  - family-names: Xu
+    given-names: Junpeng
+repository-code: "https://github.com/XuJP264/ESM-IF-on-cas13"
+license: MIT
+version: 0.1.0-dev
+date-released: 2026-07-31
+

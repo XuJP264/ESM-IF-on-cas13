@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/XuJP264/ESM-IF-on-cas13/refold-output.schema.json",
+  "title": "Cas13 refold output",
+  "type": "object",
+  "required": [
+    "candidate_id",
+    "provider",
+    "mean_plddt",
+    "structure_path",
+    "is_mock"
+  ],
+  "properties": {
+    "candidate_id": {"type": "string", "minLength": 1},
+    "provider": {
+      "enum": ["alphafold2", "colabfold", "alphafold3", "protenix", "boltz"]
+    },
+    "mean_plddt": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+    "pae_path": {"type": ["string", "null"]},
+    "structure_path": {"type": "string", "minLength": 1},
+    "seed": {"type": ["integer", "null"]},
+    "is_mock": {"type": "boolean"}
+  },
+  "additionalProperties": true
+}

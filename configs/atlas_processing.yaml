@@ -1,0 +1,32 @@
+experiment:
+  name: atlas-processing
+  evidence_level_max: 1
+  is_mock: false
+  seed: 20260731
+atlas:
+  version: "1.0"
+  raw_dir: data/raw/atlas/v1.0
+  source_manifest: data/manifests/atlas_v1.0.yaml
+  streaming_backend: ijson
+  strict_type_vi: true
+pairing:
+  require_one_effector: true
+  require_one_array: true
+  require_nonempty_direct_repeat: true
+  require_unambiguous_subtype: true
+deduplication:
+  canonical_amino_acids_only: false
+clustering:
+  tool: mmseqs
+  identities: [1.0, 0.9, 0.7, 0.5, 0.4, 0.3]
+  coverage: 0.8
+  coverage_mode: 0
+  cluster_mode: 2
+  threads: 16
+splits:
+  strict_identity: 0.4
+  auxiliary_identities: [0.5, 0.7]
+  subtype_held_out: true
+  scaffold_held_out: true
+  fail_on_leakage: true
+
