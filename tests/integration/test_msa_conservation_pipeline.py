@@ -18,18 +18,32 @@ def test_subtype_msa_to_conservation_pipeline(tmp_path: Path) -> None:
                     "protein_sequence": "ACDE",
                     "protein_length": 4,
                     "subtypes": ["VI-D"],
+                    "nonconflicting_record_count": 1,
+                    "complete_record_count": 1,
                 },
                 {
                     "sequence_sha256": "seq-b",
                     "protein_sequence": "ACDF",
                     "protein_length": 4,
                     "subtypes": ["VI-D"],
+                    "nonconflicting_record_count": 1,
+                    "complete_record_count": 1,
                 },
                 {
                     "sequence_sha256": "seq-invalid",
                     "protein_sequence": "ACDX",
                     "protein_length": 4,
                     "subtypes": ["VI-D"],
+                    "nonconflicting_record_count": 1,
+                    "complete_record_count": 1,
+                },
+                {
+                    "sequence_sha256": "seq-conflict",
+                    "protein_sequence": "ACDE",
+                    "protein_length": 4,
+                    "subtypes": ["VI-D"],
+                    "nonconflicting_record_count": 0,
+                    "complete_record_count": 1,
                 },
             ]
         ),
@@ -39,10 +53,21 @@ def test_subtype_msa_to_conservation_pipeline(tmp_path: Path) -> None:
         pa.Table.from_pylist(
             [
                 {
-                    "sequence_sha256": name,
-                    "representative_sha256": name,
-                }
-                for name in ("seq-a", "seq-b", "seq-invalid")
+                    "sequence_sha256": "seq-a",
+                    "representative_sha256": "seq-conflict",
+                },
+                {
+                    "sequence_sha256": "seq-conflict",
+                    "representative_sha256": "seq-conflict",
+                },
+                {
+                    "sequence_sha256": "seq-b",
+                    "representative_sha256": "seq-b",
+                },
+                {
+                    "sequence_sha256": "seq-invalid",
+                    "representative_sha256": "seq-invalid",
+                },
             ]
         ),
         mapping,
@@ -65,7 +90,11 @@ def test_subtype_msa_to_conservation_pipeline(tmp_path: Path) -> None:
         threads=1,
     )
     assert msa_manifest["subtypes"]["VI-D"]["status"] == "success"
-    assert msa_manifest["excluded_sequence_count"] == 1
+    assert msa_manifest["excluded_sequence_count"] == 2
+    assert msa_manifest["exclusion_counts"] == {
+        "noncanonical_amino_acid": 1,
+        "only_subtype_conflicting_records": 1,
+    }
 
     conservation = compute_subtype_conservation(
         msa_root=tmp_path / "msa",

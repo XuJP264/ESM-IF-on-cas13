@@ -22,6 +22,9 @@
       {
         "gene_name": "Cas13d",
         "hmm_name": "Cas13d_fixture",
+        "evalue": 0.0,
+        "score": 1000.0,
+        "truncated": "00",
         "protein": "ACDEFGHIKLMNPQRSTVWY",
         "length": 20
       }
@@ -56,6 +59,9 @@
       {
         "gene_name": "Cas13a",
         "hmm_name": "Cas13a_fixture",
+        "evalue": 0.0,
+        "score": 1000.0,
+        "truncated": "00",
         "protein": "ACDEFGHIKLMNPQRSTVWYACDEFGHIK",
         "length": 29
       }

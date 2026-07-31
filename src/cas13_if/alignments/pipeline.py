@@ -56,20 +56,28 @@ def build_subtype_msas(
     executable_path = shutil.which(executable)
     if executable_path is None:
         raise FileNotFoundError(f"MAFFT executable not found: {executable}")
-    unique_rows = pq.read_table(
-        exact_unique_path,
-        columns=["sequence_sha256", "protein_sequence", "protein_length", "subtypes"],
-    ).to_pylist()
+    unique_rows = pq.read_table(exact_unique_path).to_pylist()
     cluster_rows = pq.read_table(
         cluster_mapping_path,
         columns=["sequence_sha256", "representative_sha256"],
     ).to_pylist()
-    representatives = {str(row["representative_sha256"]) for row in cluster_rows}
-    by_subtype: dict[str, list[tuple[str, str]]] = {}
+    representative_by_member = {
+        str(row["sequence_sha256"]): str(row["representative_sha256"])
+        for row in cluster_rows
+    }
+    eligible_by_subtype_cluster: dict[str, dict[str, list[tuple[str, str]]]] = {}
     excluded: list[dict[str, Any]] = []
     for row in unique_rows:
         digest = str(row["sequence_sha256"])
-        if digest not in representatives:
+        representative = representative_by_member.get(digest)
+        if representative is None:
+            excluded.append(
+                {
+                    "sequence_sha256": digest,
+                    "reason": "missing_cluster_mapping",
+                    "invalid_symbols": [],
+                }
+            )
             continue
         sequence = str(row["protein_sequence"]).upper()
         invalid = sorted(set(sequence).difference(STANDARD_AA))
@@ -90,6 +98,28 @@ def build_subtype_msas(
         ]
         if not type_vi_subtypes:
             continue
+        nonconflicting = int(row.get("nonconflicting_record_count", 1))
+        complete = int(row.get("complete_record_count", 1))
+        if nonconflicting < 1:
+            excluded.append(
+                {
+                    "sequence_sha256": digest,
+                    "subtypes": type_vi_subtypes,
+                    "reason": "only_subtype_conflicting_records",
+                    "invalid_symbols": invalid,
+                }
+            )
+            continue
+        if complete < 1:
+            excluded.append(
+                {
+                    "sequence_sha256": digest,
+                    "subtypes": type_vi_subtypes,
+                    "reason": "no_explicitly_complete_record",
+                    "invalid_symbols": invalid,
+                }
+            )
+            continue
         if invalid:
             excluded.append(
                 {
@@ -101,7 +131,16 @@ def build_subtype_msas(
             )
             continue
         for subtype in type_vi_subtypes:
-            by_subtype.setdefault(subtype, []).append((digest, sequence))
+            eligible_by_subtype_cluster.setdefault(subtype, {}).setdefault(
+                representative, []
+            ).append((digest, sequence))
+    by_subtype = {
+        subtype: [
+            min(cluster_members, key=lambda item: item[0])
+            for cluster_members in clusters.values()
+        ]
+        for subtype, clusters in eligible_by_subtype_cluster.items()
+    }
     if not by_subtype:
         raise ValueError("no canonical Type VI representative sequences for MSA")
 
@@ -162,7 +201,10 @@ def build_subtype_msas(
         "schema_version": "1.0",
         "is_mock": False,
         "evidence_level": 0,
-        "selection": "MMseqs2 70% representative sequences, split by Type VI subtype",
+        "selection": (
+            "one eligible sequence per MMseqs2 70% cluster and Type VI subtype; "
+            "requires at least one nonconflicting, explicitly complete record"
+        ),
         "mafft_version": version,
         "subtypes": summary,
         "excluded_sequence_count": len(excluded),

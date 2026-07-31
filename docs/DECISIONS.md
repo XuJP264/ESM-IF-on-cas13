@@ -66,6 +66,16 @@ canonical Cas13a–j nomenclature. Preserve `subtype_raw`, `subtype_source`, and
 conflicts with a Cas13 HMM is retained but routed to ambiguous pairing; it is
 never silently promoted to a high-confidence pair.
 
+## 2026-07-31 — Evolutionary inputs require auditable complete records
+
+Retain all Cas13 HMM hits in `cas13_records` and exact-unique tables, including
+short, truncated, or subtype-conflicting annotations. Preserve HMM e-value,
+score, source length field, and two-end truncation flag. For subtype MSA
+eligibility, require at least one occurrence with no subtype conflict and the
+explicit Atlas completeness flag `truncated=00`. Select one eligible member per
+70% cluster and subtype even if MMseqs chose an ineligible member as the raw
+cluster representative. This is a data-QC rule, not evidence of Cas13 function.
+
 ## 2026-07-31 — Environment isolation gate
 
 An environment is not accepted merely because its Conda transaction completes.

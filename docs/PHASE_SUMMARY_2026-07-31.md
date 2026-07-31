@@ -202,6 +202,13 @@ bash scripts/fetch_atlas.sh
 Cas13 注释，其中 3 个与 operon summary 冲突并会进入 ambiguous 路径。
 这只是 schema/规则诊断，不是最终 Atlas 数据漏斗。
 
+生产诊断同时发现短 HMM fragment 即使标记 `truncated=00` 也可能与非
+Type-VI operon summary 冲突。最终表在显式列中保留 e-value、score、
+source length 和 truncation，不删除原始注释；进化 MSA 只接受至少有一个
+无 subtype conflict 且 `truncated=00` 的 exact sequence。70% cluster 的
+原始 representative 若不合格，会在同 cluster/subtype 内选择一个合格成员，
+避免整簇被代表序列偶然状态误删。
+
 ### 2.2 ESM-IF1 隔离环境
 
 `.tools/envs/esm_if1` 的第一次 Conda transaction 暴露了 user-site 泄漏；

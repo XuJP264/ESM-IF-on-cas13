@@ -35,6 +35,10 @@ class Cas13Record:
     protein_sequence: str
     sequence_sha256: str
     protein_length: int
+    source_length_field: int | None
+    evalue: float | None
+    score: float | None
+    truncated: str | None
     source: str | None
     taxonomy: str | None
     metadata_json: str
@@ -335,6 +339,14 @@ def extract_cas13_records(operon: dict[str, Any]) -> list[Cas13Record]:
                 protein_sequence=sequence,
                 sequence_sha256=hashlib.sha256(sequence.encode("ascii")).hexdigest(),
                 protein_length=len(sequence),
+                source_length_field=(
+                    int(cas["length"]) if cas.get("length") is not None else None
+                ),
+                evalue=_optional_float(cas.get("evalue")),
+                score=_optional_float(cas.get("score")),
+                truncated=(
+                    str(cas["truncated"]) if cas.get("truncated") is not None else None
+                ),
                 source=(
                     str(metadata["source_db"])
                     if metadata.get("source_db") is not None
@@ -402,6 +414,8 @@ def exact_deduplicate(records: list[Cas13Record]) -> list[dict[str, Any]]:
     output: list[dict[str, Any]] = []
     for digest, members in sorted(grouped.items()):
         representative = min(members, key=lambda item: item.operon_id)
+        evalues = [item.evalue for item in members if item.evalue is not None]
+        scores = [item.score for item in members if item.score is not None]
         output.append(
             {
                 "sequence_sha256": digest,
@@ -409,6 +423,17 @@ def exact_deduplicate(records: list[Cas13Record]) -> list[dict[str, Any]]:
                 "protein_length": representative.protein_length,
                 "representative_operon_id": representative.operon_id,
                 "record_count": len(members),
+                "nonconflicting_record_count": sum(
+                    not item.subtype_conflict for item in members
+                ),
+                "complete_record_count": sum(
+                    item.truncated == "00" for item in members
+                ),
+                "minimum_evalue": min(evalues) if evalues else None,
+                "maximum_score": max(scores) if scores else None,
+                "truncated_flags": sorted(
+                    {item.truncated for item in members if item.truncated}
+                ),
                 "subtypes": sorted({item.subtype for item in members}),
                 "operon_ids": sorted(item.operon_id for item in members),
             }
@@ -501,6 +526,10 @@ def _schemas() -> dict[str, pa.Schema]:
             ("protein_sequence", string),
             ("sequence_sha256", string),
             ("protein_length", integer),
+            ("source_length_field", integer),
+            ("evalue", floating),
+            ("score", floating),
+            ("truncated", string),
             ("source", string),
             ("taxonomy", string),
             ("metadata_json", string),
@@ -559,6 +588,11 @@ def _schemas() -> dict[str, pa.Schema]:
                 ("protein_length", integer),
                 ("representative_operon_id", string),
                 ("record_count", integer),
+                ("nonconflicting_record_count", integer),
+                ("complete_record_count", integer),
+                ("minimum_evalue", floating),
+                ("maximum_score", floating),
+                ("truncated_flags", pa.list_(string)),
                 ("subtypes", pa.list_(string)),
                 ("operon_ids", pa.list_(string)),
             ]
@@ -649,7 +683,8 @@ def _write_exact_unique(
 ) -> int:
     cursor = connection.execute(
         """
-        SELECT sequence_sha256, protein_sequence, protein_length, operon_id, subtype
+        SELECT sequence_sha256, protein_sequence, protein_length, operon_id, subtype,
+               subtype_conflict, truncated, evalue, score
         FROM cas13_dedup
         ORDER BY sequence_sha256, operon_id
         """
@@ -659,6 +694,11 @@ def _write_exact_unique(
     protein_length = 0
     operon_ids: list[str] = []
     subtypes: set[str] = set()
+    nonconflicting_record_count = 0
+    complete_record_count = 0
+    evalues: list[float] = []
+    scores: list[float] = []
+    truncated_flags: set[str] = set()
     unique_count = 0
 
     def flush_group() -> None:
@@ -672,24 +712,52 @@ def _write_exact_unique(
                 "protein_length": protein_length,
                 "representative_operon_id": operon_ids[0],
                 "record_count": len(operon_ids),
+                "nonconflicting_record_count": nonconflicting_record_count,
+                "complete_record_count": complete_record_count,
+                "minimum_evalue": min(evalues) if evalues else None,
+                "maximum_score": max(scores) if scores else None,
+                "truncated_flags": sorted(truncated_flags),
                 "subtypes": sorted(subtypes),
                 "operon_ids": operon_ids,
             }
         )
         unique_count += 1
 
-    for digest, row_sequence, row_length, operon_id, subtype in cursor:
+    for (
+        digest,
+        row_sequence,
+        row_length,
+        operon_id,
+        subtype,
+        subtype_conflict,
+        truncated,
+        evalue,
+        score,
+    ) in cursor:
         digest_string = str(digest)
         if current_digest is not None and digest_string != current_digest:
             flush_group()
             operon_ids = []
             subtypes = set()
+            nonconflicting_record_count = 0
+            complete_record_count = 0
+            evalues = []
+            scores = []
+            truncated_flags = set()
         if digest_string != current_digest:
             current_digest = digest_string
             sequence = str(row_sequence)
             protein_length = int(row_length)
         operon_ids.append(str(operon_id))
         subtypes.add(str(subtype))
+        nonconflicting_record_count += int(not bool(subtype_conflict))
+        complete_record_count += int(str(truncated) == "00")
+        if truncated is not None:
+            truncated_flags.add(str(truncated))
+        if evalue is not None:
+            evalues.append(float(evalue))
+        if score is not None:
+            scores.append(float(score))
     flush_group()
     return unique_count
 
@@ -726,7 +794,11 @@ def process_atlas(
             protein_sequence TEXT NOT NULL,
             protein_length INTEGER NOT NULL,
             operon_id TEXT NOT NULL,
-            subtype TEXT NOT NULL
+            subtype TEXT NOT NULL,
+            subtype_conflict INTEGER NOT NULL,
+            truncated TEXT,
+            evalue REAL,
+            score REAL
         )
         """
     )
@@ -744,6 +816,8 @@ def process_atlas(
     ambiguous_pair_count = 0
     failure_count = 0
     cas13_subtype_conflicts = 0
+    cas13_nonconflicting_records = 0
+    cas13_complete_records = 0
     try:
         for index, raw in enumerate(iter_json_array(path)):
             total += 1
@@ -773,14 +847,22 @@ def process_atlas(
                     cas13_subtype_counts[cas13_record.subtype] += 1
                     cas13_subtype_sources[cas13_record.subtype_source] += 1
                     cas13_subtype_conflicts += int(cas13_record.subtype_conflict)
+                    cas13_nonconflicting_records += int(
+                        not cas13_record.subtype_conflict
+                    )
+                    cas13_complete_records += int(cas13_record.truncated == "00")
                     connection.execute(
-                        "INSERT INTO cas13_dedup VALUES (?, ?, ?, ?, ?)",
+                        "INSERT INTO cas13_dedup VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         (
                             cas13_record.sequence_sha256,
                             cas13_record.protein_sequence,
                             cas13_record.protein_length,
                             cas13_record.operon_id,
                             cas13_record.subtype,
+                            int(cas13_record.subtype_conflict),
+                            cas13_record.truncated,
+                            cas13_record.evalue,
+                            cas13_record.score,
                         ),
                     )
                     cas13_count += 1
@@ -808,6 +890,15 @@ def process_atlas(
         connection.commit()
         exact_unique_count = _write_exact_unique(
             connection, writers["cas13_exact_unique"]
+        )
+        evolution_eligible_exact_unique = int(
+            connection.execute(
+                """
+                SELECT COUNT(DISTINCT sequence_sha256)
+                FROM cas13_dedup
+                WHERE subtype_conflict = 0 AND truncated = '00'
+                """
+            ).fetchone()[0]
         )
         for writer in writers.values():
             writer.close()
@@ -839,6 +930,9 @@ def process_atlas(
         "cas13_subtype_counts": dict(sorted(cas13_subtype_counts.items())),
         "cas13_subtype_sources": dict(sorted(cas13_subtype_sources.items())),
         "cas13_subtype_conflicts": cas13_subtype_conflicts,
+        "cas13_nonconflicting_records": cas13_nonconflicting_records,
+        "cas13_complete_records": cas13_complete_records,
+        "cas13_evolution_eligible_exact_unique": evolution_eligible_exact_unique,
         "pair_orientation_policy": (
             "unknown orientation is ambiguous; reverse is reverse-complemented; "
             "only declared/recovered orientation may be high confidence"
@@ -868,5 +962,10 @@ def _render_data_card(funnel: dict[str, Any]) -> str:
         "with declared or reliably recovered orientation enter the high-confidence",
         "paired table. Atlas v1.0 records without orientation are retained in",
         "`ambiguous_pairs.parquet`; they are never silently used for coevolution.",
+        "",
+        "The raw Cas13 and exact-unique tables retain subtype conflicts and",
+        "truncation flags. Evolutionary MSA eligibility requires at least one",
+        "nonconflicting record explicitly marked `truncated=00`; this eligibility",
+        "does not imply functional validation.",
     ]
     return "\n".join(lines) + "\n"

@@ -90,6 +90,7 @@ def test_cas13_subtype_recovery_and_conflict_are_explicit(tmp_path: Path) -> Non
     assert funnel["type_vi_operons"] == 1
     assert funnel["cas13_subtype_counts"] == {"VI-D": 1}
     assert funnel["cas13_subtype_sources"] == {"cas_hmm_explicit": 1}
+    assert funnel["cas13_evolution_eligible_exact_unique"] == 1
 
 
 def test_exact_dedup_and_fixture_pipeline(tmp_path: Path) -> None:
@@ -97,6 +98,9 @@ def test_exact_dedup_and_fixture_pipeline(tmp_path: Path) -> None:
     record = extract_cas13_records(raw[0])[0]
     unique = exact_deduplicate([record, record])
     assert unique[0]["record_count"] == 2
+    assert unique[0]["nonconflicting_record_count"] == 2
+    assert unique[0]["complete_record_count"] == 2
+    assert unique[0]["truncated_flags"] == ["00"]
     funnel = process_atlas(FIXTURE, tmp_path / "processed")
     assert funnel["atlas_operons"] == 2
     assert funnel["cas13_exact_unique"] == 2
@@ -104,6 +108,7 @@ def test_exact_dedup_and_fixture_pipeline(tmp_path: Path) -> None:
     assert funnel["ambiguous_pairs"] == 1
     assert funnel["cas13_subtype_counts"] == {"VI-A": 1, "VI-D": 1}
     assert funnel["cas13_subtype_conflicts"] == 0
+    assert funnel["cas13_evolution_eligible_exact_unique"] == 2
     saved = json.loads(
         (tmp_path / "processed/data_funnel.json").read_text(encoding="utf-8")
     )
