@@ -6,7 +6,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pandas as pd
 import pyarrow as pa  # type: ignore[import-untyped]
@@ -215,8 +215,10 @@ def build_variant_dataset(
         for inactive_maximum in (0.10, 0.20, 0.30):
             labels = [
                 activity_label(
-                    float(row.cis_activity),
-                    float(row.trans_activity) if pd.notna(row.trans_activity) else None,
+                    cast(float, row.cis_activity),
+                    cast(float, row.trans_activity)
+                    if pd.notna(row.trans_activity)
+                    else None,
                     active_minimum=active_minimum,
                     inactive_maximum=inactive_maximum,
                     cis_retained_minimum=float(policy["cis_retained_minimum"]),
