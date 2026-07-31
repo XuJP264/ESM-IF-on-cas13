@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -50,6 +51,15 @@ def _mapping_rows(path: Path) -> list[dict[str, str]]:
 
     with path.open(encoding="utf-8", newline="") as handle:
         return list(csv.DictReader(handle))
+
+
+def _integer_field(value: str, *, field: str) -> int:
+    """Parse integer-valued CSV fields that nullable tables emit as floats."""
+
+    parsed = float(value)
+    if not math.isfinite(parsed) or not parsed.is_integer():
+        raise ValueError(f"{field} must contain a finite integer value: {value!r}")
+    return int(parsed)
 
 
 def _parent_and_fixed(
@@ -131,20 +141,23 @@ def main() -> int:
         if row["mapping_confidence"] == str(constraints["minimum_mapping_confidence"])
         and float(row["msa_coverage"]) >= float(constraints["minimum_msa_coverage"])
         and float(row["conservation"]) >= float(constraints["minimum_conservation"])
-        and int(row["coordinate_index_0"]) not in fixed
+        and _integer_field(row["coordinate_index_0"], field="coordinate_index_0")
+        not in fixed
     ]
     eligible.sort(
         key=lambda row: (
             -float(row["conservation"]),
             -float(row["msa_coverage"]),
-            int(row["coordinate_index_0"]),
+            _integer_field(row["coordinate_index_0"], field="coordinate_index_0"),
         )
     )
     conservation_rows = eligible[
         : int(constraints["maximum_conservation_biased_positions"])
     ]
     conservation_allowed = {
-        int(row["coordinate_index_0"]): set(row["allowed_residues"].split(";"))
+        _integer_field(row["coordinate_index_0"], field="coordinate_index_0"): set(
+            row["allowed_residues"].split(";")
+        )
         for row in conservation_rows
     }
     rna_ranked = _rna_contact_positions(
@@ -157,7 +170,10 @@ def main() -> int:
         residue_keys=residue_keys,
     )
     maximum_rna = int(constraints["maximum_rna_contact_biased_positions"])
-    mapping_by_coordinate = {int(row["coordinate_index_0"]): row for row in resolved}
+    mapping_by_coordinate = {
+        _integer_field(row["coordinate_index_0"], field="coordinate_index_0"): row
+        for row in resolved
+    }
     rna_allowed: dict[int, set[str]] = {}
     for index, _ in rna_ranked:
         if index in fixed or len(rna_allowed) >= maximum_rna:
