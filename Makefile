@@ -1,15 +1,19 @@
 SHELL := /usr/bin/env bash
 ANALYSIS_ENV ?= .tools/envs/analysis
+CONFIG ?= configs/benchmark_experimental.yaml
 RUN := conda run -p $(ANALYSIS_ENV)
 
-.PHONY: bootstrap fetch-references fetch-third-party fetch-models fetch-atlas
-.PHONY: fetch-structures lint typecheck test smoke-cpu smoke-esm-if1
+.PHONY: bootstrap bootstrap-specialized fetch-references fetch-third-party fetch-models fetch-atlas
+.PHONY: fetch-structures lint typecheck test smoke-cpu smoke-pyg smoke-esm-if1
 .PHONY: smoke-proteinmpnn smoke-ligandmpnn process-atlas cluster msa
 .PHONY: conservation coevolution-smoke benchmark-experimental generate-pilot
 .PHONY: report export-gpu-bundle verify-reproducibility
 
 bootstrap:
 	bash scripts/bootstrap_local.sh
+
+bootstrap-specialized:
+	bash scripts/bootstrap_specialized_envs.sh
 
 fetch-references:
 	bash scripts/fetch_references.sh
@@ -27,8 +31,8 @@ fetch-structures:
 	bash scripts/fetch_experimental_structures.sh
 
 lint:
-	$(RUN) ruff check src tests
-	$(RUN) ruff format --check src tests
+	$(RUN) ruff check src tests scripts
+	$(RUN) ruff format --check src tests scripts
 
 typecheck:
 	$(RUN) mypy src
@@ -38,6 +42,9 @@ test:
 
 smoke-cpu:
 	$(RUN) cas13-if preflight --config configs/benchmark_experimental.yaml --fixture
+
+smoke-pyg:
+	PYTHONNOUSERSITE=1 .tools/envs/esm_if1/bin/python scripts/smoke_pyg.py
 
 smoke-esm-if1:
 	bash scripts/run_real_smoke.sh esm-if1
@@ -64,7 +71,7 @@ coevolution-smoke:
 	$(RUN) cas13-if coevolution --config configs/atlas_processing.yaml --fixture
 
 benchmark-experimental:
-	bash scripts/run_experimental_benchmark.sh
+	bash scripts/run_experimental_benchmark.sh $(CONFIG)
 
 generate-pilot:
 	$(RUN) cas13-if sample --config configs/esm_if1_sampling.yaml

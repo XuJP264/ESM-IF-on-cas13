@@ -10,8 +10,10 @@ papers:
     official_url: https://proceedings.mlr.press/v162/hsu22a.html
     pdf_url: https://proceedings.mlr.press/v162/hsu22a/hsu22a.pdf
     local_pdf: references/papers/hsu2022_esm_if1.pdf
-    sha256: null
-    access_status: open_access_not_fetched
+    sha256: d0d06b1e6a2aa097e19d98d51ca37a9a6b8183eb87c777b3e517392d156a1e87
+    size_bytes: 3824267
+    fetched_at: 2026-07-31
+    access_status: open_access_fetched_local_gitignored
     license: PMLR open access; verify paper notice before redistribution
     relevance: Primary ESM-IF1 architecture, training, scoring, and evaluation reference
     notes_path: references/notes/hsu2022_esm_if1.md
@@ -36,10 +38,12 @@ papers:
     venue: Nature Methods
     doi: 10.1038/s41592-025-02626-1
     official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11978504/
-    pdf_url: https://www.bakerlab.org/wp-content/uploads/2025/03/s41592-025-02626-1.pdf
+    pdf_url: https://www.ipd.uw.edu/publication-pdfs/331/b896bbdf83798df6853c60bf2f2a0928/s41592-025-02626-1-3.pdf
     local_pdf: references/papers/dauparas2025_ligandmpnn.pdf
-    sha256: null
-    access_status: public_author_version_not_fetched
+    sha256: c133b4f2323355b787280c616b18e6930618abd541775e995f4e8c4c0313bfc0
+    size_bytes: 3268188
+    fetched_at: 2026-07-31
+    access_status: public_author_version_fetched_local_gitignored
     license: article terms differ from upstream MIT code; verify before redistribution
     relevance: RNA atomic-context sequence design baseline
     notes_path: references/notes/dauparas2025_ligandmpnn.md
@@ -78,10 +82,10 @@ papers:
     venue: Cell 175(1), 212-223.e17
     doi: 10.1016/j.cell.2018.09.001
     official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6179368/
-    pdf_url: https://escholarship.org/content/qt2n23w39j/qt2n23w39j.pdf
-    local_pdf: references/papers/zhang2018_cas13d.pdf
+    pdf_url: https://escholarship.org/content/qt2n23w39j/qt2n23w39j_noSplash_ea1673179e805c25aa43187b2964af98.pdf
+    local_pdf: null
     sha256: null
-    access_status: public_author_manuscript_not_fetched
+    access_status: public_author_manuscript_automated_endpoint_returned_non_pdf
     license: HHS public access manuscript; publisher copyright
     relevance: Cas13d apo/binary/ternary states and 6E9F structural interpretation
     notes_path: references/notes/zhang2018_cas13d.md
@@ -155,4 +159,3 @@ papers:
     license: publisher copyright
     relevance: Nucleotide-amino-acid evolutionary coupling in RNA-protein complexes
     notes_path: references/notes/weinreb2016_rna_ec.md
-

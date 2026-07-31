@@ -7,47 +7,46 @@ projects:
     commit: 2b369911bb5b4b0dda914521b9475cad1656b2ac
     tag: null
     resolved_at: 2026-07-31
-    fetched_at: null
+    fetched_at: 2026-07-31
     license: MIT
     license_path: third_party/LICENSES/esm-LICENSE
     local_path: third_party/esm
     modified: false
-    checksum: null
+    checksum: git-tree-sha1:9f2c4290576d17fdb4f0b05f2790a8a300576d44
     purpose: ESM-IF1 genuine inference and API reference
   - name: pyskop/SynTnpBs
     official_url: https://github.com/pyskop/SynTnpBs
     commit: f3ea8e69c6f71baa56c4bb388e9df0489720f968
     tag: null
     resolved_at: 2026-07-31
-    fetched_at: null
+    fetched_at: 2026-07-31
     license: MIT
     license_path: third_party/LICENSES/SynTnpBs-LICENSE
     local_path: third_party/SynTnpBs
     modified: false
-    checksum: null
+    checksum: git-tree-sha1:6b3473a4124ef477d56d884692112c3a1b11f9d3
     purpose: Partial-sequence semantics and constrained-decoder regression reference
   - name: dauparas/ProteinMPNN
     official_url: https://github.com/dauparas/ProteinMPNN
     commit: 8907e6671bfbfc92303b5f79c4b5e6ce47cdef57
     tag: null
     resolved_at: 2026-07-31
-    fetched_at: null
+    fetched_at: 2026-07-31
     license: MIT
     license_path: third_party/LICENSES/ProteinMPNN-LICENSE
     local_path: third_party/ProteinMPNN
     modified: false
-    checksum: null
+    checksum: git-tree-sha1:a0b3b3178eb4d6cc10b4de5594a9e06b2d0243d5
     purpose: Protein-only graph sequence-design baseline
   - name: dauparas/LigandMPNN
     official_url: https://github.com/dauparas/LigandMPNN
     commit: 26ec57ac976ade5379920dbd43c7f97a91cf82de
     tag: null
     resolved_at: 2026-07-31
-    fetched_at: null
+    fetched_at: 2026-07-31
     license: MIT
     license_path: third_party/LICENSES/LigandMPNN-LICENSE
     local_path: third_party/LigandMPNN
     modified: false
-    checksum: null
+    checksum: git-tree-sha1:d1f6f14ed7f3b99f707abd340089d3efdf985f5c
     purpose: RNA atomic-context sequence-design baseline
-

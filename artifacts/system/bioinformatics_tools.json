@@ -1,0 +1,87 @@
+{
+  "environment": "envs/bioinformatics.yml",
+  "is_mock": false,
+  "missing": [],
+  "schema_version": "1.0",
+  "tools": {
+    "foldseek": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/foldseek",
+        "version"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/foldseek",
+      "returncode": 0,
+      "version_output": "10.941cd33"
+    },
+    "git_lfs": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/git-lfs",
+        "version"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/git-lfs",
+      "returncode": 0,
+      "version_output": "git-lfs/3.7.1 (GitHub; linux amd64; go 1.26.4)"
+    },
+    "hmmer": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/hmmsearch",
+        "-h"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/hmmsearch",
+      "returncode": 0,
+      "version_output": "# HMMER 3.4 (Aug 2023); http://hmmer.org/"
+    },
+    "infernal": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/cmsearch",
+        "-h"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/cmsearch",
+      "returncode": 0,
+      "version_output": "# INFERNAL 1.1.5 (Sep 2023)"
+    },
+    "mafft": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/mafft",
+        "--version"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/mafft",
+      "returncode": 0,
+      "version_output": "v7.526 (2024/Apr/26)"
+    },
+    "mmseqs2": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/mmseqs",
+        "version"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/mmseqs",
+      "returncode": 0,
+      "version_output": "18.8cc5c"
+    },
+    "seqkit": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/seqkit",
+        "version"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/seqkit",
+      "returncode": 0,
+      "version_output": "seqkit v2.13.0"
+    },
+    "tmalign": {
+      "available": true,
+      "command": [
+        "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/TMalign"
+      ],
+      "executable": "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/TMalign",
+      "returncode": 0,
+      "version_output": "TM-align 20240303"
+    }
+  }
+}

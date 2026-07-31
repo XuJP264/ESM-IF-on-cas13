@@ -8,5 +8,5 @@ dependencies:
   - pyg
   - numpy<2
   - biopython>=1.80,<2
-  - pip:
-      - fair-esm==2.0.0
+  - pydantic>=2.6,<3
+  - pyyaml>=6,<7

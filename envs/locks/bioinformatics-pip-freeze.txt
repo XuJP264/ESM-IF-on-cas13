@@ -1,0 +1,14 @@
+annotated-types @ file:///home/conda/feedstock_root/build_artifacts/annotated-types_1784935130617/work
+biopython @ file:///home/conda/feedstock_root/build_artifacts/biopython_1774882026985/work
+-e git+https://github.com/XuJP264/ESM-IF-on-cas13.git@7599be02267be03b017a3b147e816eb87c2ab53e#egg=cas13_if
+numpy @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_numpy_1779169198/work/dist/numpy-2.4.6-cp311-cp311-linux_x86_64.whl#sha256=9f5ed645865bdd41eb671568973753a710fda708ed74e7a0b4acf98e7a7a2970
+packaging @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_packaging_1777103621/work
+pandas @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pandas_1785276229/work
+pyarrow @ file:///home/conda/feedstock_root/build_artifacts/apache-arrow_1784258008660/work/python
+pydantic @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pydantic_1778103405/work
+pydantic_core @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pydantic-core_1778084220/work
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_python-dateutil_1751104122/work
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1770223234623/work
+six @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_six_1753199211/work
+typing-inspection @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_typing-inspection_1777105465/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_typing_extensions_1783002732/work

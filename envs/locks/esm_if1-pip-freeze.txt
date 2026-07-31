@@ -1,0 +1,46 @@
+aiohappyeyeballs @ file:///home/conda/feedstock_root/build_artifacts/aiohappyeyeballs_1782986737989/work
+aiohttp @ file:///home/conda/feedstock_root/build_artifacts/aiohttp_1784900377390/work
+aiosignal @ file:///home/conda/feedstock_root/build_artifacts/aiosignal_1751626463503/work
+annotated-types @ file:///home/conda/feedstock_root/build_artifacts/annotated-types_1784935130617/work
+async-timeout @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_async-timeout_1767290444/work
+attrs @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_attrs_1773935801/work
+backports.zstd @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_backports.zstd_1781450813/work
+biopython @ file:///home/conda/feedstock_root/build_artifacts/biopython_1774882026200/work
+Brotli @ file:///home/conda/feedstock_root/build_artifacts/brotli-split_1764016952863/work
+-e git+https://github.com/XuJP264/ESM-IF-on-cas13.git@7599be02267be03b017a3b147e816eb87c2ab53e#egg=cas13_if
+certifi @ file:///home/conda/feedstock_root/build_artifacts/certifi_1784717589373/work/certifi
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1783505251992/work
+fair-esm @ file:///home/junpeng/ESM-IF/third_party/esm
+filelock @ file:///home/conda/feedstock_root/build_artifacts/filelock_1785376317471/work
+frozenlist @ file:///home/conda/feedstock_root/build_artifacts/frozenlist_1779999698269/work
+fsspec @ file:///home/conda/feedstock_root/build_artifacts/fsspec_1785325143698/work
+gmpy2 @ file:///home/conda/feedstock_root/build_artifacts/gmpy2_1773244929835/work
+h2 @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_h2_1784898236/work
+hpack @ file:///home/conda/feedstock_root/build_artifacts/hpack_1782283902770/work
+hyperframe @ file:///home/conda/feedstock_root/build_artifacts/hyperframe_1737618333194/work
+idna @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_idna_1781620148/work
+Jinja2 @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_jinja2_1764517220/work
+MarkupSafe @ file:///home/conda/feedstock_root/build_artifacts/markupsafe_1772444934960/work
+mpmath @ file:///home/conda/feedstock_root/build_artifacts/mpmath_1773661943568/work
+multidict @ file:///home/conda/feedstock_root/build_artifacts/multidict_1771610691664/work
+networkx @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_networkx_1731521053/work
+numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1707225380409/work/dist/numpy-1.26.4-cp310-cp310-linux_x86_64.whl#sha256=51131fd8fc130cd168aecaf1bc0ea85f92e8ffebf211772ceb16ac2e7f10d7ca
+packaging @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_packaging_1777103621/work
+propcache @ file:///home/conda/feedstock_root/build_artifacts/propcache_1780037624495/work
+psutil @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_psutil_1769678154/work
+pydantic @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pydantic_1778103405/work
+pydantic_core @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pydantic-core_1778084228/work
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pyparsing_1769003998/work
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1733217236728/work
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1770223234623/work
+requests @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_requests_1778851103/work
+scipy @ file:///home/conda/feedstock_root/build_artifacts/scipy-split_1739790642651/work/dist/scipy-1.15.2-cp310-cp310-linux_x86_64.whl#sha256=9e52bad6c3294d1a5b04a13632118ca2157130603c6c018c2d710162b223b27e
+sympy @ file:///home/conda/feedstock_root/build_artifacts/sympy_1771952240620/work
+torch==2.4.1
+torch-geometric @ file:///usr/share/miniconda/envs/test/conda-bld/pyg_1728444588353/work
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_tqdm_1785172528/work
+triton==3.0.0
+typing-inspection @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_typing-inspection_1777105465/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_typing_extensions_1783002732/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1778188571305/work
+yarl @ file:///home/conda/feedstock_root/build_artifacts/yarl_1784526337911/work

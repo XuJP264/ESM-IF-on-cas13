@@ -1,0 +1,23 @@
+[mmseqs2]
+18.8cc5c
+
+[mafft]
+v7.526 (2024/Apr/26)
+
+[hmmer]
+# HMMER 3.4 (Aug 2023); http://hmmer.org/
+
+[infernal]
+# INFERNAL 1.1.5 (Sep 2023)
+
+[seqkit]
+seqkit v2.13.0
+
+[foldseek]
+10.941cd33
+
+[tmalign]
+TM-align 20240303
+
+[git_lfs]
+git-lfs/3.7.1 (GitHub; linux amd64; go 1.26.4)

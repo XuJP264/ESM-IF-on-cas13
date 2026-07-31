@@ -27,12 +27,8 @@ fetch_open_pdf() {
 
 fetch_open_pdf hsu2022_esm_if1 \
   https://proceedings.mlr.press/v162/hsu22a/hsu22a.pdf
-fetch_open_pdf zhang2018_cas13d \
-  https://escholarship.org/content/qt2n23w39j/qt2n23w39j.pdf
 fetch_open_pdf dauparas2025_ligandmpnn \
-  https://www.bakerlab.org/wp-content/uploads/2025/03/s41592-025-02626-1.pdf
-fetch_open_pdf kamisetty2013_gremlin \
-  https://www.bakerlab.org/wp-content/uploads/2015/12/Kamisetty_PNAS_2013.pdf
+  https://www.ipd.uw.edu/publication-pdfs/331/b896bbdf83798df6853c60bf2f2a0928/s41592-025-02626-1-3.pdf
 
-echo "Metadata-only/paywalled entries were not downloaded; see references/manifest.yaml."
-
+echo "Other entries remain metadata-only: their licenses or stable direct-PDF endpoints"
+echo "were not sufficiently automatable; see references/manifest.yaml."

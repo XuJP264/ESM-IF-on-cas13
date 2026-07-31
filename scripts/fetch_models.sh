@@ -45,18 +45,15 @@ copy_checkpoint() {
 copy_checkpoint \
   "${repo_root}/third_party/ProteinMPNN/vanilla_model_weights/v_48_020.pt" \
   "${repo_root}/models/proteinmpnn/v_48_020.pt"
-copy_checkpoint \
-  "${repo_root}/third_party/LigandMPNN/model_params/proteinmpnn_v_48_020.pt" \
+# LigandMPNN deliberately does not store weights in Git. Fetch only the selected,
+# pinned model variants from the official IPD distribution endpoint; do not run
+# the upstream all-model downloader because that would retrieve unused weights.
+download_atomic \
+  https://files.ipd.uw.edu/pub/ligandmpnn/proteinmpnn_v_48_020.pt \
   "${repo_root}/models/ligandmpnn/proteinmpnn_v_48_020.pt"
-copy_checkpoint \
-  "${repo_root}/third_party/LigandMPNN/model_params/ligandmpnn_v_32_010_25.pt" \
+download_atomic \
+  https://files.ipd.uw.edu/pub/ligandmpnn/ligandmpnn_v_32_010_25.pt \
   "${repo_root}/models/ligandmpnn/ligandmpnn_v_32_010_25.pt"
-
-if [[ -s "${repo_root}/third_party/LigandMPNN/model_params/solublempnn_v_48_020.pt" ]]; then
-  copy_checkpoint \
-    "${repo_root}/third_party/LigandMPNN/model_params/solublempnn_v_48_020.pt" \
-    "${repo_root}/models/ligandmpnn/solublempnn_v_48_020.pt"
-else
-  echo "OPTIONAL_NOT_AVAILABLE solublempnn_v_48_020.pt"
-fi
-
+download_atomic \
+  https://files.ipd.uw.edu/pub/ligandmpnn/solublempnn_v_48_020.pt \
+  "${repo_root}/models/ligandmpnn/solublempnn_v_48_020.pt"

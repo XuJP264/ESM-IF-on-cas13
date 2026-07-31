@@ -9,7 +9,9 @@ dependencies:
   - seqkit
   - foldseek
   - tmalign
+  - git-lfs
   - biopython
   - pandas
   - pyarrow
-
+  - pydantic>=2.6,<3
+  - pyyaml>=6,<7
