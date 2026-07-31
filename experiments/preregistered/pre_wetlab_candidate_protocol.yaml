@@ -1,0 +1,79 @@
+schema_version: "1.0"
+protocol_id: stage-0003a-pre-wetlab-v1
+frozen_at: 2026-08-01
+status: preregistered_before_level3_results
+claim_boundary:
+  maximum_current_evidence_level: 2
+  level3_requires_real_independent_structure_predictions: true
+  level4_requires_wet_lab_functional_validation: true
+  prohibited_claims_before_level4: [functional, active, effective]
+units:
+  primary_selection_unit: sequence_cluster
+  nested_units: [parent_scaffold, model_seed, candidate]
+level1_sequence_qc:
+  standard_amino_acids_only: true
+  maximum_atlas_identity: 0.80
+  atlas_search:
+    engine: MMseqs2 easy-search
+    sensitivity: 7.5
+    minimum_query_coverage: 0.80
+    coverage_mode: 2
+    maximum_evalue: 1000.0
+  maximum_homopolymer_length: 7
+  maximum_new_low_complexity_windows_vs_parent: 0
+  maximum_absolute_low_complexity_windows: parent_baseline
+  low_complexity_window: 12
+  maximum_single_residue_fraction: 0.50
+  maximum_composition_deviation_from_parent: 0.25
+  hard_fixed_violations: 0
+level2_inverse_folding:
+  minimum_distinct_model_families_supporting: 2
+  eligible_model_families: [ESM-IF1, ProteinMPNN, LigandMPNN]
+  require_real_model_outputs: true
+  require_rna_atomic_context_for_ligandmpnn_claim: true
+  multi_state:
+    maximum_drop_below_parent_native_min_mean_log_likelihood: 1.0
+    maximum_state_score_variance: 0.25
+    severe_single_state_failure_allowed: false
+  fixed_position_violations: 0
+novelty_tiers:
+  conservative:
+    minimum_parent_identity: 0.50
+    maximum_parent_identity_exclusive: 0.70
+  moderate:
+    minimum_parent_identity: 0.30
+    maximum_parent_identity_exclusive: 0.50
+  aggressive:
+    minimum_parent_identity: 0.18
+    maximum_parent_identity_exclusive: 0.30
+diversity:
+  candidate_cluster_identity: 0.70
+  candidate_cluster_minimum_coverage: 0.80
+  maximum_one_primary_candidate_per_cluster_per_novelty_tier: true
+  require_each_novelty_tier_when_eligible_candidates_exist: true
+level3_predeclared_gates:
+  note: evaluated only after real outputs; not available in Stage 0003A
+  monomer_tm_score_minimum: 0.70
+  mean_plddt_minimum: 70.0
+  interface_pae_maximum_angstrom: 12.0
+  require_no_severe_state_failure: true
+  require_multi_seed_consistency: true
+  require_cross_model_consistency: true
+ranking:
+  method: pareto_then_diversity_selection
+  pareto_dimensions:
+    - sequence_novelty
+    - monomer_structural_recovery
+    - multi_state_compatibility
+    - rna_interface_preservation
+    - model_agreement
+    - candidate_diversity
+  conditional_likelihood_alone_is_sufficient: false
+threshold_change_control:
+  post_level3_primary_threshold_changes_forbidden: true
+  amendment_requires:
+    - new_versioned_protocol_file
+    - timestamp
+    - rationale
+    - affected_candidates
+    - designation_as_sensitivity_analysis

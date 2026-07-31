@@ -3,7 +3,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 bundle_root="${repo_root}/artifacts/bundles"
-input_root="${1:-}"
+input_root="${1:-${repo_root}/artifacts/gpu_jobs/stage_0003}"
 mkdir -p "${bundle_root}"
 commit="$(git -C "${repo_root}" rev-parse HEAD 2>/dev/null || printf 'uncommitted')"
 short_commit="$(printf '%s' "${commit}" | cut -c1-12)"
@@ -55,9 +55,7 @@ if [[ -n "${input_root}" ]]; then
     mkdir -p "${bundle}/inputs/$(dirname "${relative}")"
     cp "${input_path}" "${bundle}/inputs/${relative}"
   done < <(
-    find "${input_root}" -type f \
-      \( -name '*.fasta' -o -name '*.fa' -o -name '*.json' -o -name '*.jsonl' \
-      -o -name '*.yaml' -o -name '*.yml' \) -print0
+    find "${input_root}" -type f -print0
   )
 fi
 
@@ -91,6 +89,20 @@ asset_paths = (
     "data/experimental_structures/6e9e.cif",
     "data/experimental_structures/5xwy.pdb",
     "data/experimental_structures/5xwy.cif",
+    "data/experimental_structures/6iv9.pdb",
+    "data/experimental_structures/6iv9.cif",
+    "data/experimental_structures/9m38.pdb",
+    "data/experimental_structures/9m38.cif",
+    "data/experimental_structures/9m30.pdb",
+    "data/experimental_structures/9m30.cif",
+    "data/experimental_structures/9m33.pdb",
+    "data/experimental_structures/9m33.cif",
+    "data/experimental_structures/9m34.pdb",
+    "data/experimental_structures/9m34.cif",
+    "data/experimental_structures/9m31.pdb",
+    "data/experimental_structures/9m31.cif",
+    "data/experimental_structures/9m8q.pdb",
+    "data/experimental_structures/9m8q.cif",
 )
 assets = []
 missing = []

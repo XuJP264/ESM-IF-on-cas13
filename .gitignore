@@ -64,6 +64,9 @@ artifacts/bundles/**
 !artifacts/bundles/.gitkeep
 artifacts/downloads/**
 !artifacts/downloads/.gitkeep
+artifacts/gpu_jobs/**
+!artifacts/gpu_jobs/README.md
+artifacts/refold_mock_e2e/**
 
 # Editor and OS
 .idea/

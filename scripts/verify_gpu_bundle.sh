@@ -35,6 +35,22 @@ required=(
 for relative in "${required[@]}"; do
   [[ -f "${bundle}/${relative}" ]] || { echo "ERROR: missing ${relative}" >&2; exit 3; }
 done
+if [[ -d "${bundle}/inputs" ]] && find "${bundle}/inputs" -type f -print -quit | grep -q .; then
+  stage_required=(
+    inputs/manifests/all_jobs.jsonl
+    inputs/manifests/candidate_inventory.csv
+    inputs/manifests/summary.json
+    inputs/manifests/SHA256SUMS
+    inputs/expected_outputs/expected_outputs.jsonl
+    inputs/retry_manifests/failed_jobs.jsonl
+  )
+  for relative in "${stage_required[@]}"; do
+    [[ -f "${bundle}/${relative}" ]] || {
+      echo "ERROR: missing Stage 0003 input ${relative}" >&2
+      exit 3
+    }
+  done
+fi
 (cd "${bundle}" && sha256sum --check SHA256SUMS)
 python3 - "${bundle}/bundle-manifest.json" <<'PY'
 import json

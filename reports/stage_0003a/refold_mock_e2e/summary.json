@@ -1,0 +1,65 @@
+{
+  "alignment": {
+    "comparison_count": 4,
+    "executable": ".tools/envs/bioinformatics/bin/TMalign",
+    "minimum_tm_score": 1.0
+  },
+  "claim_scope": "fixture pipeline validation only",
+  "cross_model_consistency": {
+    "all_mock": true,
+    "comparison_count": 2,
+    "mean_tm_score": 1.0,
+    "minimum_tm_score": 1.0,
+    "successful_count": 2
+  },
+  "domain_rmsd": {
+    "C_terminal_fixture": 7.0521597210355486e-15,
+    "N_terminal_fixture": 3.206586302145304e-15
+  },
+  "evidence_level": 0,
+  "hepn_geometry": {
+    "295-300": 8.894698926888976,
+    "849-854": 8.624204427076158
+  },
+  "ingested_predictions": 4,
+  "interface_confidence": 81.0,
+  "interface_pae": 5.0,
+  "is_mock": true,
+  "multi_seed_consistency": {
+    "all_mock": true,
+    "comparison_count": 2,
+    "mean_tm_score": 1.0,
+    "minimum_tm_score": 1.0,
+    "successful_count": 2
+  },
+  "pareto_front": [
+    "fixture-a",
+    "fixture-b"
+  ],
+  "provider_qc": [
+    {
+      "is_mock": true,
+      "jobs": 2,
+      "mean_plddt": 81.5,
+      "missing_or_failed": 0,
+      "provider": "alphafold3",
+      "successful": 2
+    },
+    {
+      "is_mock": true,
+      "jobs": 2,
+      "mean_plddt": 81.5,
+      "missing_or_failed": 0,
+      "provider": "boltz",
+      "successful": 2
+    }
+  ],
+  "real_prediction_count": 0,
+  "rna_contact_recovery": {
+    "precision": 1.0,
+    "predicted_count": 128.0,
+    "recall": 1.0,
+    "reference_count": 128.0
+  },
+  "validated_outputs": 4
+}

@@ -81,6 +81,26 @@ make matched-baselines CONFIG=configs/matched_baselines.yaml
 The second command requires a clean worktree and local genuine checkpoints; it
 rejects mock candidates and refuses to overwrite an existing canonical report.
 
+Stage 0003A extends that platform to four Cas13d parents and nine experimental
+states. Its canonical report and frozen candidate-selection rules are:
+
+```text
+reports/stage_0003a/report.md
+experiments/preregistered/pre_wetlab_candidate_protocol.yaml
+```
+
+The bounded local real runs use `scripts/run_stage_0003a_multistate.py`,
+`scripts/run_variant_retrospective.py`, and
+`scripts/run_stage_0003a_local_smoke.py`. They intentionally refuse to
+overwrite canonical output. Large refold jobs are exported, not run locally;
+after H100 assets and a site adapter are configured, their single tmux entry is:
+
+```bash
+bash scripts/launch_gpu_tmux.sh \
+  configs/stage_0003_refold.yaml \
+  stage-0003-refold
+```
+
 ## Reproducible runs
 
 Every CLI execution writes an immutable run under
@@ -93,12 +113,14 @@ marker. See `docs/REPRODUCIBILITY.md`.
 
 Current real, fixture, mock, failed, and not-run work is reported in
 `docs/STATUS.md`. Research decisions are recorded in `docs/DECISIONS.md`, and
-the completed current-stage living plan is
-`docs/execplans/0002_vi_d_mapping_and_matched_baselines.md`.
+the current-stage living plan is
+`docs/execplans/0003a_multiscaffold_pre_wetlab.md`.
 The network-interruption recovery audit and GPU/local work split are in
 `docs/PHASE_SUMMARY_2026-07-31.md`; executable migration instructions are in
 `docs/GPU_MIGRATION.md`. Stage-0002 results and failures are summarized in
 `docs/STAGE_0002_SUMMARY_2026-07-31.md`.
+Stage-0003A results, mock boundaries, H100 jobs, and readiness are summarized in
+`docs/STAGE_0003A_SUMMARY.md`.
 
 ## License
 

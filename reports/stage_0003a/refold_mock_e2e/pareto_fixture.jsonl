@@ -1,0 +1,2 @@
+{"candidate_diversity": 0.6, "candidate_id": "fixture-a", "is_mock": true, "model_agreement": 0.9, "monomer_structural_recovery": 0.95, "multi_state_compatibility": 0.8, "rna_interface_preservation": 1.0, "sequence_novelty": 0.7}
+{"candidate_diversity": 0.75, "candidate_id": "fixture-b", "is_mock": true, "model_agreement": 0.88, "monomer_structural_recovery": 0.9, "multi_state_compatibility": 0.82, "rna_interface_preservation": 0.9, "sequence_novelty": 0.85}

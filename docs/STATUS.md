@@ -1,16 +1,16 @@
 # Project Status
 
-Last updated: 2026-07-31 (Asia/Shanghai)
+Last updated: 2026-08-01 (Asia/Shanghai)
 
 | Milestone | State | Evidence and remaining gate |
 |---|---|---|
 | M0 repository/governance | complete | ExecPlan/governance/tree/CI present; Ruff, format, strict mypy and 47 tests pass |
 | M1 environments/assets | local CPU complete; GPU acceptance pending | four isolated environments and three lock forms each; requested bioinformatics tools plus Git LFS available; genuine PyG/ESM-IF1/ProteinMPNN/LigandMPNN CPU smokes pass; GPU access recovered during stage 0002 but the requested large GPU work remains intentionally not run |
-| M2 experimental benchmark | real small fair matrix complete; scale pending | four RCSB structures downloaded/QC; clean 72-candidate ESM-IF1 pilot remains characterization only; genuine 6E9F/5XWP ProteinMPNN and RNA-context LigandMPNN smokes plus protein/soluble checkpoint smokes pass; the 9-method × 2-seed real VI-D matrix completed with 18 Level-2-scored candidates, no mocks, and zero fixed violations |
+| M2 experimental benchmark | real multi-scaffold preparation complete; Level-3 pending | Stage 0003A adds four independent Cas13d parents and nine experimental state units, all with strict four-layer mapping/RNA contacts; genuine ESM-IF1 scored all states and a 48-row four-scaffold × six-method × two-seed real smoke completed with no runtime failures, mocks, or fixed violations |
 | M3 Atlas | core production path complete; auxiliary splits pending | official 5,267,508,328-byte source verified; 1,246,088 operons streamed with zero processing failures; 4,070 exact-unique Cas13; six MMseqs thresholds and strict 40% leakage gate pass; subtype/scaffold-held-out auxiliary splits remain |
 | M4 evolution | VI-D mapping complete; paired analysis data-blocked | length-gated VI-B/D/F/I MSAs and coverage-gated conservation are real; 6E9F has 864/954 exact four-layer mapped positions and 90 coordinate-unresolved positions, with 712 resolved coverage-qualified conservation positions; Atlas repeat orientation is unavailable, yielding 0 high-confidence and 11,727 ambiguous pairs, so real MI/APC/DCA are blocked |
-| M5 constrained generation | preregistered small fair matrix complete; scale/ablations pending | causal constrained decoder and all 18 selected VI-D matrix candidates have zero fixed violations; 14/18 matrix candidates pass registered Level 1 novelty/QC; larger seed count, multistate/scaffold replication, coevolution arm, and full ablations remain |
-| M6 migration/refold | final-HEAD source bundle verified; target pending | provider-neutral mock E2E and migration scripts exist; clean bundle `gpu-bundle-a9a530d14434-7540febfb2` pins final handoff HEAD and passed internal plus 14 large-asset hashes with no missing assets; target transfer/bootstrap/GPU/refold remain |
+| M5 constrained generation | multi-scaffold smoke and pre-wet-lab protocol complete; formal selection pending | causal masks/generation now cover Es, Ur, Dj, and CasRx representatives; the frozen selection protocol requires parent-aware Level-1 QC, two real inverse-folding model families, multi-state gates, novelty strata, and cluster diversity; no final shortlist exists |
+| M6 migration/refold | Stage-0003 job/ingest interface complete; final bundle and real target run pending | 70 proteins expand to 1,068 deterministic monomer/binary/ternary jobs; four labeled mock outputs pass ingest, genuine TM-align invocation, structural metrics, consistency, retry, and Pareto E2E; real prediction count is zero and final clean Stage-0003 bundle is pending |
 
 ## Current scientific evidence
 
@@ -19,9 +19,10 @@ Last updated: 2026-07-31 (Asia/Shanghai)
   labeled.
 - Level 1: 14 of 18 selected matched-matrix candidates pass every registered
   sequence novelty/QC gate. Historical pilot results remain separately labelled.
-- Level 2: all 18 selected matched-matrix candidates received genuine ESM-IF1
-  compatibility scores on the 6E9F backbone; genuine ProteinMPNN and
-  RNA-context LigandMPNN CPU sampling also completed.
+- Level 2: all 18 selected matched-matrix candidates and 48 Stage-0003A
+  multi-scaffold smoke candidates received genuine ESM-IF1 compatibility
+  scores; genuine ProteinMPNN and RNA-context LigandMPNN sampling covers all
+  four Stage-0003A representatives.
 - Level 3: not available; no real candidate refold/multimodel structural
   validation.
 - Level 4: not available and outside the current no-wet-lab scope.
@@ -49,7 +50,13 @@ No candidate is described as a validated or effective Cas13.
 - final matched run:
   `results/runs/20260731-vi-d-matched-baselines-3e2655746e-f5932f7/`;
 - matched report: `reports/matched_baselines/report.md` and `report.html`;
-- stage-0002 audit: `docs/STAGE_0002_SUMMARY_2026-07-31.md`.
+- stage-0002 audit: `docs/STAGE_0002_SUMMARY_2026-07-31.md`;
+- stage-0003A audit: `docs/STAGE_0003A_SUMMARY.md`;
+- multi-scaffold report: `reports/stage_0003a/report.md` and `report.html`;
+- variant data card: `docs/CAS13D_VARIANT_DATA_CARD.md`;
+- frozen candidate protocol:
+  `experiments/preregistered/pre_wetlab_candidate_protocol.yaml`;
+- Stage-0003 GPU input root: `artifacts/gpu_jobs/stage_0003/`.
 
 ## Current quality gate
 
@@ -78,3 +85,7 @@ No candidate is described as a validated or effective Cas13.
   `dirty=false`, `missing_assets=[]`, internal hashes and 14/14 source-asset
   hashes passed;
 - target GPU validation: not run.
+
+Stage-0003A final lint/type/test/model-smoke/reproducibility, clean bundle,
+push, and CI checks are in progress and must replace this provisional line with
+their measured outcomes before the stage is closed.

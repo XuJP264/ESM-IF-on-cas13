@@ -1,0 +1,36 @@
+stage:
+  name: stage-0003-level3-refold
+  status: prepared_not_run
+  evidence_level_if_real_outputs_pass_qc: 3
+  local_execution_forbidden: true
+execution:
+  minimum_gpu_memory_mib: 40000
+  shard_count: 16
+  seeds: [20260801, 20260802]
+  recycles: 3
+  fail_if_target_scaffold_forced_as_template: true
+  task_root: artifacts/gpu_jobs/stage_0003
+  runner: scripts/run_stage_0003_refold.py
+  site_adapter_environment_variable: CAS13_IF_STAGE0003_SITE_ADAPTER
+backends:
+  monomer: [colabfold, alphafold2, alphafold3, boltz]
+  binary: [alphafold3, boltz]
+  ternary: [alphafold3, boltz]
+policies:
+  msa: backend_default_reproducible_cache
+  template: no_target_scaffold_as_forced_template
+  templates_may_be_searched_without_forcing: true
+inputs:
+  pilot_candidates: reports/matched_baselines/candidates.jsonl
+  local_multiscaffold_candidates: reports/stage_0003a/local_multiscaffold_smoke/candidates.jsonl
+  structure_config: configs/stage_0003a_structures.yaml
+  state_table: reports/stage_0003a/states.csv
+expected_outputs:
+  required: [result.json, prediction.cif, pae.json, execution.json]
+  output_schema: src/cas13_if/refold/output_schema.json
+  predictions_are_real: true
+  missing_outputs_enter_retry_manifest: true
+claim_boundary:
+  job_manifests_are_level: 0
+  no_job_manifest_is_a_prediction_result: true
+  fixture_ingest_is_mock: true

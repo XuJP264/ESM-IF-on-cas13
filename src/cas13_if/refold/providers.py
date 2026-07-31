@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 from abc import ABC, abstractmethod
@@ -238,7 +239,17 @@ class ManifestPredictionProvider(StructurePredictionProvider):
         }
 
     def compare_to_scaffold(self, prediction: Path, scaffold: Path) -> dict[str, Any]:
-        executable = shutil.which("USalign") or shutil.which("TMalign")
+        configured = os.environ.get("CAS13_IF_USALIGN")
+        local_candidates = (
+            Path.cwd() / ".tools/envs/bioinformatics/bin/USalign",
+            Path.cwd() / ".tools/envs/bioinformatics/bin/TMalign",
+        )
+        executable = (
+            configured
+            or shutil.which("USalign")
+            or shutil.which("TMalign")
+            or next((str(path) for path in local_candidates if path.is_file()), None)
+        )
         if executable is None:
             return {
                 "status": "not_run",

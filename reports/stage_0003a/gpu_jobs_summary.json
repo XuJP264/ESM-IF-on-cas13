@@ -1,0 +1,23 @@
+{
+  "candidate_count": 70,
+  "counts": {
+    "binary:alphafold3": 140,
+    "binary:boltz": 140,
+    "monomer:alphafold2": 140,
+    "monomer:alphafold3": 140,
+    "monomer:boltz": 140,
+    "monomer:colabfold": 140,
+    "ternary:alphafold3": 114,
+    "ternary:boltz": 114
+  },
+  "evidence_level": 0,
+  "is_mock": false,
+  "job_count": 1068,
+  "large_prediction_execution": "not_run",
+  "local_real_multiscaffold_candidate_count": 48,
+  "pilot_candidate_count": 18,
+  "shards": 16,
+  "status": "prepared_not_run",
+  "template_policy": "no_target_scaffold_as_forced_template",
+  "wt_control_count": 4
+}

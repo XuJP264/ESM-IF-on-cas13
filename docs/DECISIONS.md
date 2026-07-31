@@ -216,3 +216,65 @@ environment contains type packages absent from `.[dev]`. Keep `pandas-stubs`
 in the pip development extra and use `numpy.typing.NDArray` with explicit
 dtypes. Validate dependency-sensitive type changes once in a fresh Python 3.11
 pip-only environment so GitHub Actions does not depend on hidden Conda state.
+
+## 2026-08-01 — Independent scaffold and state semantics
+
+Treat EsCas13d, UrCas13d, DjCas13d, and CasRx/RfxCas13d as four independent
+natural parents. Different apo, binary, ternary, mismatch, or trans-RNA states
+of one parent are state units, not additional scaffold replicates. Never average
+their atomic coordinates into a synthetic backbone; score each state and
+combine normalized log-likelihoods only after state-wise evaluation.
+
+## 2026-08-01 — Natural-parent restoration is evidence-qualified
+
+Separate deposited inactive constructs from natural-parent proxies. Restore
+paper-supported catalytic residues for EsCas13d, UrCas13d, DjCas13d, and CasRx,
+but assign medium sequence-provenance confidence when RCSB lacks the mutation
+declaration or its UniProt cross-reference no longer supplies a sequence. Show
+every substitution and source reason in mapping/manual-review output. Do not
+treat a restored proxy as an independently sequenced construct.
+
+## 2026-08-01 — Multi-state safety masks have distinct meanings
+
+The intersection hard mask contains literature-supported HEPN residues and
+high-confidence direct RNA contacts present in every observed state. The union
+risk mask records any mapping failure, core, direct/second-shell RNA contact,
+or chain-break-adjacent position in any state. The variable hinge mask is the
+union-minus-intersection difference. Core annotations do not automatically
+enter the hard mask; otherwise an experimental single-state core call would
+freeze most of a scaffold and obscure state variability.
+
+## 2026-08-01 — Variant assays remain non-poolable
+
+Keep purified cis/trans cleavage, reporter knockdown, collateral activity,
+cellular allele-specific suppression, and mouse phenotypes in separate
+comparability groups. Figure-read numerical values remain approximate. Indels
+are excluded from unchanged-backbone inverse-folding scoring. With only nine
+numeric point variants, correlations are descriptive and no significance or
+predictive-validity claim is allowed.
+
+## 2026-08-01 — Low-complexity QC is parent-aware
+
+Fail a designed sequence for low complexity when it introduces a flagged
+window beyond the natural-parent baseline. Preserve and report the absolute
+window count, but do not reject all variants of a parent solely because an
+unresolved or inherited natural segment already triggers the same heuristic.
+Homopolymer and composition gates remain absolute as preregistered.
+
+## 2026-08-01 — Level-3 preparation is not Level-3 evidence
+
+Stage-0003 manifests, shards, backend-formatted inputs, expected outputs, and
+retry manifests are Level 0 preparation. Mock prediction fixtures remain
+`is_mock=true`, even when the metric implementation invokes genuine TM-align.
+Only real independent monomer and RNA-complex outputs passing the frozen gates
+may support Level 3. Conditional ESM-IF1 likelihood alone may never determine a
+pre-wet-lab ranking.
+
+## 2026-08-01 — Large refolds are H100-only and site-explicit
+
+The Stage-0003 dispatcher requires at least 40,000 MiB visible GPU memory,
+verifies input hashes, and requires an explicit executable site adapter for
+the installed predictor/database layout. The local 8 GB RTX 4060 must fail
+before prediction starts. Every job uses
+`no_target_scaffold_as_forced_template`; ordinary backend template search may
+be used only without forcing the target experimental scaffold.

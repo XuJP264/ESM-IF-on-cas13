@@ -9,7 +9,7 @@ RUN := conda run -p $(ANALYSIS_ENV)
 .PHONY: map-vi-d
 .PHONY: conservation coevolution-smoke benchmark-experimental generate-pilot
 .PHONY: candidate-novelty
-.PHONY: matched-baselines verify-matched-report
+.PHONY: matched-baselines verify-matched-report stage-0003-refold
 .PHONY: report export-gpu-bundle verify-reproducibility
 
 bootstrap:
@@ -90,6 +90,9 @@ matched-baselines:
 
 verify-matched-report:
 	$(RUN) python scripts/verify_matched_report.py
+
+stage-0003-refold:
+	$(RUN) python scripts/run_stage_0003_refold.py --config $(CONFIG)
 
 report:
 	$(RUN) cas13-if report --config configs/benchmark_experimental.yaml

@@ -252,3 +252,31 @@ bash scripts/launch_gpu_tmux.sh configs/matched_baselines_gpu.yaml matched-basel
 `reports/matched_baselines_gpu/`，不会覆盖 CPU 小矩阵。任务当前状态为
 `not_run`；不得把 job manifest 当作 GPU 结果。完成后必须核对固定/free
 position hash 与 manifest 一致，并确认 mock=0、固定位置违反为 0。
+
+## 8. Stage 0003 Level-3 回折
+
+Stage 0003A 导出目录为 `artifacts/gpu_jobs/stage_0003/`。它包含 70 个蛋白
+输入（18 条 Stage-0002 pilot、48 条真实本地 multi-scaffold smoke 和 4 个
+WT），展开为 1,068 个双 seed 任务：560 monomer、280 binary 和 228
+ternary。支持 ColabFold、AlphaFold2、AlphaFold3 和 Boltz；所有任务的
+template policy 均为 `no_target_scaffold_as_forced_template`。这些任务状态为
+`prepared_not_run`，manifest 本身不是 Level-3 结果。
+
+GPU 节点必须先安装并固定所选 predictor、数据库和许可证允许的权重。站点
+适配器需要接受 `--manifest`、`--task-root` 和 `--config`，并为每项任务生成
+`result.json`、预测结构、PAE 和执行记录。将其可执行路径放入
+`CAS13_IF_STAGE0003_SITE_ADAPTER`；dispatcher 会先要求至少 40,000 MiB 可见
+显存并校验 Stage-0003 内部 hash。本地 8 GB GPU 会在任何预测开始前明确
+失败。
+
+完成节点 bootstrap、资产同步和站点适配器配置后，唯一正式入口是：
+
+```bash
+bash scripts/launch_gpu_tmux.sh \
+  configs/stage_0003_refold.yaml \
+  stage-0003-refold
+```
+
+tmux run 的成功只表示站点适配器退出 0；回传后仍必须执行 Level-3 ingest/QC
+并核对 missing/retry manifest。没有真实输出时不得把 fixture 自比对的
+TM-score、pLDDT 或 PAE 写入正式候选排名。
