@@ -1,0 +1,13 @@
+endpoint,metric,spearman_rho,n,p_value,inference
+cis_activity,esm_binary_delta_vs_wt,-0.06666666666666667,9,,descriptive_only
+cis_activity,esm_ternary_delta_vs_wt,-0.41666666666666663,9,,descriptive_only
+cis_activity,multi_state_min_score,-0.06666666666666667,9,,descriptive_only
+cis_activity,proteinmpnn_delta_nll_vs_wt,0.15,9,,descriptive_only
+cis_activity,ligandmpnn_delta_log_probability_vs_wt,-0.31666666666666665,9,,descriptive_only
+cis_activity,mean_mutated_position_conservation,0.5666666666666667,9,,descriptive_only
+trans_activity,esm_binary_delta_vs_wt,-0.4769916229907622,9,,descriptive_only
+trans_activity,esm_ternary_delta_vs_wt,-0.21757512627648798,9,,descriptive_only
+trans_activity,multi_state_min_score,-0.4769916229907622,9,,descriptive_only
+trans_activity,proteinmpnn_delta_nll_vs_wt,0.12552411131335847,9,,descriptive_only
+trans_activity,ligandmpnn_delta_log_probability_vs_wt,-0.4518868007280905,9,,descriptive_only
+trans_activity,mean_mutated_position_conservation,0.7447763937925935,9,,descriptive_only

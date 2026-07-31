@@ -227,6 +227,7 @@ pydantic                                 2.13.4             pyhcf101f3_0        
 pydantic-core                            2.46.4             py311h902ca64_0       conda-forge
 pygments                                 2.20.0             pyhd8ed1ab_0          conda-forge
 pyparsing                                3.3.2              pyhcf101f3_0          conda-forge
+pypdf                                    6.14.2             pyhcf101f3_0          conda-forge
 pyside6                                  6.11.1             py311hf27b23e_1       conda-forge
 pysocks                                  1.7.1              pyha55dd90_7          conda-forge
 pytest                                   8.4.2              pyhcf101f3_1          conda-forge
@@ -248,7 +249,7 @@ referencing                              0.37.0             pyhcf101f3_0        
 requests                                 2.34.2             pyhcf101f3_0          conda-forge
 rich                                     14.3.4             pyhcf101f3_0          conda-forge
 rpds-py                                  2026.6.3           py311h1baac5b_0       conda-forge
-ruff                                     0.16.0             h462bb3b_0            conda-forge
+ruff                                     0.16.1             h462bb3b_0            conda-forge
 s2n                                      1.7.5              h7e3ee7f_1            conda-forge
 scikit-learn                             1.9.0              np2py311ha15b03d_0    conda-forge
 scipy                                    1.17.1             py311hbe70eeb_1       conda-forge

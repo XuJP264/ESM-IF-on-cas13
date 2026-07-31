@@ -1,10 +1,10 @@
 {
   "cas13_5xwp_a": {
-    "conditional_log_likelihood": -2553.345790145657,
-    "inference_seconds": 6.099910468998132,
+    "conditional_log_likelihood": -2553.3472786061175,
+    "inference_seconds": 0.9785367940057768,
     "length": 1125,
-    "mean_conditional_log_likelihood": -2.269640702351695,
-    "perplexity": 9.675923652828677,
+    "mean_conditional_log_likelihood": -2.26964202542766,
+    "perplexity": 9.675936454819173,
     "protein_chains": [
       "A"
     ],
@@ -14,11 +14,11 @@
     ]
   },
   "cas13_6e9f_a": {
-    "conditional_log_likelihood": -1813.9333906933316,
-    "inference_seconds": 4.481202650000341,
+    "conditional_log_likelihood": -1813.9303195329267,
+    "inference_seconds": 0.6351829719933448,
     "length": 864,
-    "mean_conditional_log_likelihood": -2.099459942932097,
-    "perplexity": 8.161760905453558,
+    "mean_conditional_log_likelihood": -2.099456388348295,
+    "perplexity": 8.16173189384201,
     "protein_chains": [
       "A"
     ],
@@ -35,22 +35,22 @@
   "evidence_level": 2,
   "is_mock": false,
   "runtime": {
-    "cuda_available": false,
+    "cuda_available": true,
     "cuda_runtime": "12.1",
-    "device": "cpu",
-    "gpu": null,
-    "load_seconds": 3.543192976001592,
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "load_seconds": 5.078507037993404,
     "platform": "Linux-6.6.114.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
     "python": "3.10.20 | packaged by conda-forge | (main, Jun 11 2026, 03:31:56) [GCC 14.3.0]",
     "torch": "2.4.1"
   },
   "schema_version": "1.0",
   "toy": {
-    "conditional_log_likelihood": -4.176253437995911,
+    "conditional_log_likelihood": -4.17625105381012,
     "fixed_all_recovery": true,
     "fixed_position_violations": 0,
-    "perplexity": 8.069784023189047,
-    "sample": "AA",
+    "perplexity": 8.06977440326258,
+    "sample": "MA",
     "sequence": "AG"
   }
 }

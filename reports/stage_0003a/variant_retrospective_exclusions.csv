@@ -1,0 +1,7 @@
+variant_id,mutation,active_inactive_partial_label,reason
+Rx-delta1,del634-643,partial,indel changes sequence length; same-backbone score invalid
+Rx-delta2,del776-818,active,indel changes sequence length; same-backbone score invalid
+Rx-delta12,del634-643+del776-818,partial,indel changes sequence length; same-backbone score invalid
+Rx-delta3,del168-179,inactive,indel changes sequence length; same-backbone score invalid
+Rx-delta4,del152-215,inactive,indel changes sequence length; same-backbone score invalid
+Rx-Ins1,ins693_694:KDDPSRNF,active,indel changes sequence length; same-backbone score invalid

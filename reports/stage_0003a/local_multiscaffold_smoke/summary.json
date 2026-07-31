@@ -1,0 +1,19 @@
+{
+  "claim_scope": "bounded real execution smoke, not final statistics",
+  "evidence_level_max": 2,
+  "failed_candidate_count": 0,
+  "fixed_position_violations": 0,
+  "ligandmpnn_candidates_with_rna_context": 8,
+  "method_counts": {
+    "common_safety_mask_esm_if1": 8,
+    "conservation_esm_if1": 8,
+    "conservation_rna_esm_if1": 8,
+    "esm_ligand_consensus": 8,
+    "ligandmpnn": 8,
+    "proteinmpnn": 8
+  },
+  "mock_candidate_count": 0,
+  "real_candidate_count": 48,
+  "scaffold_count": 4,
+  "seed_count": 2
+}

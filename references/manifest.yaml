@@ -1,5 +1,5 @@
 schema_version: "1.0"
-updated: 2026-07-31
+updated: 2026-08-01
 papers:
   - id: hsu2022_esm_if1
     title: Learning inverse folding from millions of predicted structures
@@ -159,3 +159,59 @@ papers:
     license: publisher copyright
     relevance: Nucleotide-amino-acid evolutionary coupling in RNA-protein complexes
     notes_path: references/notes/weinreb2016_rna_ec.md
+  - id: zhang2019_urcas13d_hepn
+    title: Two HEPN domains dictate CRISPR RNA maturation and target cleavage in Cas13d
+    authors: [Bo Zhang, et al.]
+    year: 2019
+    venue: Nature Communications 10, 2544
+    doi: 10.1038/s41467-019-10507-3
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6559982/
+    pdf_url: null
+    local_pdf: null
+    sha256: null
+    access_status: open_access_metadata_and_full_text_used
+    license: CC BY 4.0; extracted facts only
+    relevance: UrCas13d binary structure, catalytic numbering, and natural construct interpretation
+    notes_path: references/notes/zhang2019_urcas13d_hepn.md
+  - id: tong2023_hfcas13d
+    title: High-fidelity Cas13 variants for targeted RNA degradation with minimal collateral effects
+    authors: [Hui Tong, et al.]
+    year: 2023
+    venue: Nature Biotechnology 41, 108–119
+    doi: 10.1038/s41587-022-01419-7
+    official_url: https://www.nature.com/articles/s41587-022-01419-7
+    pdf_url: null
+    local_pdf: references/papers/41587_2022_1419_MOESM1_ESM.pdf
+    sha256: 3fee0eb1071c91902c894e3767ad5076b1b86af38d35741e5b31ac00cc12fb7a
+    access_status: official_public_supplement_fetched_local_gitignored
+    license: publisher terms; extracted facts only
+    relevance: CasRx high-fidelity point variant and assay-specific phenotype evidence
+    notes_path: references/notes/tong2023_hfcas13d.md
+  - id: yang2024_hpcas13d
+    title: Allele-specific suppression of variant MHC with high-precision RNA nuclease CRISPR-Cas13d prevents hypertrophic cardiomyopathy
+    authors: [Ping Yang, et al.]
+    year: 2024
+    venue: Circulation
+    doi: 10.1161/CIRCULATIONAHA.123.067890
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11259241/
+    pdf_url: null
+    local_pdf: null
+    sha256: null
+    access_status: open_access_metadata_and_full_text_used
+    license: CC BY-NC-ND; extracted facts only
+    relevance: CasRx high-precision point variant and allele-specific cell/mouse assay evidence
+    notes_path: references/notes/yang2024_hpcas13d.md
+  - id: chen2025_casrx_djcas13d
+    title: Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d
+    authors: [Xiaoyan Chen, et al.]
+    year: 2025
+    venue: Nucleic Acids Research
+    doi: 10.1093/nar/gkaf986
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12481013/
+    pdf_url: https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12481013/supplementaryFiles
+    local_pdf: references/papers/gkaf986_supplemental_file.pdf
+    sha256: 20c9d3dcb459435034b9dd1711d6a7361ca09b30e70a716856be3e9893348318
+    access_status: open_access_supplement_fetched_local_gitignored
+    license: CC BY-NC; extracted facts only
+    relevance: CasRx/DjCas13d multistate structures, inactive constructs, and biochemical mutation panel
+    notes_path: references/notes/chen2025_casrx_djcas13d.md

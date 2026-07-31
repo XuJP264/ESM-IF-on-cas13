@@ -1,0 +1,31 @@
+experiment:
+  name: stage-0003a-real-variant-retrospective
+  evidence_level_max: 2
+  is_mock: false
+  inference_scope: descriptive_only_small_assay_stratified_sample
+inputs:
+  variants: data/processed/cas13d_variant_activity.parquet
+  scaffold_states: [9M31, 9M8Q]
+  primary_structure: data/experimental_structures/9m31.pdb
+  protein_chain: A
+  rna_context_chains: [B]
+models:
+  esm_if1_checkpoint: models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt
+  esm_if1_python: .tools/envs/esm_if1/bin/python
+  proteinmpnn_upstream: third_party/ProteinMPNN
+  proteinmpnn_checkpoint: models/proteinmpnn/v_48_020.pt
+  ligandmpnn_upstream: third_party/LigandMPNN
+  ligandmpnn_checkpoint: models/ligandmpnn/ligandmpnn_v_32_010_25.pt
+  ligandmpnn_protein_checkpoint: models/ligandmpnn/proteinmpnn_v_48_020.pt
+  ligandmpnn_soluble_checkpoint: models/ligandmpnn/solublempnn_v_48_020.pt
+  mpnn_python: .tools/envs/ligandmpnn/bin/python
+execution:
+  device: cuda
+  seed: 20260801
+  proteinmpnn_decoding_orders: 4
+  ligandmpnn_forcing_bias: 100.0
+statistics:
+  bootstrap_replicates: 2000
+  confidence: 0.95
+  independent_unit: variant_within_one_comparability_group
+  significance_tests: not_run_insufficient_class_counts

@@ -1,0 +1,16 @@
+{
+  "activity_values_are_approximate_graph_readings": true,
+  "correlations_are_descriptive": true,
+  "evidence_level": 2,
+  "fixed_or_forced_sequence_violations": 0,
+  "indels_excluded": 6,
+  "is_mock": false,
+  "point_variants_scored": 10,
+  "real_esm_state_scores": 22,
+  "real_ligandmpnn_scores": 11,
+  "real_proteinmpnn_scores": 11,
+  "rna_atomic_context_verified": true,
+  "significance_tests": "not_run_insufficient_class_counts",
+  "source_records_in_comparability_group": 16,
+  "state_rank_consistency": 0.5151515151515151
+}

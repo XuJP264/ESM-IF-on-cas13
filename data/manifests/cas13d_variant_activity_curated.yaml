@@ -1,0 +1,154 @@
+schema_version: "1.0"
+curated_at: 2026-08-01
+is_mock: false
+numbering_policy: CasRx natural protein, one-based; WT residues validated before mutation
+label_policy:
+  primary_endpoint: cis_activity
+  active_minimum: 0.80
+  inactive_maximum: 0.20
+  partial_interval: [0.20, 0.80]
+  cis_retained_minimum: 0.50
+  trans_reduced_maximum: 0.20
+sources:
+  - study_id: yan2018_cell
+    publication: Structural Basis for the RNA-Guided Ribonuclease Activity of CRISPR-Cas13d
+    doi: 10.1016/j.cell.2018.09.001
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6179368/
+    source_asset: PMC full text and Figure 7
+    source_sha256: null
+    access_status: open_author_manuscript
+    license: NIHMS/publisher terms; extracted facts only
+  - study_id: tong2023_hfcas13d
+    publication: High-fidelity Cas13 variants for targeted RNA degradation with minimal collateral effects
+    doi: 10.1038/s41587-022-01419-7
+    official_url: https://www.nature.com/articles/s41587-022-01419-7
+    source_asset: references/papers/41587_2022_1419_MOESM1_ESM.pdf
+    source_sha256: 3fee0eb1071c91902c894e3767ad5076b1b86af38d35741e5b31ac00cc12fb7a
+    access_status: public_supplement
+    license: publisher terms; extracted facts only
+  - study_id: yang2024_hpcas13d
+    publication: Allele-specific suppression of variant MHC with high-precision RNA nuclease CRISPR-Cas13d prevents hypertrophic cardiomyopathy
+    doi: 10.1161/CIRCULATIONAHA.123.067890
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11259241/
+    source_asset: PMC full text
+    source_sha256: null
+    access_status: open_access
+    license: CC BY-NC-ND; extracted facts only
+  - study_id: chen2025_structural_mutagenesis
+    publication: Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d
+    doi: 10.1093/nar/gkaf986
+    official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12481013/
+    source_asset: artifacts/downloads/PMC12481013_supplementary.zip
+    source_sha256: bc5e73b1f9c4e864511c03b4b9ba84abc43360b3f6b66f5d700a16fffcf070a1
+    access_status: open_access
+    license: CC BY-NC
+defaults:
+  scaffold: CasRx
+  residue_numbering_system: CasRx natural one-based numbering
+  guide: synthetic 52-nt CasRx crRNA, Supplementary Table S3
+  target: synthetic 109-nt target RNA; trans substrate is 79-nt NTR
+  replicate_information: n=3, mean plus/minus SD
+  expression: purified unless otherwise noted
+  solubility: purified unless otherwise noted
+  source_table_figure_supplement: Figure 6 and Supplementary Tables S1-S3
+  extraction_method: manual graph reading to approximately 0.01 from public Figure 6; values are approximate
+  confidence: medium
+  comparability_group: chen2025_in_vitro_cis_trans_figure6
+variants:
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-delta1, mutation: del634-643, cis_activity: 0.60, trans_activity: 0.49}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-delta2, mutation: del776-818, cis_activity: 0.97, trans_activity: 0.75}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-delta12, mutation: "del634-643+del776-818", cis_activity: 0.64, trans_activity: 0.40}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-delta3, mutation: del168-179, cis_activity: 0.19, trans_activity: 0.22}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-delta4, mutation: del152-215, cis_activity: 0.13, trans_activity: 0.18}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-Ins1, mutation: "ins693_694:KDDPSRNF", cis_activity: 0.98, trans_activity: 1.07}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: N2V7, mutation: "I132A,E135A,I137A,I147A", cis_activity: 0.26, trans_activity: 0.24}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: hfCas13d, mutation: "A134V,A140V,A141V,A143V", cis_activity: 0.24, trans_activity: 0.35}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: hpCas13d, mutation: "T486A,N641A,R648A", cis_activity: 0.68, trans_activity: 0.52}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-P1, mutation: "K105A,R106A,R251A,R254A,K262A", cis_activity: 0.29, trans_activity: 0.08}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-P2, mutation: "K741A,K750A,K751A,K755A", cis_activity: 0.51, trans_activity: 0.08}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-P3, mutation: "K852A,K860A,R868A,R899A,K902A", cis_activity: 0.13, trans_activity: 0.04}
+  - variant_id: Rx-T1
+    study_id: chen2025_structural_mutagenesis
+    mutation: "K72A,N324A,R403A,R950A"
+    cis_activity: null
+    trans_activity: null
+    expression: expressed but not successfully purified
+    solubility: purification failure
+    label: not_assayed
+    notes: Excluded from activity comparisons; retained in the failure audit.
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-T2, mutation: "K331A,R333A,Y360A,Q638A", cis_activity: 0.39, trans_activity: 0.13}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-T3, mutation: "K600A,R648A,K656A,K703A", cis_activity: 0.07, trans_activity: 0.06}
+  - {study_id: chen2025_structural_mutagenesis, variant_id: Rx-T4, mutation: "N595A,S598A,N599A,Y649A,S706A", cis_activity: 0.99, trans_activity: 0.82}
+  - study_id: yan2018_cell
+    variant_id: CasRx-delta3
+    mutation: del558-587
+    assay_type: human_cell_RFP_knockdown
+    guide: RFP-targeting CasRx guide
+    target: RFP reporter
+    cis_activity: null
+    trans_activity: null
+    cell_knockdown: full activity relative to WT; >95% reduction of RFP-positive cells
+    WT_normalized_activity: null
+    replicate_information: n=3, mean plus/minus SD
+    source_table_figure_supplement: Figure 7B
+    extraction_method: primary-text qualitative category
+    confidence: high
+    comparability_group: yan2018_RFP_cell_knockdown
+    label: active
+  - study_id: yan2018_cell
+    variant_id: CasRx-delta3.2
+    mutation: "del177-193+del558-587"
+    assay_type: human_cell_RFP_knockdown
+    cell_knockdown: inactive or minimal knockdown in Figure 7B
+    replicate_information: n=3, mean plus/minus SD
+    source_table_figure_supplement: Figure 7B
+    extraction_method: primary-figure qualitative category
+    confidence: medium
+    comparability_group: yan2018_RFP_cell_knockdown
+    label: inactive
+  - study_id: yan2018_cell
+    variant_id: CasRx-delta3.3
+    mutation: "del376-392+del558-587"
+    assay_type: human_cell_RFP_knockdown
+    cell_knockdown: ">95% reduction of RFP-positive cells"
+    replicate_information: n=3, mean plus/minus SD
+    source_table_figure_supplement: Figure 7B
+    extraction_method: primary-text and figure qualitative category
+    confidence: high
+    comparability_group: yan2018_RFP_cell_knockdown
+    label: active
+  - study_id: yan2018_cell
+    variant_id: CasRx-delta3.7
+    mutation: "del953-966+del558-587"
+    assay_type: human_cell_RFP_knockdown
+    cell_knockdown: ">95% reduction of RFP-positive cells"
+    replicate_information: n=3, mean plus/minus SD
+    source_table_figure_supplement: Figure 7B
+    extraction_method: primary-text and figure qualitative category
+    confidence: high
+    comparability_group: yan2018_RFP_cell_knockdown
+    label: active
+  - study_id: tong2023_hfcas13d
+    variant_id: hfCas13d
+    mutation: "A134V,A140V,A141V,A143V"
+    assay_type: HEK293T_target_knockdown_and_collateral_assays
+    cell_knockdown: retained target knockdown with reduced collateral effects
+    replicate_information: see source figures and source-data workbooks
+    source_table_figure_supplement: main and Supplementary Figures 5-10
+    extraction_method: primary-text qualitative category and sequence table
+    confidence: high
+    comparability_group: tong2023_cell_assays
+    label: active
+  - study_id: yang2024_hpcas13d
+    variant_id: hpCas13d
+    mutation: "T486A,N641A,R648A"
+    assay_type: allele_specific_cell_and_mouse_MYH7_suppression
+    guide: MYH7 variant-specific guides
+    target: variant MYH7 transcripts
+    cell_knockdown: allele-selective suppression reported
+    replicate_information: assay-specific; see primary figures
+    source_table_figure_supplement: primary article figures
+    extraction_method: primary-text qualitative category
+    confidence: high
+    comparability_group: yang2024_MYH7_cell_mouse
+    label: active

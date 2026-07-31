@@ -1,0 +1,43 @@
+experiment:
+  name: stage-0003a-real-local-multiscaffold-smoke
+  evidence_level_max: 2
+  is_mock: false
+execution:
+  device: cuda
+  seeds: [20260801, 20260802]
+  proposals_per_seed: 1
+  reason: bounded real generation on the measured 8,185 MiB RTX 4060
+sampling:
+  temperature:
+    esm_if1: 1.0
+    proteinmpnn: 1.0
+    ligandmpnn: 1.0
+  minimum_msa_coverage: 0.8
+  minimum_conservation: 0.8
+  maximum_conservation_positions: 32
+  maximum_rna_second_shell_positions: 32
+  consensus_target_coordinate_identity: 0.35
+qc:
+  maximum_homopolymer_length: 7
+  low_complexity_window: 12
+  low_complexity_maximum_fraction: 0.5
+inputs:
+  report_root: reports/stage_0003a
+  representatives:
+    - {scaffold_id: EsCas13d, pdb_id: 6E9F}
+    - {scaffold_id: UrCas13d, pdb_id: 6IV9}
+    - {scaffold_id: DjCas13d, pdb_id: 9M33}
+    - {scaffold_id: CasRx, pdb_id: 9M8Q}
+models:
+  esm_if1_checkpoint: models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt
+  proteinmpnn_checkpoint: models/proteinmpnn/v_48_020.pt
+  ligandmpnn_checkpoint: models/ligandmpnn/ligandmpnn_v_32_010_25.pt
+  ligandmpnn_protein_checkpoint: models/ligandmpnn/proteinmpnn_v_48_020.pt
+  ligandmpnn_soluble_checkpoint: models/ligandmpnn/solublempnn_v_48_020.pt
+  proteinmpnn_upstream: third_party/ProteinMPNN
+  ligandmpnn_upstream: third_party/LigandMPNN
+environments:
+  esm_if1_python: .tools/envs/esm_if1/bin/python
+  ligandmpnn_python: .tools/envs/ligandmpnn/bin/python
+outputs:
+  directory: reports/stage_0003a/local_multiscaffold_smoke

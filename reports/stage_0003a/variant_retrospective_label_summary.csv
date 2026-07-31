@@ -1,0 +1,5 @@
+label,n,multi_state_min_mean,bootstrap_ci_low,bootstrap_ci_high,unit
+active,1,-2.5300536078001232,-2.5300536078001232,-2.5300536078001232,variant within one assay group
+cis-retained/trans-reduced,1,-2.5255117702105148,-2.5255117702105148,-2.5255117702105148,variant within one assay group
+inactive,2,-2.5263518952837947,-2.5272135858916234,-2.525490204675966,variant within one assay group
+partial,5,-2.534397280408247,-2.5409821205990846,-2.5299759158620114,variant within one assay group
