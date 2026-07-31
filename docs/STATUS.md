@@ -10,7 +10,7 @@ Last updated: 2026-07-31 (Asia/Shanghai)
 | M3 Atlas | core production path complete; auxiliary splits pending | official 5,267,508,328-byte source verified; 1,246,088 operons streamed with zero processing failures; 4,070 exact-unique Cas13; six MMseqs thresholds and strict 40% leakage gate pass; subtype/scaffold-held-out auxiliary splits remain |
 | M4 evolution | real subtype MSA/conservation partial; paired analysis data-blocked | length-gated VI-B/D/F/I MSAs and coverage-gated conservation are real; scaffold mapping remains; Atlas repeat orientation is unavailable, yielding 0 high-confidence and 11,727 ambiguous pairs, so real MI/APC/DCA are blocked |
 | M5 constrained generation | real pilot and Level 1 audit partial | causal constrained decoder and 6E9F real sample have zero violations; 14/72 pilot candidates pass registered Level 1 novelty/QC; full baselines, matched novelty and ablations remain |
-| M6 migration/refold | Atlas-complete source bundle verified; target pending | provider-neutral mock E2E and migration scripts exist; clean bundle `gpu-bundle-3e53026923aa-7540febfb2` passed internal plus 14 large-asset hashes with no missing assets; target transfer/bootstrap/GPU/refold remain |
+| M6 migration/refold | Atlas-complete source bundle verified; target pending | provider-neutral mock E2E and migration scripts exist; clean bundle `gpu-bundle-4eaa2ec1d726-7540febfb2` passed internal plus 14 large-asset hashes with no missing assets; target transfer/bootstrap/GPU/refold remain |
 
 ## Current scientific evidence
 

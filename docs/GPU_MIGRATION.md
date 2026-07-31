@@ -215,11 +215,11 @@ manifest，大小为 5,267,508,328 bytes，SHA256 为
 该验收现已完成。当前 Atlas-complete source bundle 是：
 
 ```text
-artifacts/bundles/gpu-bundle-3e53026923aa-7540febfb2/
+artifacts/bundles/gpu-bundle-4eaa2ec1d726-7540febfb2/
 ```
 
 其 manifest 固定 commit
-`3e53026923aacdc9a87de1b7005dfa844d837934`，导出时
+`4eaa2ec1d72649f38e215024fe52a5b1263cd30e`，导出时
 `git_worktree_dirty_at_export=false`。bundle 本体约 372 KiB，
 `missing_assets=[]`；5 个 checkpoint、Atlas JSON 和 8 个 PDB/mmCIF
 资产均已在源节点通过 `ASSET_SHA256SUMS`。目标节点必须 checkout manifest

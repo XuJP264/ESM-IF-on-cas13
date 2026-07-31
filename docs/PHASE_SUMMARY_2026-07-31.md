@@ -331,10 +331,10 @@ sensitivity 7.5 和 query coverage ≥ 0.8：
 
 本轮 Atlas-complete clean bundle：
 
-`artifacts/bundles/gpu-bundle-3e53026923aa-7540febfb2/`
+`artifacts/bundles/gpu-bundle-4eaa2ec1d726-7540febfb2/`
 
 - manifest commit：
-  `3e53026923aacdc9a87de1b7005dfa844d837934`；
+  `4eaa2ec1d72649f38e215024fe52a5b1263cd30e`；
 - export dirty：false；
 - bundle size：约 372 KiB；
 - internal SHA256：passed；

@@ -135,7 +135,7 @@ commits, and verified push.
   registered novelty/QC gates; low-complexity and no-hit failures remain in the
   audit and no candidate receives a functional claim.
 - [x] 2026-07-31: Exported Atlas-complete clean source bundle
-  `gpu-bundle-3e53026923aa-7540febfb2` from commit `3e53026923aa`; internal
+  `gpu-bundle-4eaa2ec1d726-7540febfb2` from commit `4eaa2ec1d726`; internal
   hashes plus five checkpoints, the 5.27 GB Atlas JSON, and eight experimental
   structure assets passed, with no missing assets.
 - [ ] Complete M6 and the final acceptance audit.
