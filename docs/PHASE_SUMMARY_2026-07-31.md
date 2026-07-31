@@ -195,6 +195,13 @@ bash scripts/fetch_atlas.sh
 失败记录仍保留。只有完整 5,267,508,328 字节下载、SHA256 和原子 rename
 完成后才会把 Atlas 状态标为 downloaded。该任务不需要迁移 GPU。
 
+对生产 `.part` 前 100,000 条记录的只读流式复查发现 Atlas 经常把
+`summary.subtype` 写成泛型 `VI`，而精确亚型位于 Cas HMM；旧规则会漏计。
+现已增加保守 subtype resolution，并逐条保存 raw/source/conflict。在该
+100,000 条诊断样本中解析到 VI-B 267、VI-D 675、VI-F 4、VI-I 2 个
+Cas13 注释，其中 3 个与 operon summary 冲突并会进入 ambiguous 路径。
+这只是 schema/规则诊断，不是最终 Atlas 数据漏斗。
+
 ### 2.2 ESM-IF1 隔离环境
 
 `.tools/envs/esm_if1` 的第一次 Conda transaction 暴露了 user-site 泄漏；

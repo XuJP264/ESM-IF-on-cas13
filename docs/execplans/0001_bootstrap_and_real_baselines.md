@@ -180,6 +180,11 @@ commits, and verified push.
   candidate IDs across temperature/constraint conditions. Historical outputs
   remain immutable; the corrected run uses condition-digest IDs and validates
   72/72 uniqueness before downstream use.
+- A read-only scan of the first 100,000 production Atlas records showed that
+  `summary.subtype` is often generic `VI` or empty while the Cas HMM contains
+  the precise subtype. The parser now preserves raw/source/conflict fields and
+  resolves explicit HMM subtypes before the full parse. Conflicting non-VI
+  summaries are retained but cannot enter high-confidence pairing.
 
 ## Execution details
 

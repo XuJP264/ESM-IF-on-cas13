@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import sqlite3
 from collections import Counter
 from collections.abc import Iterator
@@ -15,6 +16,8 @@ from typing import Any, TextIO
 import pyarrow as pa  # type: ignore[import-untyped]
 import pyarrow.parquet as pq  # type: ignore[import-untyped]
 
+CAS13_NOMENCLATURE_SUBTYPES = {letter: f"VI-{letter}" for letter in "ABCDEFGHIJ"}
+
 
 class AtlasParseError(ValueError):
     """Raised when the top-level Atlas JSON stream is malformed."""
@@ -24,6 +27,9 @@ class AtlasParseError(ValueError):
 class Cas13Record:
     operon_id: str
     subtype: str
+    subtype_raw: str
+    subtype_source: str
+    subtype_conflict: bool
     effector_name: str
     hmm_name: str | None
     protein_sequence: str
@@ -38,6 +44,9 @@ class Cas13Record:
 class PairingRecord:
     operon_id: str
     subtype: str
+    subtype_raw: str
+    subtype_source: str
+    subtype_conflict: bool
     effector_name: str
     protein_sequence: str
     direct_repeat: str
@@ -151,6 +160,40 @@ def is_cas13_effector(cas: dict[str, Any]) -> bool:
         str(cas.get(key, "")) for key in ("gene_name", "hmm_name", "annotation")
     ).lower()
     return "cas13" in values or "c2c2" in values
+
+
+def resolve_cas13_subtype(
+    raw_subtype: str,
+    cas: dict[str, Any],
+) -> tuple[str, str, bool]:
+    """Resolve precise Type VI subtype while retaining source disagreements."""
+    raw = raw_subtype.strip().upper()
+    hmm_name = str(cas.get("hmm_name") or "")
+    effector_name = str(cas.get("gene_name") or cas.get("annotation") or "")
+    hmm_match = re.search(r"CAS[-_]VI[-_]([A-Z][A-Z0-9]*)", hmm_name.upper())
+    inferred: str | None = None
+    source = "atlas_summary"
+    if hmm_match:
+        inferred = f"VI-{hmm_match.group(1)}"
+        source = "cas_hmm_explicit"
+    else:
+        name_match = re.search(r"\bCAS13([A-Z])(?:\b|[^A-Z])", effector_name.upper())
+        if name_match and name_match.group(1) in CAS13_NOMENCLATURE_SUBTYPES:
+            inferred = CAS13_NOMENCLATURE_SUBTYPES[name_match.group(1)]
+            source = "effector_name_nomenclature"
+
+    if raw.startswith("VI-"):
+        conflict = (
+            inferred is not None and inferred != raw and not raw.startswith(inferred)
+        )
+        subtype_source = "atlas_summary" if not conflict else "atlas_summary_conflict"
+        return raw, subtype_source, conflict
+    if raw == "VI" or not raw:
+        subtype_source = source if inferred else "atlas_summary_unresolved"
+        return inferred or raw, subtype_source, False
+    if inferred is not None:
+        return inferred, f"{source}_summary_conflict", True
+    return raw, "atlas_summary_non_type_vi", True
 
 
 def normalize_rna(sequence: str) -> str:
@@ -275,10 +318,16 @@ def extract_cas13_records(operon: dict[str, Any]) -> list[Cas13Record]:
         if not sequence:
             continue
         name = str(cas.get("gene_name") or cas.get("hmm_name") or "Cas13")
+        resolved_subtype, subtype_source, subtype_conflict = resolve_cas13_subtype(
+            subtype, cas
+        )
         records.append(
             Cas13Record(
                 operon_id=operon_id,
-                subtype=subtype,
+                subtype=resolved_subtype,
+                subtype_raw=subtype,
+                subtype_source=subtype_source,
+                subtype_conflict=subtype_conflict,
                 effector_name=name,
                 hmm_name=(
                     str(cas["hmm_name"]) if cas.get("hmm_name") is not None else None
@@ -318,6 +367,8 @@ def pair_cas13_direct_repeat(operon: dict[str, Any]) -> PairingRecord | None:
     subtype = effectors[0].subtype
     if not subtype or not subtype.upper().startswith("VI-"):
         reasons.append("ambiguous_subtype")
+    if effectors[0].subtype_conflict:
+        reasons.append("subtype_conflict_with_operon_summary")
     orientation = arrays[0].orientation if arrays else "unknown"
     orientation_source = (
         arrays[0].orientation_source if arrays else "array_not_available"
@@ -329,6 +380,9 @@ def pair_cas13_direct_repeat(operon: dict[str, Any]) -> PairingRecord | None:
     return PairingRecord(
         operon_id=effectors[0].operon_id,
         subtype=subtype,
+        subtype_raw=effectors[0].subtype_raw,
+        subtype_source=effectors[0].subtype_source,
+        subtype_conflict=effectors[0].subtype_conflict,
         effector_name=effectors[0].effector_name,
         protein_sequence=effectors[0].protein_sequence,
         direct_repeat=repeat,
@@ -439,6 +493,9 @@ def _schemas() -> dict[str, pa.Schema]:
         [
             ("operon_id", string),
             ("subtype", string),
+            ("subtype_raw", string),
+            ("subtype_source", string),
+            ("subtype_conflict", boolean),
             ("effector_name", string),
             ("hmm_name", string),
             ("protein_sequence", string),
@@ -453,6 +510,9 @@ def _schemas() -> dict[str, pa.Schema]:
         [
             ("operon_id", string),
             ("subtype", string),
+            ("subtype_raw", string),
+            ("subtype_source", string),
+            ("subtype_conflict", boolean),
             ("effector_name", string),
             ("protein_sequence", string),
             ("direct_repeat", string),
@@ -523,6 +583,11 @@ def _operon_row(raw: dict[str, Any]) -> dict[str, Any]:
     subtype = str(summary.get("subtype") or "").strip()
     arrays = raw.get("crispr") or []
     cas_entries = raw.get("cas") or []
+    inferred_type_vi = not subtype and any(
+        resolve_cas13_subtype(subtype, cas)[0].startswith("VI-")
+        for cas in cas_entries
+        if isinstance(cas, dict) and is_cas13_effector(cas)
+    )
     genomic_context = {
         key: raw[key]
         for key in (
@@ -544,7 +609,11 @@ def _operon_row(raw: dict[str, Any]) -> dict[str, Any]:
     return {
         "operon_id": operon_id,
         "subtype": subtype,
-        "is_type_vi": subtype.upper().startswith("VI-"),
+        "is_type_vi": (
+            subtype.upper() == "VI"
+            or subtype.upper().startswith("VI-")
+            or inferred_type_vi
+        ),
         "metadata_json": json.dumps(metadata, sort_keys=True),
         "source": (
             str(metadata["source_db"])
@@ -665,6 +734,8 @@ def process_atlas(
         "CREATE INDEX cas13_digest_index ON cas13_dedup(sequence_sha256, operon_id)"
     )
     subtype_counts: Counter[str] = Counter()
+    cas13_subtype_counts: Counter[str] = Counter()
+    cas13_subtype_sources: Counter[str] = Counter()
     total = 0
     type_vi = 0
     cas_effector_count = 0
@@ -672,6 +743,7 @@ def process_atlas(
     high_pair_count = 0
     ambiguous_pair_count = 0
     failure_count = 0
+    cas13_subtype_conflicts = 0
     try:
         for index, raw in enumerate(iter_json_array(path)):
             total += 1
@@ -698,6 +770,9 @@ def process_atlas(
                     writers["crispr_arrays"].append(asdict(crispr_array))
                 for cas13_record in cas13_records:
                     writers["cas13_records"].append(asdict(cas13_record))
+                    cas13_subtype_counts[cas13_record.subtype] += 1
+                    cas13_subtype_sources[cas13_record.subtype_source] += 1
+                    cas13_subtype_conflicts += int(cas13_record.subtype_conflict)
                     connection.execute(
                         "INSERT INTO cas13_dedup VALUES (?, ?, ?, ?, ?)",
                         (
@@ -761,6 +836,9 @@ def process_atlas(
         "ambiguous_pairs": ambiguous_pair_count,
         "processing_failures": failure_count,
         "subtype_counts": dict(sorted(subtype_counts.items())),
+        "cas13_subtype_counts": dict(sorted(cas13_subtype_counts.items())),
+        "cas13_subtype_sources": dict(sorted(cas13_subtype_sources.items())),
+        "cas13_subtype_conflicts": cas13_subtype_conflicts,
         "pair_orientation_policy": (
             "unknown orientation is ambiguous; reverse is reverse-complemented; "
             "only declared/recovered orientation may be high confidence"

@@ -56,6 +56,16 @@ orientation remains ambiguous and is excluded from high-confidence paired
 protein/direct-repeat analyses. Do not silently select a strand or use spacer
 content as proof of orientation.
 
+## 2026-07-31 — Atlas subtype resolution preserves raw disagreements
+
+Atlas v1.0 frequently stores only generic `VI` (or an empty subtype) while the
+Cas HMM contains an explicit family such as `CAS-VI-D`. Resolve Cas13 subtype
+from an explicit Cas HMM first and, where the HMM lacks a subtype, from
+canonical Cas13a–j nomenclature. Preserve `subtype_raw`, `subtype_source`, and
+`subtype_conflict` on every Cas13 record. A clear non-Type-VI summary that
+conflicts with a Cas13 HMM is retained but routed to ambiguous pairing; it is
+never silently promoted to a high-confidence pair.
+
 ## 2026-07-31 — Environment isolation gate
 
 An environment is not accepted merely because its Conda transaction completes.

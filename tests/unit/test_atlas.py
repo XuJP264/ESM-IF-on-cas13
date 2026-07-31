@@ -8,6 +8,7 @@ from cas13_if.data.atlas import (
     iter_json_array,
     pair_cas13_direct_repeat,
     process_atlas,
+    resolve_cas13_subtype,
 )
 
 FIXTURE = Path("data/fixtures/atlas_operons.json")
@@ -49,6 +50,48 @@ def test_unknown_orientation_is_ambiguous_and_reverse_is_oriented() -> None:
     assert oriented.direct_repeat == "ACUU"
 
 
+def test_cas13_subtype_recovery_and_conflict_are_explicit(tmp_path: Path) -> None:
+    explicit_hmm = {
+        "gene_name": "Cas13d",
+        "hmm_name": "Cas13d_0_CAS-VI-D",
+    }
+    assert resolve_cas13_subtype("VI", explicit_hmm) == (
+        "VI-D",
+        "cas_hmm_explicit",
+        False,
+    )
+    assert resolve_cas13_subtype(
+        "VI", {"gene_name": "Cas13f", "hmm_name": "Cas13f_c126"}
+    ) == ("VI-F", "effector_name_nomenclature", False)
+    assert resolve_cas13_subtype("I-C", explicit_hmm) == (
+        "VI-D",
+        "cas_hmm_explicit_summary_conflict",
+        True,
+    )
+
+    record = next(iter(iter_json_array(FIXTURE)))
+    record["summary"]["subtype"] = "I-C"
+    record["cas"][0]["hmm_name"] = "Cas13d_0_CAS-VI-D"
+    cas13 = extract_cas13_records(record)[0]
+    assert cas13.subtype == "VI-D"
+    assert cas13.subtype_raw == "I-C"
+    assert cas13.subtype_conflict
+    pair = pair_cas13_direct_repeat(record)
+    assert pair is not None
+    assert pair.pairing_confidence == "ambiguous"
+    assert pair.ambiguity_reason == "subtype_conflict_with_operon_summary"
+
+    generic = next(iter(iter_json_array(FIXTURE)))
+    generic["summary"]["subtype"] = "VI"
+    generic["cas"][0]["hmm_name"] = "Cas13d_0_CAS-VI-D"
+    generic_path = tmp_path / "generic-vi.json"
+    generic_path.write_text(json.dumps([generic]), encoding="utf-8")
+    funnel = process_atlas(generic_path, tmp_path / "generic-processed")
+    assert funnel["type_vi_operons"] == 1
+    assert funnel["cas13_subtype_counts"] == {"VI-D": 1}
+    assert funnel["cas13_subtype_sources"] == {"cas_hmm_explicit": 1}
+
+
 def test_exact_dedup_and_fixture_pipeline(tmp_path: Path) -> None:
     raw = list(iter_json_array(FIXTURE, chunk_size=128))
     record = extract_cas13_records(raw[0])[0]
@@ -59,6 +102,8 @@ def test_exact_dedup_and_fixture_pipeline(tmp_path: Path) -> None:
     assert funnel["cas13_exact_unique"] == 2
     assert funnel["high_confidence_pairs"] == 1
     assert funnel["ambiguous_pairs"] == 1
+    assert funnel["cas13_subtype_counts"] == {"VI-A": 1, "VI-D": 1}
+    assert funnel["cas13_subtype_conflicts"] == 0
     saved = json.loads(
         (tmp_path / "processed/data_funnel.json").read_text(encoding="utf-8")
     )
