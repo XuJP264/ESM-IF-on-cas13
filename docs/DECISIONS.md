@@ -40,3 +40,68 @@ Conda resolves them relative to the environment-file directory.
 Apply strict mypy to the `cas13_if` package and require at least 70% branch-aware
 coverage for CPU fixture tests. M0 passed at 79.67%. Genuine model/network tests
 remain explicitly marked and excluded from CPU CI.
+
+## 2026-07-31 — Catalytic construct mutations
+
+Treat deposited experimental construct sequences separately from literature-
+supported biological sequences. 6E9F carries alanine at all four annotated
+HEPN catalytic positions, and 5XWP carries alanine at its second R/H pair.
+Design masks restore/protect the literature-supported R/H tokens; reports show
+construct recovery and biological recovery separately.
+
+## 2026-07-31 — Atlas repeat orientation
+
+The inspected Atlas v1.0 schema does not provide repeat orientation. Unknown
+orientation remains ambiguous and is excluded from high-confidence paired
+protein/direct-repeat analyses. Do not silently select a strand or use spacer
+content as proof of orientation.
+
+## 2026-07-31 — Environment isolation gate
+
+An environment is not accepted merely because its Conda transaction completes.
+Imports must pass with `PYTHONNOUSERSITE=1`, and dependency paths must resolve
+inside the declared prefix. The first ESM environment failed this gate because
+pip reused `fair-esm` from the user site. The repair installs ESM from the
+pinned local upstream checkout into the environment prefix and regenerates the
+lock.
+
+## 2026-07-31 — Missing-coordinate semantics across MPNN backends
+
+Do not require ProteinMPNN's upstream residue-number tensor to have the same
+length as the strict observed-coordinate sequence. For 6E9F chain A, the
+strict parser sees 864 resolved residues while ProteinMPNN builds 893 residue
+number slots and masks 29 missing-coordinate positions. Validation must prove
+that removing the upstream `X` slots recovers the strict sequence and must
+report both lengths; it must not silently delete or impute missing coordinates.
+
+## 2026-07-31 — LigandMPNN upstream-compatible environment
+
+Pin LigandMPNN to NumPy 1.23.5 and include `dm-tree`, matching the pinned
+upstream requirements. The first isolated smoke exposed missing `tree`; after
+adding it, the pinned upstream OpenFold code exposed its use of removed
+`np.int` under NumPy 1.26. Resolve these by environment pinning, not by editing
+third-party source.
+
+## 2026-07-31 — Candidate identifiers encode sampling conditions
+
+Candidate IDs must distinguish backend, scaffold, parent sequence, temperature,
+seed, fixed positions, allowed-residue filters, conditioning chains, and sample
+index. Do not use only scaffold plus sample index: it collides across
+temperatures and ablations and makes refold manifests ambiguous. Paths are
+excluded from the digest so the same declared request has the same identifier
+after migration to another node.
+
+## 2026-07-31 — Pilot recovery is not a matched method comparison
+
+The first real ESM benchmark varies the number of hard-fixed positions across
+conditions. Report its recovery values as pipeline/pilot characterization only.
+Do not interpret higher raw recovery in a more heavily fixed condition as a
+method improvement. Formal H1–H4 comparisons must match scaffold, design
+positions, parent identity/novelty range, and statistical unit.
+
+## 2026-07-31 — Bioinformatics and Git LFS remain project-local
+
+Use the locked `.tools/envs/bioinformatics` environment for MMseqs2, MAFFT,
+HMMER, Infernal, seqkit, Foldseek, TM-align, and Git LFS. Git LFS is available
+for repository tooling but model weights, raw Atlas data, PDFs, and prediction
+outputs remain ignored rather than added to LFS.

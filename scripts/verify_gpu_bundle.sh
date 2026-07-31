@@ -2,15 +2,67 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-bundle="$(find "${repo_root}/artifacts/bundles" -mindepth 1 -maxdepth 1 -type d -name 'gpu-bundle-*' | sort | tail -n 1)"
+bundle="${1:-}"
+asset_root="${2:-}"
+if [[ -z "${bundle}" ]]; then
+  bundle="$(
+    find "${repo_root}/artifacts/bundles" -mindepth 1 -maxdepth 1 \
+      -type d -name 'gpu-bundle-*' | sort | tail -n 1
+  )"
+fi
 if [[ -z "${bundle}" ]]; then
   echo "ERROR: no GPU bundle; run scripts/export_gpu_bundle.sh" >&2
   exit 2
 fi
-required=(bundle-manifest.json SHA256SUMS model-manifest.yaml third_party-manifest.yaml schemas/output_schema.json)
+bundle="$(cd "${bundle}" && pwd)"
+required=(
+  ASSET_SHA256SUMS
+  bundle-manifest.json
+  repo-clone.txt
+  SHA256SUMS
+  model-manifest.yaml
+  third_party-manifest.yaml
+  schemas/output_schema.json
+  scripts/bootstrap_gpu_node.sh
+  scripts/launch_gpu_tmux.sh
+  scripts/sync_assets.sh
+)
 for relative in "${required[@]}"; do
   [[ -f "${bundle}/${relative}" ]] || { echo "ERROR: missing ${relative}" >&2; exit 3; }
 done
 (cd "${bundle}" && sha256sum --check SHA256SUMS)
-python3 -m json.tool "${bundle}/bundle-manifest.json" >/dev/null
+python3 - "${bundle}/bundle-manifest.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+manifest = json.loads(Path(sys.argv[1]).read_text())
+required = {
+    "schema_version",
+    "git_commit",
+    "git_worktree_dirty_at_export",
+    "config_hash",
+    "assets",
+    "missing_assets",
+    "input_files",
+}
+missing = sorted(required.difference(manifest))
+if missing:
+    raise SystemExit(f"bundle manifest fields missing: {missing}")
+if manifest["large_assets_embedded"]:
+    raise SystemExit("large assets must not be embedded in the GPU bundle")
+print(
+    "Bundle manifest valid:",
+    manifest["git_commit"],
+    "dirty=" + str(manifest["git_worktree_dirty_at_export"]).lower(),
+)
+PY
+if [[ -n "${asset_root}" ]]; then
+  (
+    cd "${asset_root}"
+    sha256sum --check "${bundle}/ASSET_SHA256SUMS"
+  )
+else
+  echo "NOTICE: asset bytes not checked; pass ASSET_ROOT as argument 2 after sync"
+fi
 echo "VERIFIED ${bundle}"

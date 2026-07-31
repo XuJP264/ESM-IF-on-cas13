@@ -15,6 +15,11 @@ for relative in "${required[@]}"; do
   fi
 done
 
+while IFS= read -r -d '' script; do
+  bash -n "${script}"
+done < <(find "${repo_root}/scripts" -maxdepth 1 -type f -name '*.sh' -print0)
+echo "Shell scripts parse successfully"
+
 python3 - "${repo_root}" <<'PY'
 import json
 import sys
@@ -36,7 +41,10 @@ print("Static manifests valid")
 PY
 
 if [[ -x "${repo_root}/.tools/envs/analysis/bin/python" ]]; then
-  conda run -p "${repo_root}/.tools/envs/analysis" ruff check "${repo_root}/src" "${repo_root}/tests"
+  conda run -p "${repo_root}/.tools/envs/analysis" ruff check \
+    "${repo_root}/src" "${repo_root}/tests" "${repo_root}/scripts"
+  conda run -p "${repo_root}/.tools/envs/analysis" ruff format --check \
+    "${repo_root}/src" "${repo_root}/tests" "${repo_root}/scripts"
   conda run -p "${repo_root}/.tools/envs/analysis" mypy "${repo_root}/src"
   conda run -p "${repo_root}/.tools/envs/analysis" pytest \
     -m "not real_model and not network and not slow" "${repo_root}/tests"
@@ -44,4 +52,3 @@ else
   echo "ERROR: analysis environment missing; run make bootstrap" >&2
   exit 11
 fi
-

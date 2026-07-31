@@ -56,6 +56,7 @@ results/**
 reports/runs/**
 !reports/runs/.gitkeep
 reports/latest
+reports/latest.txt
 reports/figures/*.png
 reports/figures/*.pdf
 reports/tables/*.csv
@@ -69,4 +70,3 @@ artifacts/downloads/**
 .vscode/
 .DS_Store
 Thumbs.db
-

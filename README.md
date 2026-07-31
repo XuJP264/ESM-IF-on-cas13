@@ -25,6 +25,17 @@ make test
 make smoke-cpu
 ```
 
+Create and lock the optional model/bioinformatics environments, then run the
+genuine local smokes:
+
+```bash
+make bootstrap-specialized
+make smoke-pyg
+make smoke-esm-if1
+make smoke-proteinmpnn
+make smoke-ligandmpnn
+```
+
 Large data and model assets are explicit fetch steps and are never downloaded
 by import or inference:
 
@@ -34,6 +45,16 @@ make fetch-third-party
 make fetch-models
 make fetch-structures
 make fetch-atlas
+```
+
+After the Atlas fetch has completed its size/hash checks:
+
+```bash
+make process-atlas
+make cluster
+make msa
+make conservation
+make coevolution-smoke
 ```
 
 Production workflows are defined in Snakemake and exposed through `make`.
@@ -54,10 +75,12 @@ Current real, fixture, mock, failed, and not-run work is reported in
 `docs/STATUS.md`. Research decisions are recorded in `docs/DECISIONS.md`, and
 the active living plan is
 `docs/execplans/0001_bootstrap_and_real_baselines.md`.
+The network-interruption recovery audit and GPU/local work split are in
+`docs/PHASE_SUMMARY_2026-07-31.md`; executable migration instructions are in
+`docs/GPU_MIGRATION.md`.
 
 ## License
 
 Project-authored source code is MIT licensed. Data, papers, model weights, and
 third-party projects retain their own licenses; consult their manifests before
 use or redistribution.
-

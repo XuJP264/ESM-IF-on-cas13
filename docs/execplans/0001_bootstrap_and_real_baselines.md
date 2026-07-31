@@ -79,8 +79,43 @@ commits, and verified push.
   bioinformatics-tool audit.
 - [x] 2026-07-31: Completed and validated M0 with Ruff, strict mypy, 31 fixture
   tests, 79.67% branch-aware coverage, and a provenance-recorded CPU mock smoke.
-- [ ] Complete and validate M1.
-- [ ] Complete and validate M2.
+- [x] 2026-07-31: Fetched and hashed four pinned upstream repositories, ESM-IF1
+  and MPNN checkpoints, and four RCSB Cas13 structures.
+- [x] 2026-07-31: Completed real Level 0 structure/QC manifests for 6E9F,
+  5XWP, 6E9E, and 5XWY; separately audited deposited catalytic mutations.
+- [x] 2026-07-31: Implemented and fixture-tested the offline ESM-IF1 backend,
+  causal constrained decoder, Atlas Parquet pipeline, six-threshold clustering
+  CLI, subtype MSA/conservation pipeline, SASA regions, benchmark runner, and
+  evidence-aware project report.
+- [x] 2026-07-31: Re-ran the current CPU quality gate after network
+  interruption: Ruff/format pass for package, tests, and scripts; strict mypy
+  pass for 42 source files; 42/42 tests; and 70.08% branch coverage.
+- [ ] Restore current OS-level CUDA access and execute genuine GPU smoke tests.
+  This requires recovery of WSL `/dev/dxg`; CPU work continues independently.
+- [x] 2026-07-31: Repaired ESM user-site isolation and passed genuine CPU
+  checkpoint load, toy score/sample, all-fixed zero-violation sampling, 6E9F
+  score, and 5XWP score. GPU validation remains blocked by the current WSL
+  `/dev/dxg` failure.
+- [x] 2026-07-31: Passed a genuine 6E9F catalytic hard-fixed ESM-IF1 CPU
+  sample with zero violations and a genuine ProteinMPNN CPU smoke with
+  missing-coordinate slots explicitly masked and audited.
+- [x] 2026-07-31: Repaired the LigandMPNN environment using its pinned upstream
+  NumPy 1.23.5 and `dm-tree` requirements, then passed a genuine 6E9F CPU smoke
+  with RNA B/C atomic context, fixed-residue preservation, statistics, and
+  backbone outputs validated.
+- [x] 2026-07-31: Built the fourth isolated bioinformatics environment, exported
+  exact/conda/pip locks, and audited MMseqs2, MAFFT, HMMER, Infernal, seqkit,
+  Foldseek, TM-align, and Git LFS with no missing executable.
+- [x] 2026-07-31: Passed a genuine PyTorch Geometric GCNConv CPU smoke.
+- [x] 2026-07-31: Completed the corrected 72-candidate ESM-IF1 pilot benchmark
+  for 6E9F/5XWP across three temperatures and three constraint conditions;
+  all candidate IDs are unique and all fixed-position violation counts are
+  zero. The report remains Level 2 and does not claim a matched method win.
+- [ ] Finish the resumed Atlas download. The initial curl exit 6 is preserved;
+  the resumable production `.part` is now growing.
+- [ ] Complete GPU validation for M1; the local CPU/dependency portion passes.
+- [ ] Complete the full ProteinMPNN/LigandMPNN/matched-novelty matrix for M2;
+  the ESM pilot and individual real smokes pass.
 - [ ] Complete and validate M3.
 - [ ] Complete feasible M4/M5 work.
 - [ ] Complete M6 and the final acceptance audit.
@@ -118,6 +153,29 @@ commits, and verified push.
   path after environment creation.
 - Analysis environment validation: Ruff passed, strict mypy passed for 36 source
   files, and 31/31 tests passed with 79.67% coverage.
+- The ESM checkpoint and all requested MPNN checkpoints were fetched and hashed.
+- The first ESM Conda transaction reused `fair-esm` from the user site and
+  failed the isolation gate. It was repaired by installing the pinned local ESM
+  source with `PYTHONNOUSERSITE=1`; locks were regenerated and genuine CPU
+  inference passed.
+- PyTorch 2.4.1 with CUDA 12.1 was installed, but the current host reports both
+  `torch.cuda.is_available()=false` and an OS-level `nvidia-smi` access block.
+- Atlas v1.0 HEAD and a 2 MiB schema probe succeeded before the interruption.
+  The subsequent full fetch failed with DNS resolution error before a
+  production `.part` file was created.
+- Current CPU validation after the new implementation work is 42/42 tests with
+  70.08% branch-aware coverage.
+- ProteinMPNN's 6E9F parser represents 864 resolved residues as 893 numbering
+  slots, with 29 internal missing-coordinate slots masked as `X`. The initial
+  smoke validator incorrectly required a length of 864; the corrected
+  validation passed and preserves this distinction.
+- All four project-local environments now exist with exact/conda/pip locks.
+  The bioinformatics audit reports no missing executable and includes local
+  Git LFS 3.7.1.
+- The first full ESM pilot computed genuine outputs but generated ambiguous
+  candidate IDs across temperature/constraint conditions. Historical outputs
+  remain immutable; the corrected run uses condition-digest IDs and validates
+  72/72 uniqueness before downstream use.
 
 ## Execution details
 
@@ -190,17 +248,18 @@ The smoke run is explicitly mock and Level 0:
 
 ## Blockers and recovery
 
-Current M1 tool gaps are recorded rather than treated as blockers for M0:
-micromamba, `gh`, Git LFS, MAFFT, HMMER, Infernal, seqkit, Foldseek, and
-US-align/TM-align were unavailable at initial audit. Conda/container bootstrap
-routes exist, and independent work continues. GitHub push authentication remains
-unverified because `gh` is absent; it will be tested at push time.
+Initial M1 gaps included micromamba, `gh`, Git LFS, MAFFT, HMMER, Infernal,
+seqkit, Foldseek, and US-align/TM-align. The isolated bioinformatics environment
+now supplies every required bioinformatics executable, TM-align, and Git LFS.
+Conda remains the selected environment manager, so micromamba is not required.
+`gh` is absent; direct Git remote access works, and write authentication will be
+tested at push time.
 
 ## Outcomes and retrospective
 
-M0 outcome: the repository, CLI surface, immutable provenance, fixture
-workflow, core Atlas/alignment/structure/constraint/refold algorithms, tests,
-research governance, manifests, and CI are implemented and locally validated.
-The machine audit is real. The CPU preflight is mock and supports Level 0 only.
-No genuine model inference, experimental-structure benchmark, real Atlas parse,
-or scientific candidate result has yet been produced.
+M0 outcome remains complete. Since the original retrospective was written,
+genuine ESM-IF1 toy/6E9F/5XWP CPU inference, genuine constrained 6E9F sampling,
+a genuine ProteinMPNN 6E9F CPU smoke, a genuine RNA-context LigandMPNN smoke,
+and a corrected 72-candidate ESM pilot benchmark have been produced. The full
+matched method matrix and real Atlas parse remain in progress/not run, and no
+result constitutes Level 4 functional validation.
