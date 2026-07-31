@@ -1,0 +1,75 @@
+{
+  "atlas_fasta": "/home/junpeng/ESM-IF/data/processed/atlas/v1.0/clusters/cas13_exact_unique.fasta",
+  "atlas_fasta_sha256": "b39b4f0731cdd6fac7eb02c1e71431c7718f2ef87d0cc259c57e48e05cd25b57",
+  "candidate_count": 72,
+  "candidate_source": "/home/junpeng/ESM-IF/results/runs/20260731-benchmark-experimental-a998ff40aa-ab6c9c5/benchmark/candidates.jsonl",
+  "candidate_source_sha256": "f096dd4a1dbed6e31812e87df255465a56f818502f203a592e17e53d65e92b75",
+  "candidates_with_atlas_hit": 19,
+  "claim_scope": "Level 1 sequence-statistical novelty only for rows that pass every registered filter; no candidate is a validated or effective Cas13.",
+  "diversity_by_scaffold": {
+    "5XWP-A": {
+      "candidate_count": 36,
+      "maximum_pairwise_identity": 0.9484444444444444,
+      "mean_pairwise_identity": 0.35204232804232805,
+      "minimum_pairwise_identity": 0.1537777777777778,
+      "pair_count": 630
+    },
+    "6E9F-A": {
+      "candidate_count": 36,
+      "maximum_pairwise_identity": 0.9189814814814815,
+      "mean_pairwise_identity": 0.424566431510876,
+      "minimum_pairwise_identity": 0.21064814814814814,
+      "pair_count": 630
+    }
+  },
+  "evidence_level_max": 1,
+  "filter_failure_counts": {
+    "homopolymer_above_threshold": 18,
+    "low_complexity_windows_above_threshold": 41,
+    "no_atlas_hit_at_required_query_coverage": 53
+  },
+  "is_mock": false,
+  "maximum_observed_atlas_identity": 0.457,
+  "maximum_observed_parent_identity": 0.4212962962962963,
+  "minimum_observed_parent_identity": 0.16533333333333333,
+  "mmseqs_command": [
+    "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/mmseqs",
+    "easy-search",
+    "/home/junpeng/ESM-IF/results/runs/20260731-candidate-filtering-b14455d461-6d258de/novelty/candidates.fasta",
+    "/home/junpeng/ESM-IF/data/processed/atlas/v1.0/clusters/cas13_exact_unique.fasta",
+    "/home/junpeng/ESM-IF/results/runs/20260731-candidate-filtering-b14455d461-6d258de/novelty/atlas_alignments.tsv",
+    "/home/junpeng/ESM-IF/results/runs/20260731-candidate-filtering-b14455d461-6d258de/novelty/mmseqs_tmp",
+    "--format-output",
+    "query,target,fident,alnlen,qcov,tcov,evalue,bits",
+    "--threads",
+    "16",
+    "-s",
+    "7.5",
+    "-e",
+    "1000.0",
+    "--cov-mode",
+    "2",
+    "-c",
+    "0.8",
+    "--max-seqs",
+    "5000",
+    "--max-accept",
+    "5000",
+    "--sort-results",
+    "1",
+    "--remove-tmp-files",
+    "1"
+  ],
+  "mmseqs_result": "/home/junpeng/ESM-IF/results/runs/20260731-candidate-filtering-b14455d461-6d258de/novelty/atlas_alignments.tsv",
+  "passes_level1_novelty": 14,
+  "schema_version": "1.0",
+  "thresholds": {
+    "low_complexity_maximum_fraction": 0.5,
+    "low_complexity_window": 12,
+    "maximum_atlas_identity": 0.8,
+    "maximum_homopolymer_length": 7,
+    "maximum_low_complexity_windows": 0,
+    "maximum_parent_identity": 0.8,
+    "minimum_designed_position_entropy": 0.0
+  }
+}
