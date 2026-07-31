@@ -4,11 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from pathlib import Path
 from typing import Any
 
-import pandas as pd
 import yaml
 
 from cas13_if.backends.esm_if1 import TRACE_ALPHABET, EsmIf1ConstrainedBackend
@@ -39,6 +39,17 @@ def _load(path: Path) -> dict[str, Any]:
 def _repo_path(repo: Path, value: Any) -> Path:
     path = Path(str(value))
     return path if path.is_absolute() else repo / path
+
+
+def _mapping_rows(path: Path) -> list[dict[str, str]]:
+    """Read the mapping CSV without adding analysis-only dependencies.
+
+    This runner executes inside the intentionally minimal legacy ESM-IF1
+    environment, so tabular selection stays in the standard library.
+    """
+
+    with path.open(encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
 
 
 def _parent_and_fixed(
@@ -109,26 +120,32 @@ def main() -> int:
         chain=chain,
         functional_manifest=_repo_path(repo, inputs["functional_manifest"]),
     )
-    mapping = pd.read_csv(_repo_path(repo, inputs["mapping_csv"]))
-    resolved = mapping.loc[mapping["coordinate_index_0"].notna()].copy()
-    resolved["coordinate_index_0"] = resolved["coordinate_index_0"].astype(int)
-    eligible = resolved.loc[
-        resolved["mapping_confidence"].eq(
-            str(constraints["minimum_mapping_confidence"])
+    resolved = [
+        row
+        for row in _mapping_rows(_repo_path(repo, inputs["mapping_csv"]))
+        if row["coordinate_index_0"].strip()
+    ]
+    eligible = [
+        row
+        for row in resolved
+        if row["mapping_confidence"] == str(constraints["minimum_mapping_confidence"])
+        and float(row["msa_coverage"]) >= float(constraints["minimum_msa_coverage"])
+        and float(row["conservation"]) >= float(constraints["minimum_conservation"])
+        and int(row["coordinate_index_0"]) not in fixed
+    ]
+    eligible.sort(
+        key=lambda row: (
+            -float(row["conservation"]),
+            -float(row["msa_coverage"]),
+            int(row["coordinate_index_0"]),
         )
-        & resolved["msa_coverage"].ge(float(constraints["minimum_msa_coverage"]))
-        & resolved["conservation"].ge(float(constraints["minimum_conservation"]))
-        & ~resolved["coordinate_index_0"].isin(fixed)
-    ].sort_values(
-        ["conservation", "msa_coverage", "coordinate_index_0"],
-        ascending=[False, False, True],
     )
-    conservation_rows = eligible.head(
-        int(constraints["maximum_conservation_biased_positions"])
-    )
+    conservation_rows = eligible[
+        : int(constraints["maximum_conservation_biased_positions"])
+    ]
     conservation_allowed = {
-        int(row.coordinate_index_0): set(str(row.allowed_residues).split(";"))
-        for row in conservation_rows.itertuples()
+        int(row["coordinate_index_0"]): set(row["allowed_residues"].split(";"))
+        for row in conservation_rows
     }
     rna_ranked = _rna_contact_positions(
         structure=structure,
@@ -140,15 +157,13 @@ def main() -> int:
         residue_keys=residue_keys,
     )
     maximum_rna = int(constraints["maximum_rna_contact_biased_positions"])
-    mapping_by_coordinate = {
-        int(row.coordinate_index_0): row for row in resolved.itertuples()
-    }
+    mapping_by_coordinate = {int(row["coordinate_index_0"]): row for row in resolved}
     rna_allowed: dict[int, set[str]] = {}
     for index, _ in rna_ranked:
         if index in fixed or len(rna_allowed) >= maximum_rna:
             continue
         row = mapping_by_coordinate[index]
-        tokens = {parent[index], str(row.msa_consensus)}
+        tokens = {parent[index], row["msa_consensus"]}
         rna_allowed[index] = {token for token in tokens if len(token) == 1}
 
     checkpoint = _repo_path(repo, models["esm_if1_checkpoint"])
