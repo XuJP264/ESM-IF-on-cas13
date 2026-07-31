@@ -44,7 +44,37 @@ def test_project_report_marks_missing_artifacts_not_run(tmp_path: Path) -> None:
     inventory = loads((output / "artifact_inventory.json").read_text(encoding="utf-8"))
     assert summary["maximum_evidence_level"] == 0
     assert inventory["experimental_benchmark"]["status"] == "not_run"
+    assert summary["blocked_artifacts"] == []
+    assert "formal_dca_real" in summary["not_run_artifacts"]
     assert "does not invent" in (output / "report.md").read_text(encoding="utf-8")
+
+
+def test_project_report_marks_orientation_dependent_analysis_blocked(
+    tmp_path: Path,
+) -> None:
+    funnel = tmp_path / "data/processed/atlas/v1.0/data_funnel.json"
+    funnel.parent.mkdir(parents=True)
+    funnel.write_text(
+        dumps(
+            {
+                "is_mock": False,
+                "high_confidence_pairs": 0,
+                "ambiguous_pairs": 17,
+            }
+        ),
+        encoding="utf-8",
+    )
+    output = tmp_path / "report"
+    summary = build_project_report(repo_root=tmp_path, output_dir=output)
+    inventory = loads((output / "artifact_inventory.json").read_text(encoding="utf-8"))
+    assert summary["blocked_artifacts"] == [
+        "formal_dca_real",
+        "mi_apc_real",
+        "paired_msa_real",
+    ]
+    assert inventory["paired_msa_real"]["reason_code"] == (
+        "atlas_repeat_orientation_unavailable"
+    )
 
 
 def test_project_report_ignores_benchmark_summary_from_failed_run(

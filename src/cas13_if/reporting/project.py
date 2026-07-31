@@ -79,6 +79,11 @@ def build_project_report(
             repo_root
             / "data/processed/atlas/v1.0/conservation/conservation_manifest.json"
         ),
+        "matched_multimodel_benchmark": (
+            repo_root / "reports/tables/matched_multimodel_benchmark.json"
+        ),
+        "candidate_novelty": repo_root / "reports/tables/candidate_novelty.json",
+        "real_refold": repo_root / "reports/tables/real_refold_summary.json",
     }
     for name, path in declared.items():
         artifacts[name] = (
@@ -90,6 +95,28 @@ def build_project_report(
             if path.is_file()
             else {"status": "not_run", "path": str(path.relative_to(repo_root))}
         )
+    atlas_data = artifacts.get("atlas_funnel", {}).get("data", {})
+    if (
+        isinstance(atlas_data, dict)
+        and atlas_data.get("high_confidence_pairs") == 0
+        and int(atlas_data.get("ambiguous_pairs", 0)) > 0
+    ):
+        pairing_blocker = {
+            "status": "blocked",
+            "is_mock": False,
+            "reason_code": "atlas_repeat_orientation_unavailable",
+            "high_confidence_pairs": 0,
+            "ambiguous_pairs": int(atlas_data["ambiguous_pairs"]),
+            "reason": (
+                "Atlas v1.0 does not provide a recoverable direct-repeat "
+                "orientation for these records; ambiguous strands are excluded."
+            ),
+        }
+        for artifact_name in ("paired_msa_real", "mi_apc_real", "formal_dca_real"):
+            artifacts[artifact_name] = dict(pairing_blocker)
+    else:
+        for artifact_name in ("paired_msa_real", "mi_apc_real", "formal_dca_real"):
+            artifacts[artifact_name] = {"status": "not_run"}
     benchmark_path = _latest(
         [
             run_dir / "benchmark/summary.json"
@@ -118,6 +145,9 @@ def build_project_report(
     not_run = sorted(
         name for name, value in artifacts.items() if value.get("status") == "not_run"
     )
+    blocked = sorted(
+        name for name, value in artifacts.items() if value.get("status") == "blocked"
+    )
     summary = {
         "schema_version": "1.0",
         "is_mock": False,
@@ -126,6 +156,7 @@ def build_project_report(
         else 0,
         "available_real_artifacts": available_real,
         "not_run_artifacts": not_run,
+        "blocked_artifacts": blocked,
         "completed_run_count": len(run_inventory),
         "successful_run_count": sum(
             row["status"] == "SUCCESS" for row in run_inventory
@@ -139,6 +170,7 @@ def build_project_report(
     _write_json(output_dir / "summary.json", summary)
 
     available_lines = "\n".join(f"- `{name}`" for name in available_real) or "- None"
+    blocked_lines = "\n".join(f"- `{name}`" for name in blocked) or "- None"
     not_run_lines = "\n".join(f"- `{name}`" for name in not_run) or "- None"
     inventory_json = json.dumps(run_inventory, indent=2, sort_keys=True)
     markdown = f"""# ESM-IF-on-Cas13 project report
@@ -156,6 +188,10 @@ def build_project_report(
 ## Explicitly not run
 
 {not_run_lines}
+
+## Blocked by declared source data
+
+{blocked_lines}
 
 ## Run audit
 
@@ -182,6 +218,7 @@ pre{{background:#f4f4f4;padding:1rem;overflow:auto}}.warning{{color:#9b1c1c}}</s
 <p class="warning">{html.escape(summary["claim_scope"])}</p>
 <h2>Available real artifacts</h2><pre>{html.escape(chr(10).join(available_real))}</pre>
 <h2>Explicitly not run</h2><pre>{html.escape(chr(10).join(not_run))}</pre>
+<h2>Blocked by declared source data</h2><pre>{html.escape(chr(10).join(blocked))}</pre>
 <h2>Run audit</h2><pre>{html.escape(inventory_json)}</pre>
 </body></html>
 """
