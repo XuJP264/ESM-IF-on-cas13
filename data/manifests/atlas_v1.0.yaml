@@ -5,10 +5,10 @@ documentation_url: https://github.com/Profluent-AI/CRISPR-Cas-Atlas
 license: CC BY-NC 4.0
 local_path: data/raw/atlas/v1.0/crispr-cas-atlas-v1.0.json
 content_length: 5267508328
-size_bytes: null
-sha256: null
-downloaded_at: null
-status: head_verified_download_pending
+size_bytes: 5267508328
+sha256: 5b4ba2fb99638d279e0c126100e19a4b77aba487b37b7df118e4bf4acd494720
+downloaded_at: 2026-07-31T11:25:16+00:00
+status: downloaded_verified
 head_verified_at: 2026-07-31
 http_last_modified: "Thu, 16 Jan 2025 04:06:19 GMT"
 http_etag: '"cb116666e557bb85dab58a5f8a4e45ed"'

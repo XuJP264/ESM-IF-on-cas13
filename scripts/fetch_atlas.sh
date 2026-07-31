@@ -6,13 +6,27 @@ url="https://storage.googleapis.com/crispr-cas-atlas-xy7q13lmk9/crispr-cas-atlas
 destination_dir="${repo_root}/data/raw/atlas/v1.0"
 destination="${destination_dir}/crispr-cas-atlas-v1.0.json"
 temporary="${destination}.part"
+manifest="${repo_root}/data/manifests/atlas_v1.0.yaml"
 mkdir -p "${destination_dir}" "${repo_root}/data/manifests"
 
-headers="$(curl --fail --location --head --silent --show-error "${url}")"
-content_length="$(printf '%s\n' "${headers}" | tr -d '\r' | awk 'tolower($1)=="content-length:" {value=$2} END {print value}')"
+if [[ -s "${destination}" ]]; then
+  content_length="$(
+    awk '$1=="content_length:" {print $2; exit}' "${manifest}"
+  )"
+  source_status="LOCAL_VERIFICATION"
+else
+  headers="$(curl --fail --location --head --silent --show-error "${url}")"
+  content_length="$(
+    printf '%s\n' "${headers}" |
+      tr -d '\r' |
+      awk 'tolower($1)=="content-length:" {value=$2} END {print value}'
+  )"
+  source_status="REMOTE_HEAD_VERIFIED"
+fi
 available_bytes="$(df --output=avail -B1 "${destination_dir}" | tail -n 1 | tr -d ' ')"
 
 echo "SOURCE ${url}"
+echo "SOURCE_STATUS ${source_status}"
 echo "DESTINATION ${destination}"
 echo "CONTENT_LENGTH ${content_length:-unknown}"
 echo "AVAILABLE_BYTES ${available_bytes}"
@@ -37,7 +51,8 @@ if [[ ! -s "${destination}" ]]; then
   mv "${temporary}" "${destination}"
 fi
 
-sha256sum "${destination}"
+python3 "${repo_root}/scripts/finalize_atlas_manifest.py" \
+  --manifest "${manifest}" \
+  --asset "${destination}"
 stat --format='%n %s bytes' "${destination}"
 echo "LICENSE CC BY-NC 4.0; see https://github.com/Profluent-AI/CRISPR-Cas-Atlas"
-

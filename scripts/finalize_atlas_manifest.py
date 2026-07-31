@@ -8,7 +8,7 @@ import hashlib
 import json
 import os
 import re
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -36,7 +36,7 @@ def finalize(manifest: Path, asset: Path) -> dict[str, object]:
             f"Atlas size mismatch: {actual_size} != expected {expected_size}"
         )
     digest = _sha256(asset)
-    downloaded_at = datetime.now(UTC).replace(microsecond=0).isoformat()
+    downloaded_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     replacements = {
         "size_bytes": str(actual_size),
         "sha256": digest,
