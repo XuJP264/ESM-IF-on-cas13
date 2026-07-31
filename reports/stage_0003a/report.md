@@ -1,6 +1,7 @@
 # Stage 0003A report
 
-Status: local work complete pending final repository/CI/bundle handoff. Date:
+Status: Stage implementation and local acceptance complete. Immutable final
+bundle and CI identifiers are published in the operator handoff. Date:
 2026-08-01 (Asia/Shanghai).
 
 ## Claim boundary

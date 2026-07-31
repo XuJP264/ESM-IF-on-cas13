@@ -10,7 +10,7 @@ Last updated: 2026-08-01 (Asia/Shanghai)
 | M3 Atlas | core production path complete; auxiliary splits pending | official 5,267,508,328-byte source verified; 1,246,088 operons streamed with zero processing failures; 4,070 exact-unique Cas13; six MMseqs thresholds and strict 40% leakage gate pass; subtype/scaffold-held-out auxiliary splits remain |
 | M4 evolution | VI-D mapping complete; paired analysis data-blocked | length-gated VI-B/D/F/I MSAs and coverage-gated conservation are real; 6E9F has 864/954 exact four-layer mapped positions and 90 coordinate-unresolved positions, with 712 resolved coverage-qualified conservation positions; Atlas repeat orientation is unavailable, yielding 0 high-confidence and 11,727 ambiguous pairs, so real MI/APC/DCA are blocked |
 | M5 constrained generation | multi-scaffold smoke and pre-wet-lab protocol complete; formal selection pending | causal masks/generation now cover Es, Ur, Dj, and CasRx representatives; the frozen selection protocol requires parent-aware Level-1 QC, two real inverse-folding model families, multi-state gates, novelty strata, and cluster diversity; no final shortlist exists |
-| M6 migration/refold | Stage-0003 job/ingest interface complete; final bundle and real target run pending | 70 proteins expand to 1,068 deterministic monomer/binary/ternary jobs; four labeled mock outputs pass ingest, genuine TM-align invocation, structural metrics, consistency, retry, and Pareto E2E; real prediction count is zero and final clean Stage-0003 bundle is pending |
+| M6 migration/refold | Stage-0003 job/ingest interface and clean-bundle procedure complete; real target run pending | 70 proteins expand to 1,068 deterministic monomer/binary/ternary jobs; four labeled mock outputs pass ingest, genuine TM-align invocation, structural metrics, consistency, retry, and Pareto E2E; a clean execution-HEAD bundle passed 1,204 internal-file and 28 large-asset hashes; real prediction count is zero |
 
 ## Current scientific evidence
 
@@ -62,13 +62,16 @@ No candidate is described as a validated or effective Cas13.
 
 - Ruff lint: pass;
 - Ruff format: pass;
-- strict mypy: pass for 47 source files;
-- pytest: 61/61 pass;
-- branch-aware coverage: 72.19% (required 70%);
+- strict mypy: pass for 52 source files in both the isolated conda environment
+  and a fresh CI-equivalent Python 3.11 pip environment;
+- pytest: 79/79 pass;
+- branch-aware coverage: 70.93% (required 70%);
 - matched-report acceptance: pass for 18 candidates, nine methods, two common
   seed blocks, one fixed/free mask, no mocks, and zero fixed violations;
-- final local commands `make lint`, `make typecheck`, `make test`,
-  `make smoke-cpu`, and `make verify-reproducibility`: pass at `b1a33ff`;
+- Stage-0003A local commands `make lint`, `make typecheck`, `make test`,
+  `make smoke-cpu`, `make smoke-esm-if1`, `make smoke-proteinmpnn`,
+  `make smoke-ligandmpnn`, and `make verify-reproducibility`: pass at execution
+  commit `437ca988ff92bc4ab0e728df5c706fbf817f0754`;
 - clean Atlas parse and cluster leakage gate: pass;
 - real candidate novelty audit: pass with fail-closed missing-hit semantics;
 - GitHub Actions run `30633893318`: primary fixture/code validation success;
@@ -79,13 +82,22 @@ No candidate is described as a validated or effective Cas13.
   NumPy dtype annotations; the failure remains visible;
 - GitHub Actions run `30643470631`: stage-0002 repaired code/results validation
   success at exact commit `b1a33fffd1d7a9254a55247c449017f240f02683`;
+- GitHub Actions run `30662641614`: Stage-0003A first push failed strict mypy
+  because current pip `pandas-stubs` widened `itertuples()` field types; the
+  failure remains visible and no scientific output was affected;
+- GitHub Actions run `30662821387`: Stage-0003A repaired code/results validation
+  success at exact commit `b251adf` after an explicit type-only narrowing;
 - tag `v0.1.0-data-pipeline` points to final data-pipeline HEAD
   `a9a530d14434e74dc0cfc47896847e201431c1c2`;
 - final-HEAD GPU bundle: `gpu-bundle-a9a530d14434-7540febfb2`, export
   `dirty=false`, `missing_assets=[]`, internal hashes and 14/14 source-asset
   hashes passed;
+- Stage-0003A execution bundle:
+  `gpu-bundle-437ca988ff92-0a8201ce8f`, export `dirty=false`,
+  `missing_assets=[]`, all 1,204 embedded input/internal hashes and 28/28
+  source-asset hashes passed;
 - target GPU validation: not run.
 
-Stage-0003A final lint/type/test/model-smoke/reproducibility, clean bundle,
-push, and CI checks are in progress and must replace this provisional line with
-their measured outcomes before the stage is closed.
+The final documentation-HEAD bundle and its post-commit CI are replayed without
+tracked edits; their exact immutable identifiers are reported in the operator
+handoff. No large refold task has been started.

@@ -1,8 +1,9 @@
 # Stage 0003A summary
 
-Status: local A0–A8 implementation complete; final acceptance, clean bundle,
-push, and GitHub Actions verification are pending as of 2026-08-01
-(Asia/Shanghai). The detailed generated report is
+Status: Stage implementation and local acceptance are complete as of
+2026-08-01 (Asia/Shanghai). Execution commit `b251adf` passed the clean pip-CI
+run `30662821387`; the exact final documentation-HEAD bundle and CI identifiers
+are published in the operator handoff. The detailed generated report is
 `reports/stage_0003a/report.md` and `report.html`.
 
 ## Evidence boundary

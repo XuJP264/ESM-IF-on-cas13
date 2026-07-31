@@ -149,7 +149,14 @@ force, and verify GitHub Actions.
 - [x] 2026-08-01: Completed A7–A8. Candidate thresholds were frozen before
   Level-3 outputs; 70 proteins expand to 1,068 deterministic jobs, and four
   labeled mock predictions passed the complete ingest/TM-align/ranking E2E.
-- [ ] Complete A9 final bundle, acceptance, push, and CI.
+- [x] 2026-08-01: Completed A9 execution acceptance. All required local gates
+  and three genuine model smokes passed; clean bundle
+  `gpu-bundle-437ca988ff92-0a8201ce8f` recorded `dirty=false`,
+  `missing_assets=[]`, 1,204 passing embedded hashes, and 28/28 passing large
+  asset hashes. Initial CI run `30662641614` exposed a newer-pandas-stubs mypy
+  narrowing issue; the CI-equivalent pip reproduction and repaired run
+  `30662821387` passed. A final documentation-HEAD bundle/CI replay is required
+  after this plan closure and is reported in the external handoff.
 
 ## Decisions
 
@@ -279,6 +286,7 @@ resource, a descriptive 10-point-variant multi-model benchmark, and a 48-row
 multi-scaffold real generation smoke. The mock ledger contains four explicitly
 labeled prediction fixtures used only for Level-3 I/O and metric validation.
 The 1,068 production refold jobs are `prepared_not_run`; real Level-3 count is
-zero. A9 remains active until full acceptance, final clean bundle, push, and CI
-pass. Without real Level-3 refolds, the wet-lab readiness answer remains “not
-yet”.
+zero. A9 local acceptance, clean execution-bundle verification, push, and
+repaired CI pass are complete. The immutable documentation-HEAD replay is
+reported in the final operator handoff. Without real Level-3 refolds, the
+wet-lab readiness answer remains “not yet”.
