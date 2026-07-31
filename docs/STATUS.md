@@ -56,8 +56,12 @@ No candidate is described as a validated or effective Cas13.
 - Ruff lint: pass;
 - Ruff format: pass;
 - strict mypy: pass for 47 source files;
-- pytest: final stage-0002 acceptance pending rerun after report commit;
-- branch-aware coverage: required 70%; last pre-report audit was 72.03%;
+- pytest: 61/61 pass;
+- branch-aware coverage: 72.17% (required 70%);
+- matched-report acceptance: pass for 18 candidates, nine methods, two common
+  seed blocks, one fixed/free mask, no mocks, and zero fixed violations;
+- final local commands `make lint`, `make typecheck`, `make test`,
+  `make smoke-cpu`, and `make verify-reproducibility`: pass at `acd1137`;
 - clean Atlas parse and cluster leakage gate: pass;
 - real candidate novelty audit: pass with fail-closed missing-hit semantics;
 - GitHub Actions run `30633893318`: primary fixture/code validation success;

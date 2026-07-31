@@ -172,7 +172,11 @@ verify GitHub Actions.
   All nine methods contributed two selected candidates, all 18 received real
   ESM-IF1 scores, 14 passed Level-1 novelty/QC, mock count was zero, and the
   common four-fixed/860-free mask had zero violations.
-- [ ] Pass final local acceptance, push, and verify GitHub Actions.
+- [x] 2026-07-31: Passed final local acceptance at `acd1137`: Ruff/format,
+  strict mypy (47 source files), 61/61 tests with 72.17% branch coverage,
+  fixture CPU smoke, matched-report invariants, bundle internal hashes, and
+  14/14 source-asset hashes.
+- [ ] Push the verified commits/tag and verify GitHub Actions.
 
 ## Decisions
 
