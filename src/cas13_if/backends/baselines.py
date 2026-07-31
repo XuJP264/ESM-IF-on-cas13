@@ -109,7 +109,10 @@ class MsaProfileBackend(InverseFoldingBackend):
             sequence: list[str] = []
             traces: list[PositionTrace] = []
             for position in range(len(request.parent_sequence)):
-                position_probabilities = probabilities[position].copy()
+                position_probabilities = np.power(
+                    probabilities[position], 1.0 / request.temperature
+                )
+                position_probabilities /= position_probabilities.sum()
                 allowed = request.allowed_residues.get(position)
                 if allowed is not None:
                     for token_index, token in enumerate(BASELINE_ALPHABET):
@@ -146,7 +149,7 @@ class MsaProfileBackend(InverseFoldingBackend):
             candidates.append(
                 Candidate(
                     candidate_id=(
-                        f"msa-profile-{request.scaffold_id}-{sample_index:04d}"
+                        f"msa-profile-{request.scaffold_id}-{seed}-{sample_index:04d}"
                     ),
                     scaffold_id=request.scaffold_id,
                     backend="msa_profile",
@@ -182,7 +185,10 @@ class MsaProfileBackend(InverseFoldingBackend):
 class MatchedRandomMutationBackend(InverseFoldingBackend):
     """Mutate every free design position while preserving the registered mask."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, mutation_probability: float = 1.0) -> None:
+        if not 0 <= mutation_probability <= 1:
+            raise ValueError("mutation probability must be in [0, 1]")
+        self.mutation_probability = mutation_probability
         self._loaded = False
 
     def capabilities(self) -> BackendCapabilities:
@@ -219,22 +225,31 @@ class MatchedRandomMutationBackend(InverseFoldingBackend):
                 allowed = set(request.allowed_residues.get(position, STANDARD_AA))
                 if fixed:
                     token = request.fixed_positions[position].upper()
+                    probabilities = [
+                        1.0 if aa == token else 0.0 for aa in BASELINE_ALPHABET
+                    ]
                 else:
                     mutation_choices = sorted(allowed.difference({parent_token}))
-                    token = (
-                        str(rng.choice(mutation_choices))
-                        if mutation_choices
-                        else parent_token
+                    if not mutation_choices and parent_token not in allowed:
+                        raise ValueError(f"no allowed token at position {position}")
+                    mutate_probability = (
+                        1.0
+                        if parent_token not in allowed
+                        else self.mutation_probability
                     )
-                probabilities = [
-                    (
-                        1.0 / len(allowed.difference({parent_token}))
-                        if aa in allowed.difference({parent_token})
-                        and allowed.difference({parent_token})
-                        else 0.0
-                    )
-                    for aa in BASELINE_ALPHABET
-                ]
+                    probabilities = [
+                        (
+                            1.0 - mutate_probability
+                            if aa == parent_token
+                            else (
+                                mutate_probability / len(mutation_choices)
+                                if aa in mutation_choices
+                                else 0.0
+                            )
+                        )
+                        for aa in BASELINE_ALPHABET
+                    ]
+                    token = str(rng.choice(BASELINE_ALPHABET, p=probabilities))
                 sequence.append(token)
                 traces.append(
                     PositionTrace(
@@ -253,7 +268,8 @@ class MatchedRandomMutationBackend(InverseFoldingBackend):
             candidates.append(
                 Candidate(
                     candidate_id=(
-                        f"matched-random-{request.scaffold_id}-{sample_index:04d}"
+                        f"matched-random-{request.scaffold_id}-{seed}-"
+                        f"{sample_index:04d}"
                     ),
                     scaffold_id=request.scaffold_id,
                     backend="matched_random_mutation",
@@ -266,7 +282,8 @@ class MatchedRandomMutationBackend(InverseFoldingBackend):
                     fixed_positions=request.fixed_positions,
                     traces=traces,
                     metadata={
-                        "mutation_rule": "uniform_non_parent_at_every_free_position",
+                        "mutation_rule": "bernoulli_mutation_uniform_non_parent",
+                        "mutation_probability": self.mutation_probability,
                         "evidence_level_note": (
                             "Level 1 requires downstream novelty evaluation"
                         ),
@@ -281,4 +298,5 @@ class MatchedRandomMutationBackend(InverseFoldingBackend):
             "loaded": self._loaded,
             "is_mock": False,
             "intrinsic_score": False,
+            "mutation_probability": self.mutation_probability,
         }

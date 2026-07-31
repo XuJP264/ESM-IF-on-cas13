@@ -1,0 +1,77 @@
+experiment:
+  name: vi-d-matched-baselines
+  evidence_level_max: 2
+  is_mock: false
+  seed: 20260731
+execution:
+  device: cpu
+  require_clean_git: true
+  formal_scale: local_preregistered_small_real
+inputs:
+  structure_pdb: data/experimental_structures/6e9f.pdb
+  structure_cif: data/experimental_structures/6e9f.cif
+  chain_id: A
+  crrna_chains: [B]
+  target_rna_chains: [C]
+  functional_manifest: data/manifests/cas13_functional_residues.yaml
+  mapping_csv: reports/vi_d_mapping/mapping.csv
+  conservation_parquet: data/processed/atlas/v1.0/conservation/vi-d.parquet
+  atlas_fasta: data/processed/atlas/v1.0/clusters/cas13_exact_unique.fasta
+models:
+  esm_if1_checkpoint: models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt
+  proteinmpnn_checkpoint: models/proteinmpnn/v_48_020.pt
+  ligandmpnn_checkpoint: models/ligandmpnn/ligandmpnn_v_32_010_25.pt
+  ligandmpnn_protein_checkpoint: models/ligandmpnn/proteinmpnn_v_48_020.pt
+  ligandmpnn_soluble_checkpoint: models/ligandmpnn/solublempnn_v_48_020.pt
+  proteinmpnn_upstream: third_party/ProteinMPNN
+  ligandmpnn_upstream: third_party/LigandMPNN
+environments:
+  analysis_python: .tools/envs/analysis/bin/python
+  esm_if1_python: .tools/envs/esm_if1/bin/python
+  ligandmpnn_python: .tools/envs/ligandmpnn/bin/python
+sampling:
+  seed_blocks: [20260731, 20260732]
+  proposals_per_seed: 2
+  selected_per_seed_per_method: 1
+  random_mutation_probability: 0.78
+  temperatures:
+    msa_profile_sampling: 2.0
+    esm_if1: 1.0
+    proteinmpnn: 1.0
+    ligandmpnn: 1.0
+constraints:
+  minimum_mapping_confidence: high
+  minimum_msa_coverage: 0.8
+  minimum_conservation: 0.8
+  maximum_conservation_biased_positions: 48
+  maximum_rna_contact_biased_positions: 48
+  direct_rna_cutoff_angstrom: 5.0
+  second_shell_cutoff_angstrom: 8.0
+  buried_rsa_threshold: 0.2
+matching:
+  minimum_parent_identity: 0.18
+  maximum_parent_identity: 0.32
+  minimum_designed_identity: 0.18
+  maximum_designed_identity: 0.32
+  target_identity: 0.25
+novelty:
+  mmseqs_executable: .tools/envs/bioinformatics/bin/mmseqs
+  threads: 16
+  sensitivity: 7.5
+  minimum_query_coverage: 0.8
+  maximum_evalue: 1000.0
+  maximum_sequences: 5000
+  maximum_atlas_identity: 0.8
+  maximum_homopolymer_length: 7
+  maximum_low_complexity_windows: 0
+  minimum_designed_position_entropy: 0.0
+  low_complexity_window: 12
+  low_complexity_maximum_fraction: 0.5
+statistics:
+  independent_unit: seed
+  bootstrap_replicates: 2000
+  confidence: 0.95
+  multiple_comparison_correction: benjamini_hochberg
+outputs:
+  canonical_report_dir: reports/matched_baselines
+  gpu_job_manifest: reports/matched_baselines/gpu_hpc_job_manifest.jsonl

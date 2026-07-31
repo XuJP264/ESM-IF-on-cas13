@@ -17,6 +17,7 @@ from cas13_if.backends.esm_if1 import (
     _sha256,
 )
 from cas13_if.backends.mock import MockBackend
+from cas13_if.backends.mpnn import _proteinmpnn_slot_map, _restore_pdb_sequence
 from cas13_if.schemas import (
     Candidate,
     EvidenceLevel,
@@ -278,3 +279,25 @@ def test_profile_and_matched_random_baselines_are_seeded() -> None:
                 sequence="ACD",
             )
         )
+
+    retained_backend = MatchedRandomMutationBackend(mutation_probability=0.0)
+    retained_backend.load()
+    retained = retained_backend.sample(request)[0]
+    assert retained.sequence == "ACD"
+
+
+def test_mpnn_adapter_restores_fixed_identity_and_insertion_mapping(
+    tmp_path: Path,
+) -> None:
+    restored_path = tmp_path / "restored.pdb"
+    sequence, residue_keys = _restore_pdb_sequence(
+        source=Path("tests/fixtures/minimal_complex.pdb"),
+        destination=restored_path,
+        chain="A",
+        fixed_positions={0: "R"},
+    )
+    assert sequence == "RG"
+    assert residue_keys[1].insertion_code == "A"
+    slots = _proteinmpnn_slot_map(residue_keys)
+    assert slots[residue_keys[0]] == 0
+    assert slots[residue_keys[1]] == 1

@@ -1,0 +1,19 @@
+defaults_from: configs/matched_baselines.yaml
+experiment:
+  name: vi-d-matched-baselines-gpu
+  evidence_level_max: 2
+  is_mock: false
+  seed: 20260731
+execution:
+  device: auto
+  require_clean_git: true
+  formal_scale: registered_gpu_extension
+sampling:
+  seed_blocks:
+    [20260731, 20260732, 20260733, 20260734, 20260735,
+     20260736, 20260737, 20260738, 20260739, 20260740]
+  proposals_per_seed: 2
+  selected_per_seed_per_method: 1
+outputs:
+  canonical_report_dir: reports/matched_baselines_gpu
+  gpu_job_manifest: reports/matched_baselines_gpu/gpu_hpc_job_manifest.jsonl

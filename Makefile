@@ -6,8 +6,10 @@ RUN := conda run -p $(ANALYSIS_ENV)
 .PHONY: bootstrap bootstrap-specialized fetch-references fetch-third-party fetch-models fetch-atlas
 .PHONY: fetch-structures lint typecheck test smoke-cpu smoke-pyg smoke-esm-if1
 .PHONY: smoke-proteinmpnn smoke-ligandmpnn process-atlas cluster msa
+.PHONY: map-vi-d
 .PHONY: conservation coevolution-smoke benchmark-experimental generate-pilot
 .PHONY: candidate-novelty
+.PHONY: matched-baselines
 .PHONY: report export-gpu-bundle verify-reproducibility
 
 bootstrap:
@@ -68,6 +70,9 @@ msa:
 conservation:
 	$(RUN) cas13-if conservation --config configs/atlas_processing.yaml
 
+map-vi-d:
+	$(RUN) cas13-if map-scaffold --config configs/vi_d_mapping.yaml
+
 coevolution-smoke:
 	$(RUN) cas13-if coevolution --config configs/atlas_processing.yaml --fixture
 
@@ -79,6 +84,9 @@ generate-pilot:
 
 candidate-novelty:
 	$(RUN) cas13-if novelty --config configs/candidate_filtering.yaml
+
+matched-baselines:
+	$(RUN) python scripts/run_matched_baselines.py --config $(CONFIG)
 
 report:
 	$(RUN) cas13-if report --config configs/benchmark_experimental.yaml
