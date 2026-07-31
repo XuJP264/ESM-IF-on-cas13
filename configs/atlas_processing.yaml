@@ -49,3 +49,4 @@ conservation:
   output_dir: data/processed/atlas/v1.0/conservation
   sequence_identity_threshold: 0.8
   allowed_residue_frequency: 0.05
+  constraint_minimum_column_coverage: 0.8

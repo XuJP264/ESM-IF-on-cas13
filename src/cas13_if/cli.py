@@ -551,6 +551,9 @@ def conservation(config: ConfigOption) -> None:
             output_dir=output_dir,
             identity_threshold=float(settings.get("sequence_identity_threshold", 0.8)),
             allowed_frequency=float(settings.get("allowed_residue_frequency", 0.05)),
+            constraint_minimum_column_coverage=float(
+                settings.get("constraint_minimum_column_coverage", 0.8)
+            ),
         )
         recorder.finish(
             success=True,

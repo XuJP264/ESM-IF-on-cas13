@@ -120,4 +120,12 @@ def test_subtype_msa_to_conservation_pipeline(tmp_path: Path) -> None:
         allowed_frequency=0.05,
     )
     assert conservation["subtypes"]["VI-D"]["columns"] == 4
+    assert (
+        conservation["subtypes"]["VI-D"]["constraint_eligible_columns_before_mapping"]
+        == 4
+    )
+    assert (
+        conservation["subtypes"]["VI-D"]["constraint_status"]
+        == "requires_scaffold_mapping_and_mapping_confidence"
+    )
     assert (tmp_path / "conservation/vi-d.parquet").is_file()

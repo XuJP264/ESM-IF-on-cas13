@@ -21,7 +21,10 @@ def compute_subtype_conservation(
     output_dir: Path,
     identity_threshold: float,
     allowed_frequency: float,
+    constraint_minimum_column_coverage: float = 0.8,
 ) -> dict[str, Any]:
+    if not 0 <= constraint_minimum_column_coverage <= 1:
+        raise ValueError("constraint minimum column coverage must be in [0, 1]")
     if output_dir.exists():
         raise FileExistsError(
             f"refusing to overwrite conservation output: {output_dir}"
@@ -70,6 +73,10 @@ def compute_subtype_conservation(
         output_path = output_dir / f"{subtype_label}.parquet"
         pq.write_table(pa.Table.from_pylist(rows), output_path, compression="zstd")
         effective_count = statistics[0].effective_sequence_count if statistics else 0.0
+        coverage_threshold_counts = {
+            f"{threshold:.2f}": sum(item.coverage >= threshold for item in statistics)
+            for threshold in (0.5, 0.8, 0.9, 0.95)
+        }
         subtype_summary[str(subtype)] = {
             "status": "success",
             "sequences": alignment.n_sequences,
@@ -85,6 +92,13 @@ def compute_subtype_conservation(
                 if statistics
                 else None
             ),
+            "coverage_threshold_counts": coverage_threshold_counts,
+            "constraint_minimum_column_coverage": (constraint_minimum_column_coverage),
+            "constraint_eligible_columns_before_mapping": sum(
+                item.coverage >= constraint_minimum_column_coverage
+                for item in statistics
+            ),
+            "constraint_status": "requires_scaffold_mapping_and_mapping_confidence",
             "output": str(output_path),
         }
     manifest = {
@@ -93,10 +107,13 @@ def compute_subtype_conservation(
         "evidence_level": 0,
         "identity_threshold": identity_threshold,
         "allowed_frequency": allowed_frequency,
+        "constraint_minimum_column_coverage": constraint_minimum_column_coverage,
         "subtypes": subtype_summary,
         "warning": (
             "Position-level values are subtype-specific and must not be merged "
-            "across incompatible Cas13 domain layouts."
+            "across incompatible Cas13 domain layouts. Coverage eligibility does "
+            "not authorize a constraint until scaffold mapping and mapping "
+            "confidence also pass."
         ),
     }
     atomic_write_text(
