@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+from numpy.typing import NDArray
 
 from cas13_if.data.fasta import iter_fasta
 from cas13_if.schemas import STANDARD_AA
@@ -28,7 +29,7 @@ class Alignment:
     def n_columns(self) -> int:
         return len(self.sequences[0])
 
-    def matrix(self) -> np.ndarray:
+    def matrix(self) -> NDArray[np.str_]:
         return np.array([list(sequence) for sequence in self.sequences], dtype="U1")
 
 
@@ -79,7 +80,7 @@ def sequence_weights(
     alignment: Alignment,
     *,
     identity_threshold: float = 0.8,
-) -> np.ndarray:
+) -> NDArray[np.float64]:
     """Return 1/neighborhood-size weights under aligned sequence identity."""
     if not 0 < identity_threshold <= 1:
         raise ValueError("identity threshold must be in (0, 1]")

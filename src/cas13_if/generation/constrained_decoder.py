@@ -11,10 +11,11 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 import numpy as np
+from numpy.typing import NDArray
 
 from cas13_if.schemas import STANDARD_AA
 
-LogitsFunction = Callable[[str, int], np.ndarray]
+LogitsFunction = Callable[[str, int], NDArray[np.float64]]
 
 
 @dataclass(frozen=True)
@@ -130,7 +131,7 @@ def _validate_constraints(
             raise ValueError(f"unknown allowed tokens at {index}: {sorted(unknown)}")
 
 
-def _softmax(values: np.ndarray) -> np.ndarray:
+def _softmax(values: NDArray[np.float64]) -> NDArray[np.float64]:
     maximum = float(np.max(values))
     if not np.isfinite(maximum):
         raise ValueError("all amino acids were filtered out")

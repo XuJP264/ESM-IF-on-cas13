@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
 
 from cas13_if.backends.base import InverseFoldingBackend
 from cas13_if.schemas import (
@@ -231,7 +232,7 @@ class EsmIf1Backend(InverseFoldingBackend):
             return chain_coords[chains[0]], chains[0], list(chains)
         return chain_coords, chains[0], list(chains)
 
-    def _extract_chain_coords(self, atoms: Any, chain: str) -> np.ndarray:
+    def _extract_chain_coords(self, atoms: Any, chain: str) -> NDArray[np.float32]:
         sequence, residue_keys = protein_chain_sequence(atoms, chain)
         if not sequence:
             raise ValueError(f"protein chain {chain!r} has no residues")

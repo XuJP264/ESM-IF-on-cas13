@@ -6,6 +6,7 @@ import math
 from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
 
 from cas13_if.backends.base import InverseFoldingBackend
 from cas13_if.schemas import (
@@ -35,7 +36,7 @@ class MsaProfileBackend(InverseFoldingBackend):
             raise ValueError("pseudocount must be positive")
         self.frequencies = frequencies
         self.pseudocount = pseudocount
-        self._probabilities: np.ndarray | None = None
+        self._probabilities: NDArray[np.float64] | None = None
 
     def capabilities(self) -> BackendCapabilities:
         return BackendCapabilities(
@@ -67,7 +68,7 @@ class MsaProfileBackend(InverseFoldingBackend):
             matrix[position] /= matrix[position].sum()
         self._probabilities = matrix
 
-    def _require_loaded(self) -> np.ndarray:
+    def _require_loaded(self) -> NDArray[np.float64]:
         if self._probabilities is None:
             raise RuntimeError("MsaProfileBackend.load() must be called first")
         return self._probabilities
