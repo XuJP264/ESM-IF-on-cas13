@@ -40,9 +40,11 @@ Cas13”。
 - 正式 run 使用不可覆盖目录，记录 resolved config、seed、环境、硬件、
   git、输入/输出 hash、失败和 SUCCESS/FAILED；
 - mock、fixture、real 和证据 Level 均显式记录；
-- 本轮提交已 push 到 `origin/main`；GitHub Actions run `30633893318`
-  的 fixture-validation job 已通过 Ruff、format、shell syntax、mypy、
-  pytest/coverage 和 fixture preflight。
+- 本轮提交已 push 到 `origin/main`。GitHub Actions run `30633893318` 是
+  primary fixture/code run，其 fixture-validation job 已通过 Ruff、format、
+  shell syntax、mypy、pytest/coverage 和 fixture preflight；run
+  `30635299503` 是 preceding-stage final handoff/documentation run，不作为
+  primary code-run identifier。
 
 ### 1.2 本机实测资源
 
@@ -242,7 +244,8 @@ sensitivity 7.5 和 query coverage ≥ 0.8：
 - branch-aware coverage：70.89%，门槛 70%；
 - fixture MI/APC：通过，明确 `is_mock=true`，不是 DCA；
 - mock refold E2E：通过，明确 `is_mock=true`。
-- GitHub Actions：run `30633893318` success。
+- GitHub Actions：primary fixture/code run `30633893318` success；final
+  handoff/documentation run `30635299503` success。
 
 当前项目报告：
 
@@ -331,18 +334,19 @@ sensitivity 7.5 和 query coverage ≥ 0.8：
 - tmux launcher 记录唯一 session、run dir、完整日志、退出码和现场；
 - 不无限静默重试。
 
-本轮 Atlas-complete clean bundle：
+最终交接 HEAD 的权威 clean bundle：
 
-`artifacts/bundles/gpu-bundle-4eaa2ec1d726-7540febfb2/`
+`artifacts/bundles/gpu-bundle-a9a530d14434-7540febfb2/`
 
 - manifest commit：
-  `4eaa2ec1d72649f38e215024fe52a5b1263cd30e`；
+  `a9a530d14434e74dc0cfc47896847e201431c1c2`；
 - export dirty：false；
 - bundle size：约 372 KiB；
 - internal SHA256：passed；
 - 5 个 checkpoint、Atlas JSON、8 个 PDB/mmCIF asset hash：passed；
 - `missing_assets=[]`；
 - 大资产没有嵌入 bundle。
+- annotated tag：`v0.1.0-data-pipeline`。
 
 尚未完成的是目标 GPU 节点验收：
 

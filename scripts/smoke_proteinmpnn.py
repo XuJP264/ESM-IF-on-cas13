@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
 import sys
@@ -14,6 +15,15 @@ import torch
 
 from cas13_if.provenance import sha256_file
 from cas13_if.structures.parser import parse_structure, protein_chain_sequence
+
+
+def _arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pdb-id", default="6e9f")
+    parser.add_argument("--chain", default="A")
+    parser.add_argument("--seed", type=int, default=20260731)
+    parser.add_argument("--output-path", type=Path)
+    return parser.parse_args()
 
 
 def _sequences(path: Path) -> list[str]:
@@ -30,16 +40,19 @@ def _sequences(path: Path) -> list[str]:
 
 
 def main() -> int:
+    arguments = _arguments()
     repo = Path(__file__).resolve().parents[1]
     upstream = repo / "third_party/ProteinMPNN"
     checkpoint = repo / "models/proteinmpnn/v_48_020.pt"
-    structure = repo / "data/experimental_structures/6e9f.pdb"
+    pdb_id = str(arguments.pdb_id).lower()
+    chain = str(arguments.chain)
+    structure = repo / f"data/experimental_structures/{pdb_id}.pdb"
     for path in (upstream / "protein_mpnn_run.py", checkpoint, structure):
         if not path.is_file():
             raise FileNotFoundError(f"required local asset is missing: {path}")
 
     atoms = parse_structure(structure)
-    native, _ = protein_chain_sequence(atoms, "A")
+    native, _ = protein_chain_sequence(atoms, chain)
     with tempfile.TemporaryDirectory(
         prefix="proteinmpnn-smoke-", dir=repo / "results"
     ) as temporary:
@@ -50,7 +63,7 @@ def main() -> int:
             "--pdb_path",
             str(structure),
             "--pdb_path_chains",
-            "A",
+            chain,
             "--out_folder",
             str(output),
             "--path_to_model_weights",
@@ -64,7 +77,7 @@ def main() -> int:
             "--sampling_temp",
             "0.1",
             "--seed",
-            "20260731",
+            str(arguments.seed),
             "--save_probs",
             "1",
             "--suppress_print",
@@ -85,7 +98,7 @@ def main() -> int:
                 f"{completed.returncode}\nSTDOUT:\n{completed.stdout}\n"
                 f"STDERR:\n{completed.stderr}"
             )
-        fasta = output / "seqs/6e9f.fa"
+        fasta = output / f"seqs/{structure.stem}.fa"
         upstream_native, sampled = _sequences(fasta)[0], _sequences(fasta)[-1]
         probability_files = sorted((output / "probs").glob("*.npz"))
         if len(sampled) != len(upstream_native):
@@ -118,7 +131,7 @@ def main() -> int:
             "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
             "elapsed_seconds": elapsed,
         },
-        "cas13_6e9f_a": {
+        f"cas13_{pdb_id}_{chain.lower()}": {
             "resolved_coordinate_length": len(native),
             "upstream_tensor_length": len(upstream_native),
             "unresolved_internal_slots": upstream_native.count("X"),
@@ -130,7 +143,13 @@ def main() -> int:
             "missing_coordinate_positions_are_masked_by_upstream": True,
         },
     }
-    output_path = repo / "artifacts/system/proteinmpnn_real_smoke.json"
+    smoke_filename = f"proteinmpnn_{pdb_id}_{chain.lower()}_real_smoke.json"
+    default_output = (
+        "artifacts/system/proteinmpnn_real_smoke.json"
+        if pdb_id == "6e9f" and chain == "A"
+        else f"artifacts/system/{smoke_filename}"
+    )
+    output_path = arguments.output_path or (repo / default_output)
     output_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0

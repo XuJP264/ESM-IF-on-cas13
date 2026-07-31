@@ -1,0 +1,17 @@
+experiment:
+  name: vi-d-scaffold-mapping
+  evidence_level_max: 0
+  is_mock: false
+  seed: 20260731
+mapping:
+  pdb_id: 6E9F
+  chain_id: A
+  subtype: VI-D
+  structure: data/experimental_structures/6e9f.cif
+  protein_entity: data/experimental_structures/6e9f.entity_1.json
+  msa: data/processed/atlas/v1.0/msa/vi-d/alignment.fasta
+  conservation: data/processed/atlas/v1.0/conservation/vi-d.parquet
+  output_dir: reports/vi_d_mapping
+  mafft_executable: .tools/envs/bioinformatics/bin/mafft
+  threads: 16
+  minimum_conservation_coverage: 0.8

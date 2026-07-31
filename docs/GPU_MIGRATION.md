@@ -212,18 +212,20 @@ manifest，大小为 5,267,508,328 bytes，SHA256 为
 本阶段最终验收会从最新 clean commit 再导出一次 bundle，并要求 Atlas
 出现在 `ASSET_SHA256SUMS` 而不是 `missing_assets`。
 
-该验收现已完成。当前 Atlas-complete source bundle 是：
+该验收现已在最终交接 HEAD 上重新完成。当前权威 source bundle 是：
 
 ```text
-artifacts/bundles/gpu-bundle-4eaa2ec1d726-7540febfb2/
+artifacts/bundles/gpu-bundle-a9a530d14434-7540febfb2/
 ```
 
 其 manifest 固定 commit
-`4eaa2ec1d72649f38e215024fe52a5b1263cd30e`，导出时
+`a9a530d14434e74dc0cfc47896847e201431c1c2`，导出时
 `git_worktree_dirty_at_export=false`。bundle 本体约 372 KiB，
 `missing_assets=[]`；5 个 checkpoint、Atlas JSON 和 8 个 PDB/mmCIF
-资产均已在源节点通过 `ASSET_SHA256SUMS`。目标节点必须 checkout manifest
-中的精确 commit，而不是假定当前 branch tip 与 bundle 相同。
+资产（合计 14 项）均已在源节点通过 `ASSET_SHA256SUMS`，所有 bundle
+内部文件也通过 `SHA256SUMS`。该检查点带 annotated tag
+`v0.1.0-data-pipeline`。目标节点必须 checkout manifest 中的精确 commit，
+而不是假定当前 branch tip 与 bundle 相同。
 
 当前状态是“操作指南、源节点 bundle 机制和本地校验完成，目标 GPU 节点
 真实验收未完成”，而不是“GPU 实验已完成”。此外，Atlas 缺失

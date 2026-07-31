@@ -19,6 +19,7 @@ from rich.console import Console
 from cas13_if import __version__
 from cas13_if.alignments.msa import read_aligned_fasta
 from cas13_if.alignments.pipeline import build_subtype_msas
+from cas13_if.alignments.scaffold_mapping import build_scaffold_mapping
 from cas13_if.backends.mock import MockBackend
 from cas13_if.config import ConfigDict, ConfigError, load_config
 from cas13_if.data.atlas import iter_json_array, process_atlas
@@ -685,6 +686,61 @@ def coevolution(
 def inspect_structure(config: ConfigOption) -> None:
     """Run strict protein/RNA structure QC and mapping."""
     _fail_not_run("inspect-structure", config)
+
+
+@app.command("map-scaffold")
+def map_scaffold(config: ConfigOption) -> None:
+    """Map a resolved structure chain through full scaffold and subtype MSA."""
+    recorder: RunRecorder | None = None
+    try:
+        resolved, recorder = _start_run("map-scaffold", config, is_mock=False)
+        settings = _mapping(resolved, "mapping")
+        structure = _path(settings.get("structure"), key="mapping.structure")
+        entity = _path(settings.get("protein_entity"), key="mapping.protein_entity")
+        msa = _path(settings.get("msa"), key="mapping.msa")
+        conservation_path = _path(
+            settings.get("conservation"), key="mapping.conservation"
+        )
+        output_dir = _path(settings.get("output_dir"), key="mapping.output_dir")
+        executable = _path(
+            settings.get("mafft_executable"), key="mapping.mafft_executable"
+        )
+        inputs = [structure, entity, msa, conservation_path]
+        _record_inputs(recorder, inputs)
+        summary = build_scaffold_mapping(
+            structure_path=structure,
+            entity_path=entity,
+            msa_path=msa,
+            conservation_path=conservation_path,
+            output_dir=output_dir,
+            chain_id=str(settings.get("chain_id", "A")),
+            subtype=str(settings.get("subtype", "VI-D")),
+            mafft_executable=str(executable),
+            threads=int(settings.get("threads", 1)),
+            minimum_conservation_coverage=float(
+                settings.get("minimum_conservation_coverage", 0.8)
+            ),
+        )
+        recorder.finish(
+            success=True,
+            metrics=summary,
+            outputs=[_file_entry(path) for path in _tree_files(output_dir)],
+        )
+        console.print_json(json.dumps(summary))
+    except (
+        ConfigError,
+        RunExistsError,
+        FileNotFoundError,
+        FileExistsError,
+        RuntimeError,
+        ValueError,
+        OSError,
+    ) as exc:
+        if recorder is not None:
+            recorder.record_failure("map-scaffold", str(exc))
+            recorder.finish(success=False)
+        console.print(f"[red]error:[/red] {exc}")
+        raise typer.Exit(code=2) from exc
 
 
 @app.command("annotate-contacts")

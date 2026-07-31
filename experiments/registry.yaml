@@ -6,4 +6,9 @@ experiments:
     evidence_level_max: 2
     preregistrations:
       - experiments/preregistered/split_protocol.yaml
-
+  - id: vi-d-mapping-and-matched-baselines
+    execplan: docs/execplans/0002_vi_d_mapping_and_matched_baselines.md
+    status: in_progress
+    evidence_level_max: 2
+    preregistrations:
+      - experiments/preregistered/matched_baseline_protocol.yaml

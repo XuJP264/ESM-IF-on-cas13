@@ -1,0 +1,94 @@
+schema_version: "1.0"
+registered_at: "2026-07-31"
+registered_before_formal_run: true
+scope: "6E9F chain A / EsCas13d / VI-D small real CPU matrix"
+evidence_level_max: 2
+is_mock: false
+scaffold:
+  pdb_id: 6E9F
+  chain_id: A
+  subtype: VI-D
+  coordinate_source: data/experimental_structures/6e9f.cif
+  mapping_source: reports/vi_d_mapping/mapping.csv
+position_policy:
+  comparison_universe: resolved residues with complete N_CA_C backbone
+  identical_hard_fixed_across_methods: true
+  identical_free_positions_across_methods: true
+  require_mapping_confidence_for_conservation: high
+  minimum_msa_coverage_for_conservation: 0.8
+  conservation_never_automatically_defines_catalytic_truth: true
+  unconstrained_label_semantics: no evolutionary_or_RNA_bias_beyond_common_safety_mask
+  catalytic_only_label_semantics: independently_seeded_technical_replicate_of_common_mask
+methods:
+  - matched_random_mutation
+  - msa_profile_sampling
+  - unconstrained_esm_if1
+  - catalytic_only_fixed_esm_if1
+  - conservation_constrained_esm_if1
+  - conservation_rna_contact_esm_if1
+  - proteinmpnn
+  - ligandmpnn
+  - esm_if1_ligandmpnn_consensus
+local_scale:
+  seeds: [20260731, 20260732]
+  selected_candidates_per_seed_per_method: 1
+  proposal_oversampling_per_seed: 2
+  independent_unit: seed
+matching:
+  variables: [parent_identity, designed_position_identity]
+  common_interval:
+    parent_identity: [0.18, 0.32]
+    designed_position_identity: [0.18, 0.32]
+  target_center: 0.25
+  deterministic_assignment: true
+  tie_break: [distance_to_target_center, candidate_id]
+  require_one_candidate_per_seed_per_method_in_common_interval: true
+  failure_action: fail_formal_comparison_and_export_gpu_manifest
+calibration:
+  amended_before_formal_run: true
+  endpoint_metrics_inspected: false
+  sources:
+    - historical_6e9f_esm_pilot_identity_only
+    - real_single_candidate_mpnn_identity_diagnostics
+    - deterministic_profile_and_random_identity_diagnostics
+  rationale: >-
+    Identity is the registered matching variable, not a performance endpoint.
+    The broad common interval was fixed before the formal run so methods with
+    different native sampling temperatures can be compared without post-hoc
+    sequence editing.
+proposal_settings:
+  random_mutation_probability: 0.78
+  msa_profile_temperature: 2.0
+  esm_if1_temperature: 1.0
+  proteinmpnn_temperature: 1.0
+  ligandmpnn_temperature: 1.0
+  maximum_conservation_biased_positions: 48
+  maximum_rna_contact_biased_positions: 48
+  conservation_rank_minimum: 0.8
+novelty:
+  atlas_fasta: data/processed/atlas/v1.0/clusters/cas13_exact_unique.fasta
+  tool: mmseqs
+  sensitivity: 7.5
+  minimum_query_coverage: 0.8
+  maximum_evalue: 1000.0
+  maximum_sequences: 5000
+  no_coverage_hit_semantics: fail_closed_not_evidence_of_extreme_novelty
+quality:
+  require_standard_amino_acids: true
+  maximum_homopolymer_length: 7
+  low_complexity_window: 12
+  maximum_single_residue_fraction: 0.5
+  fixed_position_violations: 0
+statistics:
+  bootstrap_replicates: 2000
+  bootstrap_unit: seed
+  confidence_level: 0.95
+  paired_comparisons: true
+  effect_size: paired_mean_difference
+  multiple_comparison_correction: benjamini_hochberg
+  candidate_level_inference_forbidden: true
+  local_two_seed_results_label: low_power_descriptive
+reporting:
+  distinguish_level_1_novelty_from_level_2_compatibility: true
+  forbid_functional_validity_claims: true
+  include_all_failures: true

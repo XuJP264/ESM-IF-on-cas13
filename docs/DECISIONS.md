@@ -151,3 +151,37 @@ parent-identity, Atlas-identity, homopolymer, low-complexity, entropy, and
 fixed-position gates. The absence of VI-A in the current Atlas Cas13 HMM table
 is a database-coverage limitation for 5XWP, not favorable evidence for its
 candidates.
+
+## 2026-07-31 — Final data-pipeline checkpoint and CI roles
+
+Tag `v0.1.0-data-pipeline` identifies exact commit
+`a9a530d14434e74dc0cfc47896847e201431c1c2`. Its authoritative GPU source
+bundle is `gpu-bundle-a9a530d14434-7540febfb2`; the export was clean, had no
+missing assets, and passed internal hashes plus all 14 source-asset hashes.
+GitHub Actions run `30633893318` remains the primary fixture/code CI evidence;
+run `30635299503` is the final handoff/documentation CI evidence. Do not cite
+the latter as if it were the primary code-validation run.
+
+## 2026-07-31 — Fair baseline masks are method-invariant
+
+For the 6E9F VI-D matrix, all methods use one identical hard-fixed set and one
+identical free set. Conservation or RNA-interface information may bias allowed
+residues or proposal probabilities only inside the common free set; it may not
+change the evaluated design positions. `unconstrained_esm_if1` means no such
+proposal bias beyond the common safety mask. The requested
+`catalytic_only_fixed_esm_if1` condition is an independently seeded technical
+replicate of that same mask and is not interpreted as a separate biological
+treatment. Conservation remains disabled until a high-confidence full
+scaffold-to-VI-D-MSA mapping passes its audit.
+
+## 2026-07-31 — Identity matching uses a preregistered common interval
+
+Before the formal matched run, calibrate only on historical/diagnostic identity
+values, never endpoint performance. Select one proposal per method and seed in
+the common parent- and designed-position identity interval 0.18–0.32, nearest
+to target 0.25 with candidate ID as deterministic tie-break. Use random
+mutation probability 0.78, profile temperature 2.0, and model temperature 1.0.
+Limit the local conservation and RNA-contact proposal filters to the top 48
+mapped positions each so a real small CPU matrix can meet the same novelty
+interval without post-hoc sequence editing. The larger GPU extension may add
+seeds but may not change this matching rule after seeing performance metrics.
