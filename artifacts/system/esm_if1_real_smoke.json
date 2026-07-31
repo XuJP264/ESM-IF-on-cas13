@@ -1,10 +1,10 @@
 {
   "cas13_5xwp_a": {
-    "conditional_log_likelihood": -2553.3472786061175,
-    "inference_seconds": 0.9785367940057768,
+    "conditional_log_likelihood": -2553.347415918921,
+    "inference_seconds": 0.951284561000648,
     "length": 1125,
-    "mean_conditional_log_likelihood": -2.26964202542766,
-    "perplexity": 9.675936454819173,
+    "mean_conditional_log_likelihood": -2.269642147483485,
+    "perplexity": 9.675937635823653,
     "protein_chains": [
       "A"
     ],
@@ -14,11 +14,11 @@
     ]
   },
   "cas13_6e9f_a": {
-    "conditional_log_likelihood": -1813.9303195329267,
-    "inference_seconds": 0.6351829719933448,
+    "conditional_log_likelihood": -1813.9300331624108,
+    "inference_seconds": 0.6424521610024385,
     "length": 864,
-    "mean_conditional_log_likelihood": -2.099456388348295,
-    "perplexity": 8.16173189384201,
+    "mean_conditional_log_likelihood": -2.0994560569009386,
+    "perplexity": 8.161729188658,
     "protein_chains": [
       "A"
     ],
@@ -39,7 +39,7 @@
     "cuda_runtime": "12.1",
     "device": "cuda",
     "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
-    "load_seconds": 5.078507037993404,
+    "load_seconds": 3.944343088005553,
     "platform": "Linux-6.6.114.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
     "python": "3.10.20 | packaged by conda-forge | (main, Jun 11 2026, 03:31:56) [GCC 14.3.0]",
     "torch": "2.4.1"

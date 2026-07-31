@@ -39,7 +39,7 @@
   "runtime": {
     "cuda_available": true,
     "cuda_runtime": "12.1",
-    "elapsed_seconds": 5.548165165993851,
+    "elapsed_seconds": 4.626041117007844,
     "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
     "torch": "2.4.1"
   },
