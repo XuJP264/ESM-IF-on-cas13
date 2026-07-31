@@ -202,5 +202,9 @@ GPU 节点取证后才能标记完成：
 - 大规模 AF/ColabFold/AF3/Protenix/Boltz 回折；
 - 正式 DCA、Foldseek 全量结构聚类和 ESM-IF1 domain adaptation。
 
-因此当前状态是“操作指南和可执行路径完成，本机静态/fixture 验证待执行，
-目标 GPU 节点真实验收未完成”，而不是“GPU 实验已完成”。
+本地 clean bundle
+`artifacts/bundles/gpu-bundle-7dc0491d8441-6ad46d8577/` 已完成内部
+checksum 和现有大资产 checksum 验证；其 manifest 明确把尚未下载完成的
+Atlas JSON 列入 `missing_assets`。当前状态是“操作指南、源节点 bundle
+导出和本地校验完成，目标 GPU 节点真实验收未完成”，而不是“GPU 实验已
+完成”。

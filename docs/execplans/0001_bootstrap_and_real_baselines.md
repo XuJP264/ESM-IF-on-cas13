@@ -111,6 +111,10 @@ commits, and verified push.
   for 6E9F/5XWP across three temperatures and three constraint conditions;
   all candidate IDs are unique and all fixed-position violation counts are
   zero. The report remains Level 2 and does not claim a matched method win.
+- [x] 2026-07-31: Exported a clean-commit GPU bundle and verified all internal
+  files plus all currently available model/experimental-structure assets.
+  The incomplete Atlas JSON is explicitly listed in `missing_assets`; target
+  GPU-node validation remains pending.
 - [ ] Finish the resumed Atlas download. The initial curl exit 6 is preserved;
   the resumable production `.part` is now growing.
 - [ ] Complete GPU validation for M1; the local CPU/dependency portion passes.

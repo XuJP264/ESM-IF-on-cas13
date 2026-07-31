@@ -10,7 +10,7 @@ Last updated: 2026-07-31 (Asia/Shanghai)
 | M3 Atlas | official download in progress | official 5,267,508,328-byte source HEAD/schema verified; initial DNS failure preserved; resumable production `.part` is now downloading |
 | M4 evolution | implementation/fixture only | subtype MSA/conservation and MI/APC code tested; real Atlas-derived analysis pending |
 | M5 constrained generation | real pilot, matrix pending | genuine causal decoder implemented; 6E9F catalytic hard-fixed CPU sample completed with zero fixed-position violations; baseline matrix/novelty report pending |
-| M6 migration/refold | interface/fixture partial | provider-neutral mock E2E, bundle/sync/verify/tmux scripts and migration guide exist; bundle export and target-node validation pending |
+| M6 migration/refold | source-node bundle verified; target pending | provider-neutral mock E2E and guide exist; clean bundle `gpu-bundle-7dc0491d8441-6ad46d8577` passed internal and current-asset hashes; target-node transfer/bootstrap/GPU validation pending |
 
 Genuine ESM-IF1 CPU scoring now supplies Level 2 inverse-folding compatibility
 for the toy, 6E9F, and 5XWP inputs. A genuine 6E9F catalytic hard-fixed sample

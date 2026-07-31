@@ -306,10 +306,20 @@ bootstrap 收尾失败，不是工具安装失败。
 - tmux launcher 记录 git、GPU、配置、起止时间、日志、退出码以及
   SUCCESS/FAILED。
 
-当前尚未达到的验收：
+本地已经达到的验收：
 
-- 尚未实际导出本阶段 bundle；
-- 尚未运行 bundle checksum verification；
+- 已从 clean commit `7dc0491d84419771b4b5e14d2f8daf39f36e68d1`
+  导出
+  `artifacts/bundles/gpu-bundle-7dc0491d8441-6ad46d8577/`；
+- `git_worktree_dirty_at_export=false`；
+- bundle 内所有文件的 `SHA256SUMS` 已通过；
+- 5 个模型 checkpoint 和 8 个实验结构 PDB/mmCIF 已按
+  `ASSET_SHA256SUMS` 在本地资产根目录逐一通过；
+- `make verify-reproducibility` 已通过 shell parsing、manifest、
+  Ruff、format、strict mypy、42 个 pytest 和 bundle verification。
+
+仍未达到的目标节点验收：
+
 - `bootstrap_gpu_node.sh` 尚未在目标 GPU 节点验证完全隔离安装和 GPU
   imports；
 - `sync_assets.sh` 的逐资产 hash 路径尚未在第二台机器完成真实传输验收；
@@ -318,9 +328,10 @@ bootstrap 收尾失败，不是工具安装失败。
 - 正式 DCA job export/ingest 未完成；
 - 大规模结构预测 provider 只有通用交换接口，没有在目标软件上真实跑通。
 
-因此答案是：迁移操作指南和可执行路径已经完成到本地待验收状态，但本阶段
-bundle 尚未实际导出/校验，目标 GPU 节点真实运行也未完成，不能称为 GPU
-迁移验收完成。
+当前基础 bundle 的 `missing_assets` 只有尚在下载的 Atlas 正式 JSON；
+脚本正确地将其列为缺失而没有嵌入未完成 `.part`。因此答案是：迁移操作
+指南、clean bundle 导出、本地内部校验和现有资产校验已完成；第二台机器的
+真实传输、环境恢复和 GPU 运行仍未完成，不能称为目标 GPU 迁移验收完成。
 
 ## 7. 从中断点恢复的执行顺序
 
