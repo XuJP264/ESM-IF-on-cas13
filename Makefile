@@ -88,4 +88,4 @@ export-gpu-bundle:
 
 verify-reproducibility:
 	bash scripts/run_static_validation.sh
-	bash scripts/verify_gpu_bundle.sh
+	bash scripts/verify_gpu_bundle.sh "" "$(CURDIR)"

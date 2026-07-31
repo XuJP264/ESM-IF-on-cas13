@@ -5,10 +5,15 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 bundle="${1:-}"
 asset_root="${2:-}"
 if [[ -z "${bundle}" ]]; then
-  bundle="$(
-    find "${repo_root}/artifacts/bundles" -mindepth 1 -maxdepth 1 \
-      -type d -name 'gpu-bundle-*' | sort | tail -n 1
+  latest_manifest="$(
+    find "${repo_root}/artifacts/bundles" -mindepth 2 -maxdepth 2 \
+      -type f -path '*/gpu-bundle-*/bundle-manifest.json' \
+      -printf '%T@ %p\n' |
+      sort -n |
+      tail -n 1 |
+      cut -d ' ' -f 2-
   )"
+  bundle="${latest_manifest%/bundle-manifest.json}"
 fi
 if [[ -z "${bundle}" ]]; then
   echo "ERROR: no GPU bundle; run scripts/export_gpu_bundle.sh" >&2
