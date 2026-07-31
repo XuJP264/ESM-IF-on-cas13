@@ -1039,24 +1039,38 @@ def main() -> int:
             report_dir / "summary.json",
             json.dumps(summary, indent=2, sort_keys=True) + "\n",
         )
+        gpu_config_relative = "configs/matched_baselines_gpu.yaml"
+        gpu_config = _resolved_config(repo, repo / gpu_config_relative)
+        gpu_report_dir = str(gpu_config["outputs"]["canonical_report_dir"]).rstrip("/")
         gpu_jobs = [
             {
                 "job_id": "vi-d-matched-baselines-gpu-extension",
                 "task": "matched-baselines",
-                "config": "configs/matched_baselines_gpu.yaml",
-                "seed_blocks": list(range(20260731, 20260741)),
+                "config": gpu_config_relative,
+                "seed_blocks": [
+                    int(value) for value in gpu_config["sampling"]["seed_blocks"]
+                ],
                 "command": (
                     "bash scripts/launch_gpu_tmux.sh "
                     "configs/matched_baselines_gpu.yaml matched-baselines"
+                ),
+                "required_code_commit": str(git["commit"]),
+                "source_asset_bundle": (
+                    "artifacts/bundles/gpu-bundle-a9a530d14434-7540febfb2"
+                ),
+                "source_asset_bundle_commit": (
+                    "a9a530d14434e74dc0cfc47896847e201431c1c2"
                 ),
                 "status": "not_run",
                 "is_mock": False,
                 "reason": "large GPU extension intentionally deferred",
                 "expected_outputs": [
-                    "reports/matched_baselines/methods_table.csv",
-                    "reports/matched_baselines/candidates.jsonl",
-                    "reports/matched_baselines/matched_statistics.csv",
+                    f"{gpu_report_dir}/methods_table.csv",
+                    f"{gpu_report_dir}/candidates.jsonl",
+                    f"{gpu_report_dir}/matched_statistics.csv",
                 ],
+                "expected_fixed_position_hash": fixed_hash,
+                "expected_free_position_hash": free_hash,
             }
         ]
         _write_jsonl(report_dir / "gpu_hpc_job_manifest.jsonl", gpu_jobs)
