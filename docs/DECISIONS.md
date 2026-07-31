@@ -125,3 +125,17 @@ Use the locked `.tools/envs/bioinformatics` environment for MMseqs2, MAFFT,
 HMMER, Infernal, seqkit, Foldseek, TM-align, and Git LFS. Git LFS is available
 for repository tooling but model weights, raw Atlas data, PDFs, and prediction
 outputs remain ignored rather than added to LFS.
+
+## 2026-07-31 — Atlas completeness flags do not establish full-length Cas13
+
+The first inclusive subtype MSA retained records marked `truncated=00`, but its
+shortest representatives were 48–80 aa and no subtype had an alignment column
+with 90% sequence coverage. Treat that alignment as an audit result, not a
+design constraint source. Before any scaffold mapping or candidate test metric,
+preregister a broad 700–1600 aa full-length screen, retain canonical sequences
+with a nonconflicting complete occurrence, and select the longest eligible
+member of each 70% MMseqs2 cluster with SHA256 as the deterministic tie-break.
+Column conservation still requires an explicit scaffold mapping, mapping
+confidence, and at least 80% column coverage; conservation alone never
+automatically creates a hard-fixed position. Preserve the inclusive alignment
+outside the canonical result path and report length-threshold sensitivity.

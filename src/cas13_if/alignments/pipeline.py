@@ -7,6 +7,7 @@ import shutil
 import subprocess
 from collections import Counter
 from pathlib import Path
+from statistics import median
 from typing import Any
 
 import pyarrow.parquet as pq  # type: ignore[import-untyped]
@@ -47,10 +48,19 @@ def build_subtype_msas(
     output_dir: Path,
     executable: str,
     threads: int,
+    minimum_protein_length: int = 1,
+    maximum_protein_length: int | None = None,
 ) -> dict[str, Any]:
     """Align one representative set per subtype and audit all exclusions."""
     if threads < 1:
         raise ValueError("MAFFT threads must be positive")
+    if minimum_protein_length < 1:
+        raise ValueError("minimum protein length must be positive")
+    if (
+        maximum_protein_length is not None
+        and maximum_protein_length < minimum_protein_length
+    ):
+        raise ValueError("maximum protein length is below the minimum")
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite MSA output: {output_dir}")
     executable_path = shutil.which(executable)
@@ -120,6 +130,31 @@ def build_subtype_msas(
                 }
             )
             continue
+        if len(sequence) < minimum_protein_length:
+            excluded.append(
+                {
+                    "sequence_sha256": digest,
+                    "subtypes": type_vi_subtypes,
+                    "reason": "below_minimum_protein_length",
+                    "protein_length": len(sequence),
+                    "invalid_symbols": invalid,
+                }
+            )
+            continue
+        if (
+            maximum_protein_length is not None
+            and len(sequence) > maximum_protein_length
+        ):
+            excluded.append(
+                {
+                    "sequence_sha256": digest,
+                    "subtypes": type_vi_subtypes,
+                    "reason": "above_maximum_protein_length",
+                    "protein_length": len(sequence),
+                    "invalid_symbols": invalid,
+                }
+            )
+            continue
         if invalid:
             excluded.append(
                 {
@@ -136,7 +171,7 @@ def build_subtype_msas(
             ).append((digest, sequence))
     by_subtype = {
         subtype: [
-            min(cluster_members, key=lambda item: item[0])
+            min(cluster_members, key=lambda item: (-len(item[1]), item[0]))
             for cluster_members in clusters.values()
         ]
         for subtype, clusters in eligible_by_subtype_cluster.items()
@@ -190,6 +225,11 @@ def build_subtype_msas(
         summary[subtype] = {
             "status": "success",
             "input_sequences": len(records),
+            "minimum_sequence_length": min(len(sequence) for _, sequence in records),
+            "median_sequence_length": float(
+                median(len(sequence) for _, sequence in records)
+            ),
+            "maximum_sequence_length": max(len(sequence) for _, sequence in records),
             "alignment_sequences": alignment.n_sequences,
             "alignment_columns": alignment.n_columns,
             "mafft_version": version,
@@ -202,9 +242,12 @@ def build_subtype_msas(
         "is_mock": False,
         "evidence_level": 0,
         "selection": (
-            "one eligible sequence per MMseqs2 70% cluster and Type VI subtype; "
-            "requires at least one nonconflicting, explicitly complete record"
+            "longest eligible sequence (SHA256 tie-break) per MMseqs2 70% cluster "
+            "and Type VI subtype; requires at least one nonconflicting, explicitly "
+            "complete record and the configured broad full-length screen"
         ),
+        "minimum_protein_length": minimum_protein_length,
+        "maximum_protein_length": maximum_protein_length,
         "mafft_version": version,
         "subtypes": summary,
         "excluded_sequence_count": len(excluded),

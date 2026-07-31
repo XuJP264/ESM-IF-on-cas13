@@ -507,6 +507,12 @@ def build_msa(config: ConfigOption) -> None:
             output_dir=output_dir,
             executable=str(executable),
             threads=int(msa.get("threads", 16)),
+            minimum_protein_length=int(msa.get("minimum_protein_length", 1)),
+            maximum_protein_length=(
+                int(msa["maximum_protein_length"])
+                if msa.get("maximum_protein_length") is not None
+                else None
+            ),
         )
         recorder.finish(
             success=True,

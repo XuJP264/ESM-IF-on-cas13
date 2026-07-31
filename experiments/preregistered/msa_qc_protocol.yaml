@@ -1,0 +1,27 @@
+registered_at: 2026-07-31
+registered_before_constraint_mapping: true
+registered_before_candidate_test_metrics: true
+scope: subtype_specific_cas13_msa
+representative_unit: mmseqs_70_percent_cluster_within_subtype
+representative_selection:
+  rule: longest_eligible_sequence
+  tie_break: ascending_sequence_sha256
+eligibility:
+  require_nonconflicting_record: true
+  require_atlas_truncated_flag: "00"
+  require_canonical_amino_acids: true
+  minimum_protein_length: 700
+  maximum_protein_length: 1600
+rationale: >-
+  The inclusive production alignment showed a strongly bimodal length
+  distribution, minimum lengths of 48-80 aa, and no columns with 90 percent
+  coverage. Atlas truncated=00 therefore does not establish a full-length
+  Cas13 sequence. The broad 700-1600 aa screen excludes obvious HMM fragments
+  and extreme fusions without selecting on downstream design or test metrics.
+constraint_gate:
+  require_scaffold_to_msa_mapping: true
+  require_mapping_confidence: true
+  minimum_column_coverage: 0.8
+  automatic_hard_fix_from_conservation_only: false
+sensitivity_minimum_lengths: [500, 600, 800]
+inclusive_alignment_retention: audit_only

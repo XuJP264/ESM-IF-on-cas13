@@ -42,6 +42,8 @@ msa:
   executable: .tools/envs/bioinformatics/bin/mafft
   threads: 16
   representative_identity: 0.7
+  minimum_protein_length: 700
+  maximum_protein_length: 1600
 conservation:
   msa_dir: data/processed/atlas/v1.0/msa
   output_dir: data/processed/atlas/v1.0/conservation

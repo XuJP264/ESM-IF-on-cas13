@@ -45,6 +45,14 @@ def test_subtype_msa_to_conservation_pipeline(tmp_path: Path) -> None:
                     "nonconflicting_record_count": 0,
                     "complete_record_count": 1,
                 },
+                {
+                    "sequence_sha256": "seq-too-short",
+                    "protein_sequence": "ACD",
+                    "protein_length": 3,
+                    "subtypes": ["VI-D"],
+                    "nonconflicting_record_count": 1,
+                    "complete_record_count": 1,
+                },
             ]
         ),
         exact,
@@ -68,6 +76,10 @@ def test_subtype_msa_to_conservation_pipeline(tmp_path: Path) -> None:
                     "sequence_sha256": "seq-invalid",
                     "representative_sha256": "seq-invalid",
                 },
+                {
+                    "sequence_sha256": "seq-too-short",
+                    "representative_sha256": "seq-too-short",
+                },
             ]
         ),
         mapping,
@@ -88,10 +100,15 @@ def test_subtype_msa_to_conservation_pipeline(tmp_path: Path) -> None:
         output_dir=tmp_path / "msa",
         executable=str(fake_mafft),
         threads=1,
+        minimum_protein_length=4,
+        maximum_protein_length=10,
     )
     assert msa_manifest["subtypes"]["VI-D"]["status"] == "success"
-    assert msa_manifest["excluded_sequence_count"] == 2
+    assert msa_manifest["minimum_protein_length"] == 4
+    assert msa_manifest["maximum_protein_length"] == 10
+    assert msa_manifest["excluded_sequence_count"] == 3
     assert msa_manifest["exclusion_counts"] == {
+        "below_minimum_protein_length": 1,
         "noncanonical_amino_acid": 1,
         "only_subtype_conflicting_records": 1,
     }
