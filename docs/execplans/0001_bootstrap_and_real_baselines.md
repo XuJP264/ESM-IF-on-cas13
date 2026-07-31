@@ -115,13 +115,25 @@ commits, and verified push.
   files plus all currently available model/experimental-structure assets.
   The incomplete Atlas JSON is explicitly listed in `missing_assets`; target
   GPU-node validation remains pending.
-- [ ] Finish the resumed Atlas download. The initial curl exit 6 is preserved;
-  the resumable production `.part` is now growing.
+- [x] 2026-07-31: Completed the resumed official Atlas download, verified the
+  exact 5,267,508,328-byte size and SHA256
+  `5b4ba2fb99638d279e0c126100e19a4b77aba487b37b7df118e4bf4acd494720`,
+  atomically finalized the manifest, and passed an offline idempotence check.
 - [ ] Complete GPU validation for M1; the local CPU/dependency portion passes.
 - [ ] Complete the full ProteinMPNN/LigandMPNN/matched-novelty matrix for M2;
   the ESM pilot and individual real smokes pass.
-- [ ] Complete and validate M3.
-- [ ] Complete feasible M4/M5 work.
+- [x] 2026-07-31: Completed the core M3 production path: clean deterministic
+  streaming parse, real funnel, exact dedup, all six registered MMseqs2
+  thresholds, and strict 40% cluster leakage audit. Auxiliary subtype-held-out
+  and scaffold-held-out splits remain a later M3 extension.
+- [x] 2026-07-31: Completed feasible real M4 work on this node: length-gated
+  subtype VI-B/D/F/I MAFFT alignments and coverage-gated weighted conservation.
+  Scaffold mapping remains; paired MSA/MI/DCA are source-data blocked because
+  Atlas exposes no trustworthy repeat orientation.
+- [x] 2026-07-31: Completed an M5 real Level 1 candidate audit against the
+  4,070-sequence Atlas resource. Fourteen of 72 pilot candidates passed all
+  registered novelty/QC gates; low-complexity and no-hit failures remain in the
+  audit and no candidate receives a functional claim.
 - [ ] Complete M6 and the final acceptance audit.
 
 ## Decisions
@@ -185,6 +197,20 @@ commits, and verified push.
   the precise subtype. The parser now preserves raw/source/conflict fields and
   resolves explicit HMM subtypes before the full parse. Conflicting non-VI
   summaries are retained but cannot enter high-confidence pairing.
+- The complete real Atlas parse yielded 1,246,088 operons, 12,353 Cas13
+  records, 4,070 exact-unique sequences, 3,500 evolution-eligible exact-unique
+  sequences, zero processing failures, zero high-confidence oriented pairs,
+  and 11,727 ambiguous pairs.
+- Six-threshold MMseqs2 clustering yielded 3,877/1,797/1,323/1,003/783/516
+  clusters at 100/90/70/50/40/30%. The strict 40% split has
+  3,335/160/575 train/validation/test sequences and passed the leakage gate.
+- Atlas `truncated=00` did not establish full-length effectors. The inclusive
+  MSA had 48–80 aa representatives and no 90%-coverage column. A preregistered
+  700–1600 aa screen restored hundreds of high-coverage columns per subtype,
+  but those columns still require explicit scaffold mapping.
+- The real candidate novelty audit found 14/72 Level 1 pass rows. Fifty-three
+  candidates had no Atlas hit at the required 80% query coverage and were
+  failed closed; 41 failed low-complexity and 18 failed homopolymer gates.
 
 ## Execution details
 
@@ -269,6 +295,10 @@ tested at push time.
 M0 outcome remains complete. Since the original retrospective was written,
 genuine ESM-IF1 toy/6E9F/5XWP CPU inference, genuine constrained 6E9F sampling,
 a genuine ProteinMPNN 6E9F CPU smoke, a genuine RNA-context LigandMPNN smoke,
-and a corrected 72-candidate ESM pilot benchmark have been produced. The full
-matched method matrix and real Atlas parse remain in progress/not run, and no
-result constitutes Level 4 functional validation.
+and a corrected 72-candidate ESM pilot benchmark have been produced. The real
+Atlas parse, exact dedup, six-threshold clustering, strict split, subtype MSA,
+coverage-gated conservation, and candidate novelty audit are now also complete.
+The full matched method matrix, scaffold-to-MSA mapping, real refold and target
+GPU validation remain pending; paired-repeat analysis is blocked by the source
+orientation field rather than compute. No result constitutes Level 4
+functional validation.

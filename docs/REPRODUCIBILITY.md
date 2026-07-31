@@ -15,3 +15,9 @@ environment specifications under `envs/`, and exact exported locks after
 successful environment validation. `make verify-reproducibility` audits
 manifests, required files, fixture tests, and the current GPU bundle.
 
+The current CPU quality gate passes Ruff lint and formatting, strict mypy for
+43 source files, and 47/47 non-network/non-large-model tests with 70.89%
+branch-aware coverage. The official Atlas source is size/SHA256 verified; its
+clean production parse is deterministic across two runs and reports zero
+record-processing failures. Real model and data runs remain separate from CPU
+CI and retain their own immutable provenance.

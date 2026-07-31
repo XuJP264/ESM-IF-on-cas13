@@ -55,7 +55,16 @@ make cluster
 make msa
 make conservation
 make coevolution-smoke
+make candidate-novelty
+make report
 ```
+
+`coevolution-smoke` is a fixture-only MI/APC implementation check. The real
+Atlas v1.0 paired analysis is currently data-blocked because repeat orientation
+is unavailable; it is not reported as DCA. `candidate-novelty` uses the
+authoritative clean 72-candidate pilot path declared in
+`configs/candidate_filtering.yaml` and fails closed when no Atlas hit reaches
+the registered query-coverage threshold.
 
 Production workflows are defined in Snakemake and exposed through `make`.
 Machine-specific paths belong in `configs/local.yaml`, which is ignored by Git;

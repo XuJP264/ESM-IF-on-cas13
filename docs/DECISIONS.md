@@ -139,3 +139,15 @@ Column conservation still requires an explicit scaffold mapping, mapping
 confidence, and at least 80% column coverage; conservation alone never
 automatically creates a hard-fixed position. Preserve the inclusive alignment
 outside the canonical result path and report length-threshold sensitivity.
+
+## 2026-07-31 — Atlas novelty searches fail closed on missing coverage hits
+
+For candidate novelty, search the full 4,070-sequence exact-unique Atlas FASTA
+with MMseqs2 and require at least 80% query coverage. Report the maximum
+identity only among returned alignments and preserve candidates with no such
+hit as `no_atlas_hit_at_required_query_coverage`; do not reinterpret missing
+hits as proof of extreme novelty. A Level 1 row must also pass the registered
+parent-identity, Atlas-identity, homopolymer, low-complexity, entropy, and
+fixed-position gates. The absence of VI-A in the current Atlas Cas13 HMM table
+is a database-coverage limitation for 5XWP, not favorable evidence for its
+candidates.

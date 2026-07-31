@@ -202,9 +202,17 @@ GPU 节点取证后才能标记完成：
 - 大规模 AF/ColabFold/AF3/Protenix/Boltz 回折；
 - 正式 DCA、Foldseek 全量结构聚类和 ESM-IF1 domain adaptation。
 
-本地 clean bundle
-`artifacts/bundles/gpu-bundle-7dc0491d8441-6ad46d8577/` 已完成内部
-checksum 和现有大资产 checksum 验证；其 manifest 明确把尚未下载完成的
-Atlas JSON 列入 `missing_assets`。当前状态是“操作指南、源节点 bundle
-导出和本地校验完成，目标 GPU 节点真实验收未完成”，而不是“GPU 实验已
-完成”。
+早期 clean bundle
+`artifacts/bundles/gpu-bundle-7dc0491d8441-6ad46d8577/` 和
+`artifacts/bundles/gpu-bundle-ab6c9c5d011d-6ad46d8577/` 已完成内部
+checksum 及当时已有模型/结构资产校验；它们是在 Atlas 完整下载前导出，
+所以不应作为当前生产数据 bundle。官方 Atlas 现在已经完整下载并写入
+manifest，大小为 5,267,508,328 bytes，SHA256 为
+`5b4ba2fb99638d279e0c126100e19a4b77aba487b37b7df118e4bf4acd494720`。
+本阶段最终验收会从最新 clean commit 再导出一次 bundle，并要求 Atlas
+出现在 `ASSET_SHA256SUMS` 而不是 `missing_assets`。
+
+当前状态是“操作指南、源节点 bundle 机制和本地校验完成，目标 GPU 节点
+真实验收未完成”，而不是“GPU 实验已完成”。此外，Atlas 缺失
+direct-repeat orientation 是源数据阻断；把 DCA 任务搬到 GPU 不能解决
+0 个高置信配对的问题。

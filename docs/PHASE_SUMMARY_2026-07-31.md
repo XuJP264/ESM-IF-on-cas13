@@ -1,466 +1,367 @@
-# 阶段性工作、测试与迁移审计（2026-07-31）
+# 阶段性工作、测试、缺口与 GPU 迁移审计
+
+更新时间：2026-07-31（Asia/Shanghai）
 
 ## 结论
 
-当前项目已完成 Milestone 0，并完成了 Milestone 1 的本地 CPU/依赖部分及
-Milestone 2 的 ESM-IF1 实验结构 pilot benchmark。真实 ESM-IF1 toy、
-6E9F、5XWP CPU 推理，6E9F 受约束 CPU 生成，ProteinMPNN 6E9F CPU
-smoke 和 LigandMPNN RNA-context 6E9F CPU smoke 已成功。修正候选 ID
-后的正式 ESM-IF1 benchmark 产生 72/72 个唯一候选，固定位置违反为 0。
-这些结果最高支持 Level 2 的模型兼容性，不构成 Level 4 功能验证。
-Milestone 3 的真实 Atlas 下载已经从 DNS 中断点重新启动，当前为可续传
-`.part`，所以真实数据漏斗、聚类、MSA 和共进化结果仍为 `not_run`。
+网络中断后的续跑已经完成了官方 CRISPR-Cas Atlas v1.0 下载、真实流式
+解析、exact dedup、六阈值 MMseqs2 聚类、严格 40% cluster split、真实
+subtype MSA、保守性统计，以及 72 条 ESM-IF1 pilot 候选的全 Atlas
+新颖度审计。
 
-本文件是网络中断后的审计快照，不把“代码已实现”写成“实验已完成”，也
-不把 fixture/mock 结果写成真实科学结果。
+当前可确认：
 
-## 1. 已完成并验证的工作
+- Milestone 0 已完成；
+- Milestone 1 的本地 CPU、环境、依赖和权重部分已完成，GPU 验收未完成；
+- Milestone 2 的 ESM-IF1 pilot 和三模型真实 CPU smoke 已完成，匹配设计
+  位置/新颖度的完整多模型矩阵未完成；
+- Milestone 3 的官方数据、真实漏斗、dedup、六阈值聚类和严格 split 已
+  完成，subtype-held-out/scaffold-held-out 辅助 split 尚未实现；
+- Milestone 4 已取得真实 subtype MSA 和 coverage-gated conservation，
+  但 scaffold 映射尚未完成；paired-repeat、真实 MI/APC 和 DCA 被 Atlas
+  repeat orientation 缺失阻断；
+- Milestone 5 已完成真正的 causal constrained ESM-IF1 pilot 和 Level 1
+  候选新颖度审计，完整 baseline/ablation matrix 未完成；
+- Milestone 6 的 provider-neutral 接口、mock E2E、迁移脚本和操作指南已
+  完成源节点验证，目标 GPU 节点的实际传输、bootstrap 和 GPU run 未完成。
 
-### 1.1 仓库、规范与研究边界
+现有结果最高为 Level 2 inverse-folding compatibility。只有 14 条候选
+通过当前预注册统计过滤并可标为 Level 1；这不等于功能有效。没有 Level 3
+真实回折证据，没有 Level 4 wet-lab 证据，任何候选都不得称为“已验证有效
+Cas13”。
 
-- 已建立 `AGENTS.md`、`.agent/PLANS.md` 和
-  `docs/execplans/0001_bootstrap_and_real_baselines.md`。
-- 已建立完整项目树、MIT 代码许可证、CITATION、README、ROADMAP、
-  Snakemake、Makefile、CI、配置、环境、容器、数据/模型/第三方 manifest、
-  manuscript 和报告目录。
-- 全局采用 Level 0–4 证据分级。任何 Level 1–3 计算候选都不得描述成
-  “已验证有效 Cas13”。
-- 已提交 M0：
-  `7599be0 chore: initialize publication-grade research repository`。
-- 当前分支为 `main`，远端为
-  `https://github.com/XuJP264/ESM-IF-on-cas13.git`。新增工作尚未提交或
-  push。
+## 1. 已完成的真实工作
 
-### 1.2 机器审计
+### 1.1 仓库、规范与可复现基础
 
-真实审计保存在：
+- `AGENTS.md`、`.agent/PLANS.md` 和首个 ExecPlan 已建立并持续更新；
+- 项目树、MIT 自有代码许可、CITATION、CI、Snakemake、Makefile、配置、
+  四套隔离环境、三类 lock、第三方/模型/数据 manifest 已建立；
+- 正式 run 使用不可覆盖目录，记录 resolved config、seed、环境、硬件、
+  git、输入/输出 hash、失败和 SUCCESS/FAILED；
+- mock、fixture、real 和证据 Level 均显式记录；
+- 当前本地 `main` 比 `origin/main` 超前；最终质量门和 bundle 验证通过后
+  才 push。
 
-- `artifacts/system/hardware.json`
-- `artifacts/system/software_initial.txt`
+### 1.2 本机实测资源
 
-初始实测为：
+| 项目 | 实测 |
+|---|---|
+| GPU | NVIDIA GeForce RTX 4060 Laptop |
+| 显存 | 8188 MiB，不是 32 GB |
+| NVIDIA driver | 560.94 |
+| `nvidia-smi` 驱动兼容 CUDA 标签 | 12.6 |
+| CPU | 32 logical CPUs |
+| 内存 | 15 GiB |
+| 当前磁盘余量 | 约 710 GiB |
+| 当前 GPU 状态 | OS 阻断；`/dev/dxg` 不存在 |
 
-- NVIDIA GeForce RTX 4060 Laptop GPU；
-- 显存 8188 MiB，不是 32 GB；
-- NVIDIA driver 560.94，`nvidia-smi` 显示的驱动兼容 CUDA 为 12.6；
-- 32 个逻辑 CPU；
-- 15 GiB 系统内存；
-- 当前磁盘约 723 GiB 可用；
-- Docker 28.5.1、Apptainer 1.4.5、Conda 26.3.2 可用；
-- `nvcc`、`gh`、可用 Git LFS 及多数生物信息工具在初始审计时缺失。
+当前 `nvidia-smi` 返回 `GPU access blocked by the operating system`，
+PyTorch `torch.cuda.is_available()` 为 false。因此本轮真实模型运行均
+明确使用 CPU。
 
-网络中断后的复查中，`nvidia-smi` 返回
-`GPU access blocked by the operating system`。这与初始成功审计不同，
-必须在真实 GPU 推理前重新诊断，不能宣称本机 CUDA 已通过。
+### 1.3 环境、第三方和权重
 
-### 1.3 当前 CPU/fixture 质量门
+四个环境位于 `.tools/envs/`，不污染系统 Python：
 
-网络中断后重新实际执行：
+- `analysis`；
+- `esm_if1`；
+- `ligandmpnn`；
+- `bioinformatics`。
 
-```text
-make lint
-make typecheck
-make test
-```
+每个环境均有 conda explicit、conda list 和 pip freeze lock。真实可用工具
+包括 MMseqs2 18.8cc5c、MAFFT 7.526、HMMER 3.4、Infernal 1.1.5、
+seqkit 2.13.0、Foldseek 10.941cd33、TM-align 20240303 和 Git LFS 3.7.1。
+PyTorch Geometric GCNConv CPU smoke 已通过。
 
-结果：
+固定上游：
+
+- ESM：`2b369911bb5b4b0dda914521b9475cad1656b2ac`；
+- SynTnpBs：`f3ea8e69c6f71baa56c4bb388e9df0489720f968`；
+- ProteinMPNN：`8907e6671bfbfc92303b5f79c4b5e6ce47cdef57`；
+- LigandMPNN：`26ec57ac976ade5379920dbd43c7f97a91cf82de`。
+
+模型均从本地 checkpoint 加载且有 hash：
+
+| 模型 | 状态 |
+|---|---|
+| ESM-IF1 142M | toy、6E9F、5XWP 真实 CPU score/sample 通过 |
+| ProteinMPNN v48_020 | 6E9F 真实 CPU smoke 通过 |
+| LigandMPNN ligand_mpnn | 6E9F RNA B/C atomic-context 真实 CPU smoke 通过 |
+| LigandMPNN protein_mpnn | 权重已下载，独立 smoke 未运行 |
+| LigandMPNN soluble_mpnn | 权重已下载，独立 smoke 未运行 |
+
+### 1.4 实验结构和真实 inverse-folding
+
+RCSB 真实结构 6E9F、5XWP、6E9E、5XWY 已下载、hash 和 QC；RNA 只用于
+接触注释或 LigandMPNN atomic context，不会作为 ESM-IF1 蛋白链输入。
+
+ESM-IF1 真实 CPU score：
+
+- 6E9F chain A，864 aa：conditional log-likelihood
+  `-1813.9333906933316`，perplexity `8.161760905453558`；
+- 5XWP chain A，1125 aa：conditional log-likelihood
+  `-2553.345790145657`，perplexity `9.675923652828677`。
+
+真正的 decode-time constrained decoder 已验证：
+
+- fixed token 在自回归到达该位置时被强制输入；
+- 不是生成后覆盖；
+- future fixed token 对早期位置不可见；
+- all-fixed、partial-fixed、free、非法位置、长度不匹配和 seed 重现均有测试；
+- 6E9F 真实 constrained sample 固定位置违反为 0。
+
+权威 ESM pilot：
+
+`results/runs/20260731-benchmark-experimental-a998ff40aa-ab6c9c5/`
+
+- 2 scaffold × 3 constraint condition × 3 temperature × 4 sample；
+- 72/72 candidate ID 唯一；
+- fixed-position violations 为 0；
+- `is_mock=false`，CPU，Level 2；
+- 条件间 fixed-position 比例不同，因此 raw recovery 不能解释为方法胜负。
+
+### 1.5 真实 Atlas 数据
+
+官方源：
+
+`data/raw/atlas/v1.0/crispr-cas-atlas-v1.0.json`
+
+- size：5,267,508,328 bytes；
+- SHA256：
+  `5b4ba2fb99638d279e0c126100e19a4b77aba487b37b7df118e4bf4acd494720`；
+- license：CC BY-NC 4.0；
+- manifest status：`downloaded_verified`。
+
+clean-provenance 真实解析 run：
+
+`results/runs/20260731-atlas-processing-e8356ef7b5-eebc1a5-r001/`
+
+| 漏斗项 | 数量 |
+|---|---:|
+| Atlas operons | 1,246,088 |
+| Type VI operons | 11,707 |
+| Cas effector annotations | 6,174,375 |
+| Cas13 records | 12,353 |
+| Cas13 exact unique | 4,070 |
+| evolution-eligible exact unique | 3,500 |
+| high-confidence Cas13–repeat pairs | 0 |
+| ambiguous pairs | 11,727 |
+| processing failures | 0 |
+
+Cas13 record subtype：
+
+- VI-B：5,163；
+- VI-D：6,857；
+- VI-F：166；
+- VI-I：167；
+- subtype conflict：40。
+
+Atlas v1.0 没有可恢复的 direct-repeat orientation。项目没有猜测 strand，
+所以 11,727 条进入 ambiguous 表，0 条进入高置信配对表。这是源数据阻断，
+不是 GPU 或内存不足。
+
+### 1.6 聚类、split、MSA 和 conservation
+
+MMseqs2 使用 identity 1.0/0.9/0.7/0.5/0.4/0.3、coverage 0.8、
+coverage mode 0、cluster mode 2、16 threads。
+
+| identity | cluster 数 |
+|---:|---:|
+| 100% | 3,877 |
+| 90% | 1,797 |
+| 70% | 1,323 |
+| 50% | 1,003 |
+| 40% | 783 |
+| 30% | 516 |
+
+100% cluster 少于 4,070 exact unique 是因为 80% coverage 下可把完全一致的
+短片段与较长序列聚在一起；exact hash 与 MMseqs cluster 是不同语义。
+
+严格 40% cluster split：
+
+- train：3,335 sequences；
+- validation：160；
+- test：575；
+- leakage gate：passed。
+
+inclusive MSA 暴露 `truncated=00` 仍包含 48–80 aa HMM fragment，且没有
+90% coverage 列。该结果保留在 audit 目录，不能用于约束。随后在任何候选
+test metric 前预注册 700–1600 aa 宽松全长门，并在每个 70% cluster 选择
+最长合格成员。
+
+正式 subtype MSA：
+
+| subtype | sequences | columns | median length |
+|---|---:|---:|---:|
+| VI-B | 489 | 7,380 | 1,139 |
+| VI-D | 182 | 3,524 | 954 |
+| VI-F | 45 | 1,786 | 1,154 |
+| VI-I | 50 | 2,164 | 1,084.5 |
+
+coverage ≥ 0.8 的列：
+
+- VI-B：696；
+- VI-D：724；
+- VI-F：1,095；
+- VI-I：763。
+
+这些只是“进入 scaffold mapping 的候选列”。在 scaffold-to-MSA mapping
+和 mapping confidence 通过前，不会自动进入 hard/soft constraint。
+
+### 1.7 候选新颖度
+
+真实 run：
+
+`results/runs/20260731-candidate-filtering-b14455d461-6d258de/`
+
+对 72 条 pilot 候选使用全 4,070 exact-unique Atlas FASTA、MMseqs2
+sensitivity 7.5 和 query coverage ≥ 0.8：
+
+- 19 条有满足覆盖门的 Atlas hit；
+- 观察到的最大 Atlas identity：0.457；
+- parent identity 范围：0.1653–0.4213；
+- 14 条通过全部预注册门，最高可标 Level 1；
+- 41 条因 low-complexity window 失败；
+- 18 条因 homopolymer > 7 失败；
+- 53 条没有满足覆盖门的 Atlas hit，按 fail-closed 处理，不能把“未检出”
+  自动解释为高度新颖。
+
+5XWP 属 VI-A，而本次 Atlas Cas13 HMM 记录没有解析出 VI-A；其候选缺少
+同 subtype Atlas 覆盖是数据库覆盖限制，不是候选优越性的证据。
+
+## 2. 当前测试和报告状态
+
+最近完整 CPU/fixture 质量门：
 
 - Ruff lint：通过；
-- Ruff format check：通过，65 个 Python 文件已格式化；
-- strict mypy：通过，42 个源文件无错误；
-- pytest：42/42 通过；
-- branch-aware coverage：70.08%，达到项目设定的 70% 门槛。
+- Ruff format：通过；
+- strict mypy：通过，43 个源文件；
+- pytest：47/47 通过；
+- branch-aware coverage：70.89%，门槛 70%；
+- fixture MI/APC：通过，明确 `is_mock=true`，不是 DCA；
+- mock refold E2E：通过，明确 `is_mock=true`。
 
-这些测试覆盖：
+当前项目报告：
 
-- Atlas 流式 parser、方向处理、保守配对、模糊配对和 exact dedup；
-- MMseqs cluster mapping、cluster-level split 和泄漏阻断；
-- FASTA、真实 alignment 合法性、gap、sequence weighting；
-- conservation、entropy、MI/APC；
-- PDB/mmCIF、蛋白/RNA 链、insertion code、缺失主链和 RNA contact；
-- Shrake–Rupley 相对 SASA；
-- hard/soft/free mask、位置索引；
-- constrained decoder、固定位置保持、seed 重现；
-- backend/candidate/score schema；
-- novelty、refold export/ingest、provenance；
-- fixture Atlas → candidate → mock refold → report；
-- fixture subtype MSA → conservation。
+`results/runs/20260731-benchmark-experimental-bcfd0be469-3ebd1c9/report/`
 
-Mock E2E 明确为 `is_mock=true`、Level 0，不支持科学性能结论。
+报告明确列出：
 
-### 1.4 第三方代码、论文与模型资产
+- available real：Atlas、cluster、MSA、conservation、candidate novelty、
+  三模型 smoke、实验结构和 ESM benchmark；
+- not run：matched multimodel benchmark、real refold；
+- data-blocked：paired MSA、real MI/APC、formal DCA；
+- maximum evidence：Level 2；
+- 无 Level 4 功能声明。
 
-以下仓库已获取到固定 commit，源码保持未修改：
+## 3. 本节点仍可完成但尚未完成
 
-- ESM：`2b369911bb5b4b0dda914521b9475cad1656b2ac`
-- SynTnpBs：`f3ea8e69c6f71baa56c4bb388e9df0489720f968`
-- ProteinMPNN：`8907e6671bfbfc92303b5f79c4b5e6ce47cdef57`
-- LigandMPNN：`26ec57ac976ade5379920dbd43c7f97a91cf82de`
+以下工作不应因有 GPU 节点而推迟：
 
-真实 checkpoint 已下载并记录：
+1. 把 VI-D scaffold 映射到正式 VI-D MSA，并生成 mapping confidence；
+2. 实现 subtype-held-out 和 scaffold-held-out 辅助 split；
+3. 对 MSA 最短长度 500/600/800 aa 做预注册 sensitivity；
+4. 把 ProteinMPNN、LigandMPNN、MSA profile、matched random mutation
+   扩展为相同设计位置/相同新颖度的 CPU 小规模矩阵；
+5. 为 5XWP 运行真实 ProteinMPNN/LigandMPNN baseline；
+6. 运行 LigandMPNN `protein_mpnn` 和 `soluble_mpnn` 独立 checkpoint smoke；
+7. 实现当前仍是显式 `not_run` 的生产 CLI wrapper，包括通用
+   `score/sample/sequence-qc`、真实 refold export/ingest 命令入口；
+8. 完成候选 funnel、匹配统计、bootstrap/effect size 和 failure analysis；
+9. 更新 manuscript 的实际方法数字和图表。
 
-| 模型 | 大小 | SHA256 | 当前状态 |
-|---|---:|---|---|
-| ESM-IF1 142M | 1,700,450,121 B | `be4ba36edec22a9bfaa4946ff6b2815f1f19d8a3d7e0eada8b796d5a0eae9fd4` | 真实 CPU toy、6E9F、5XWP smoke 通过；GPU 被 OS 阻断 |
-| ProteinMPNN v48_020 | 6,681,301 B | `c9cb4a671d79604111231f8dbfc7c590e06f1197453b7a6854ac6661a642f5bd` | 真实 6E9F CPU smoke 通过；GPU 被 OS 阻断 |
-| LigandMPNN protein_mpnn | 6,681,301 B | 同上 | 已下载，未运行真实 smoke |
-| LigandMPNN ligand_mpnn | 10,541,943 B | `161cd264061fda9680cbb940255522ae42f2966c552d045d87913d9452a80970` | 真实 6E9F RNA-context CPU smoke 通过；GPU 被 OS 阻断 |
-| LigandMPNN soluble_mpnn | 6,681,301 B | `7af52d090172c230c7f0e9d21e02203f6b3a38b16db58d3c7a3960e0a9a6e31a` | 已下载，未运行真实 smoke |
+这些是尚未实现/运行，不应描述为已完成。
 
-ESM-IF1 和 LigandMPNN 的开放论文 PDF 已下载并校验。Cas13d 某作者
-PDF 端点返回的内容不是 PDF；无效临时文件未进入仓库，论文元数据和公开
-链接仍保留。这是参考资料获取失败，不是模型或算法失败。
+## 4. 本节点失败过的工作及原因
 
-### 1.5 实验结构与结构 QC
+| 事项 | 原因 | 当前处理 |
+|---|---|---|
+| Atlas 首次下载 | DNS 无法解析 Google Storage | 网络恢复后续传完成，size/hash 验证通过 |
+| fetch finalizer 首次幂等测试 | 系统 Python 3.10 没有 `datetime.UTC` | 改用 `timezone.utc`，系统 Python 与 analysis env 均通过 |
+| clean Atlas 重跑首次启动 | 安全门拒绝覆盖已有 canonical 输出 | 保留旧目录后 clean run 成功，输出逐字节一致 |
+| ESM 环境首次建成 | user-site `fair-esm` 泄漏 | pinned 本地源码安装并强制 `PYTHONNOUSERSITE=1` |
+| ProteinMPNN 首次 validator | 把 893 numbering slots 错当 864 resolved residues | 显式保留 29 个 masked `X` slot 后通过 |
+| LigandMPNN 前两次 | 缺 `dm-tree`；NumPy 1.26 移除 `np.int` | 按上游 requirements 加 `dm-tree`、pin NumPy 1.23.5 |
+| inclusive MSA | `truncated=00` 仍含 48–80 aa fragment | 保留 audit；预注册全长门后重建正式 MSA |
+| 本机 GPU smoke | WSL `/dev/dxg` 缺失，NVML 被 OS 阻断 | CPU 结果保留；真实 GPU smoke 迁移 |
+| Cas13–repeat 共进化 | Atlas 缺 repeat orientation，0 高置信 pair | data-blocked；不猜 strand，不用 MI 冒充 DCA |
+| 一篇 Cas13d 作者 PDF | 公开端点返回内容不是 PDF | 无效文件不入库，只保留元数据/合法链接 |
 
-已从 RCSB 官方接口真实下载并校验：
+当前没有“测试失败但仍标记完成”的事项。
 
-- 6E9F：VI-D ternary；
-- 5XWP：VI-A ternary；
-- 6E9E：VI-D binary matched state；
-- 5XWY：VI-A binary matched state。
+## 5. 应迁移到 GPU/HPC 的工作
 
-权威产物：
+优先或必须迁移：
 
-- `data/manifests/experimental_structures.yaml`
-- `data/manifests/experimental_structure_funnel.json`
-- `reports/experimental_structure_data_card.md`
+- ESM-IF1、ProteinMPNN、LigandMPNN 的正式 GPU smoke；
+- 大规模 ESM-IF1/LigandMPNN 采样和完整消融矩阵；
+- 多状态大批量候选生成；
+- AF2/ColabFold/AF3/Protenix/Boltz 多 seed 回折；
+- 全 Atlas 结构预测和 Foldseek 结构聚类；
+- ESM-IF1 Cas13 domain adaptation；
+- 有合格 paired data 后的长序列 plmDCA/GREMLIN/CCMpred。
 
-当前真实 QC：
+注意：当前 direct-repeat DCA 首先是源数据 orientation 阻断。迁到 GPU
+不会自动解决 0 高置信 pair；必须先获得有授权、方向可信的 paired data。
 
-- 4/4 下载结构通过现有 Level 0 坐标/QC 门；
-- 6E9F chain A：864 个坐标残基，对应 SEQRES 954，90 个未建模/未映射；
-- 5XWP chain A：1125 个坐标残基，对应 SEQRES 1160，35 个未建模/未映射；
-- 显式记录 chain break、MSE、RNA chain、crRNA/target chain、hash 和
-  SEQRES 映射；
-- RNA 只用于接触注释，不会传给标准 ESM-IF1 蛋白 N/CA/C 输入。
+## 6. GPU 迁移指南是否完成
 
-进一步的人工文献核查发现：
+源节点指南和接口已完成：
 
-- 6E9F 为防止切割，把 R295/H300/R849/H854 全部突变为 A；
-- 5XWP 的 R1048/H1053 在沉积结构中为 A，而 R472/H477 保留。
+- `docs/GPU_MIGRATION.md`；
+- `scripts/export_gpu_bundle.sh`；
+- `scripts/verify_gpu_bundle.sh`；
+- `scripts/bootstrap_gpu_node.sh`；
+- `scripts/sync_assets.sh`；
+- `scripts/launch_gpu_tmux.sh`；
+- provider-neutral refold FASTA/JSONL、deterministic shard、retry、
+  pLDDT/PAE/structure ingest、US-align comparison 和 missing-output audit；
+- mock refold E2E，`is_mock=true`。
 
-因此已建立 `data/manifests/cas13_functional_residues.yaml`，分别记录
-沉积构建体氨基酸和文献支持的生物学 R/H 残基。后续设计必须保护后者，
-而 construct recovery 与 biological recovery 必须分开报告。
+已验证的行为：
 
-### 1.6 模型后端与当前真实结果
+- bundle 不嵌入 GB 级资产；
+- `SHA256SUMS` 校验内部文件；
+- `ASSET_SHA256SUMS` 校验模型、结构和 Atlas；
+- rsync 支持 `--partial`；
+- target bootstrap 使用四个隔离环境；
+- tmux launcher 记录唯一 session、run dir、完整日志、退出码和现场；
+- 不无限静默重试。
 
-- 统一 inverse-folding schema 和接口；
-- 离线本地 checkpoint 的 `EsmIf1Backend`；
-- 真正 decode-time hard-fixed 的 `EsmIf1ConstrainedBackend`；
-- 固定 token 在自回归到达该位置时输入，不是生成后覆盖；
-- 记录每位置 logits、probability、selected token、fixed/free、
-  temperature 和 seed；
-- 明确保持左到右因果语义，未来固定 token 对早期位置不可见；
-- `MsaProfileBackend` 和 `MatchedRandomMutationBackend`；
-- 真实 ESM-IF1、ProteinMPNN、LigandMPNN smoke 脚本；
-- 6E9F/5XWP ESM-IF1 benchmark 脚本，含 construct/biological sequence、
-  HEPN、RNA interface、second shell、buried/surface 和 temperature sweep；
-- 报告聚合器，缺失结果会标记 `not_run`，不会填造性能数字。
+尚未完成的是目标 GPU 节点验收：
 
-ESM-IF1、ProteinMPNN 和 LigandMPNN 已取得本文件第 9 节所列真实结果。
-完整 temperature sweep 与正式方法矩阵仍未完成，因此不能把已通过的 smoke
-扩大解释为完整 benchmark。
+- 第二台机器真实资产传输；
+- 目标节点四环境 bootstrap；
+- `torch.cuda.is_available()=true`；
+- 三模型 GPU smoke；
+- 实际 tmux 长任务；
+- 真实 refold shard 执行和结果回收。
 
-## 2. 网络中断和当前失败项
+因此准确表述是：“迁移操作指南、脚本、源节点 bundle 机制和 mock E2E
+已完成；目标 GPU 节点实测尚未完成。”
 
-### 2.1 CRISPR-Cas Atlas
-
-下载前已真实核验：
-
-- 官方 URL：
-  `https://storage.googleapis.com/crispr-cas-atlas-xy7q13lmk9/crispr-cas-atlas-v1.0.json`
-- Content-Length：5,267,508,328 B；
-- 磁盘空间充足；
-- 顶层为 JSON array；
-- 2 MiB schema probe 显示真实字段可由当前 parser 处理；
-- Atlas v1.0 的已检查记录没有 direct-repeat orientation 字段。
-
-本次恢复下载时失败：
-
-```text
-curl: (6) Could not resolve host: storage.googleapis.com
-```
-
-失败发生在 DNS/连接建立阶段，正式目的目录只有 README，没有 `.part`
-数据可统计。恢复命令仍为：
+目标节点主流程：
 
 ```bash
-bash scripts/fetch_atlas.sh
+git clone https://github.com/XuJP264/ESM-IF-on-cas13.git /work/ESM-IF
+cd /work/ESM-IF
+git checkout <bundle-manifest中的完整commit>
+bash scripts/verify_gpu_bundle.sh <bundle-dir> /work/ESM-IF
+bash scripts/bootstrap_gpu_node.sh all
+make smoke-esm-if1
+make smoke-proteinmpnn
+make smoke-ligandmpnn
+bash scripts/launch_gpu_tmux.sh \
+  configs/benchmark_experimental.yaml \
+  benchmark-experimental
 ```
 
-脚本支持 `.part`、`curl --continue-at -`、大小检查、SHA256 和原子 rename。
-网络恢复后已在本节点重新执行该命令；正式 `.part` 正在增长，初始 DNS
-失败记录仍保留。只有完整 5,267,508,328 字节下载、SHA256 和原子 rename
-完成后才会把 Atlas 状态标为 downloaded。该任务不需要迁移 GPU。
+## 7. 下一阶段顺序
 
-对生产 `.part` 前 100,000 条记录的只读流式复查发现 Atlas 经常把
-`summary.subtype` 写成泛型 `VI`，而精确亚型位于 Cas HMM；旧规则会漏计。
-现已增加保守 subtype resolution，并逐条保存 raw/source/conflict。在该
-100,000 条诊断样本中解析到 VI-B 267、VI-D 675、VI-F 4、VI-I 2 个
-Cas13 注释，其中 3 个与 operon summary 冲突并会进入 ambiguous 路径。
-这只是 schema/规则诊断，不是最终 Atlas 数据漏斗。
-
-生产诊断同时发现短 HMM fragment 即使标记 `truncated=00` 也可能与非
-Type-VI operon summary 冲突。最终表在显式列中保留 e-value、score、
-source length 和 truncation，不删除原始注释；进化 MSA 只接受至少有一个
-无 subtype conflict 且 `truncated=00` 的 exact sequence。70% cluster 的
-原始 representative 若不合格，会在同 cluster/subtype 内选择一个合格成员，
-避免整簇被代表序列偶然状态误删。
-
-### 2.2 ESM-IF1 隔离环境
-
-`.tools/envs/esm_if1` 的第一次 Conda transaction 暴露了 user-site 泄漏；
-该问题已修复。现在从固定 commit 的本地 `third_party/esm` 构建并安装，
-所有 bootstrap/smoke 强制 `PYTHONNOUSERSITE=1`，三类 lock 已重新导出，
-真实 CPU load/score/sample 已通过。
-
-同一复查中：
-
-```text
-torch=2.4.1
-torch CUDA runtime=12.1
-torch.cuda.is_available()=false
-```
-
-同时 `nvidia-smi` 当前被操作系统阻断。真实 CPU ESM smoke 已运行；GPU
-smoke 仍必须在 `/dev/dxg` 恢复后单独通过或在 GPU 节点复跑，不能由 CPU
-结果替代。
-
-### 2.3 隔离环境与本地工具
-
-四个环境现在均已建立在 `.tools/envs/`，未修改系统 Python：
-
-- `analysis`：Ruff、mypy、pytest、Snakemake 及分析依赖；
-- `esm_if1`：PyTorch 2.4.1、CUDA runtime 12.1、PyG 2.6.1 和 pinned
-  ESM；
-- `ligandmpnn`：pinned NumPy 1.23.5、`dm-tree` 和 MPNN 依赖；
-- `bioinformatics`：MMseqs2 18.8cc5c、MAFFT 7.526、HMMER 3.4、
-  Infernal 1.1.5、seqkit 2.13.0、Foldseek 10.941cd33、TM-align
-  20240303、Git LFS 3.7.1。
-
-每个环境均有 `*-linux-64.explicit.txt`、`*-conda-list.txt` 和
-`*-pip-freeze.txt`。真实 PyTorch Geometric GCNConv CPU smoke 已通过，
-结果在 `artifacts/system/pytorch_geometric_real_smoke.json`。
-
-bioinformatics 第一次长安装在环境和 locks 已写完后以 shell syntax error
-退出。原因是运行中的旧 shell 与此时刚更新的脚本内容不一致；当前脚本
-`bash -n` 已通过，并在同一环境上重新完整执行成功。因此这是已恢复的
-bootstrap 收尾失败，不是工具安装失败。
-
-## 3. Milestone 状态
-
-| Milestone | 当前状态 | 尚缺验收 |
-|---|---|---|
-| M0 仓库和长期规范 | complete | 无 |
-| M1 环境和依赖 | local CPU complete; GPU pending | 四环境、三类 locks、PyG/ESM/ProteinMPNN/LigandMPNN CPU smoke 已通过；只缺真实 GPU smoke |
-| M2 实验结构 benchmark | ESM pilot complete; full matrix pending | 72-candidate ESM temperature/constraint sweep 和正式报告通过；ProteinMPNN/LigandMPNN 尚未进入匹配方法矩阵 |
-| M3 Atlas | official download in progress | 完整下载/hash；真实 stream parse；funnel；dedup；MMseqs 六阈值聚类；split audit |
-| M4 进化约束 | implementation/fixture only | 真实 subtype MSA、conservation、paired data；MI/APC；结构验证；formal DCA |
-| M5 约束生成 | real pilot, matrix pending | 6E9F 真实 constrained ESM 固定位置零违反；尚缺 baseline matrix、novelty/candidate report |
-| M6 GPU/refold 迁移 | interface/fixture partial | 完整 bundle；实际 verify；GPU node bootstrap 验证；真实 candidate shards；回收测试 |
-
-## 4. 哪些工作应继续在本节点完成
-
-以下工作不应仅因为存在 GPU 节点就推迟：
-
-1. 诊断 WSL/操作系统的 GPU 阻断；CPU model load 已完成；
-2. 完成已恢复的 Atlas 下载并解析；
-3. MMseqs2 exact/90/70/50/40/30% 聚类与泄漏审计；
-4. subtype-specific MAFFT、conservation/entropy；
-5. 高置信 paired-repeat 数据漏斗；如果 orientation 无法恢复，应如实得到
-   很小或为零的高置信集合，而不是静默翻转 repeat；
-6. 正式报告、bundle export 和 reproducibility verification；
-7. 小规模 MPNN 候选生成、新颖度分析和匹配方法矩阵。
-
-## 5. 哪些工作应迁移到 GPU/HPC 资源节点
-
-必须或优先迁移的工作：
-
-- 全 Atlas Cas13 的大规模结构预测；
-- 大规模候选回折、多 seed AF2/ColabFold/AF3/Protenix/Boltz；
-- 大规模 ESM-IF1/LigandMPNN 采样和完整消融矩阵；
-- ESM-IF1 Cas13 domain adaptation；
-- 长 Cas13 protein + direct-repeat 的正式 plmDCA/GREMLIN/CCMpred；
-- Foldseek 全结构聚类；
-- 本机 8 GiB 显存无法容纳的 batch 或多状态联合工作。
-
-无需迁移但可在节点复跑以确认环境一致性的工作：
-
-- 单结构 ESM-IF1/ProteinMPNN/LigandMPNN smoke；
-- bundle verification；
-- 少量候选 refold ingest；
-- US-align/TM-align 结构比较。
-
-## 6. GPU 迁移指南完成度
-
-已存在：
-
-- `docs/GPU_MIGRATION.md`
-- `scripts/export_gpu_bundle.sh`
-- `scripts/verify_gpu_bundle.sh`
-- `scripts/bootstrap_gpu_node.sh`
-- `scripts/sync_assets.sh`
-- `scripts/launch_gpu_tmux.sh`
-- provider-neutral refold FASTA/JSONL export、deterministic sharding、
-  expected-output schema、retry manifest、pLDDT/PAE/structure ingest、
-  missing-output audit；
-- mock prediction E2E，`is_mock=true`。
-
-中断恢复后，迁移路径已进一步补强：
-
-- bundle 现在包含 git commit、dirty 状态、配置 hash、环境 locks、
-  containers、运行脚本、clone instructions、输入 shard 清单和 expected
-  output schema；
-- 大资产不会嵌入 bundle；`ASSET_SHA256SUMS` 记录逐资产大小和 SHA256；
-- `sync_assets.sh` 在 rsync 续传后对目标资产逐一验 hash；
-- `verify_gpu_bundle.sh` 同时验证 bundle 内部和可选目标资产根目录；
-- GPU bootstrap 覆盖 analysis、ESM-IF1、LigandMPNN、bioinformatics 四环境；
-- tmux launcher 记录 git、GPU、配置、起止时间、日志、退出码以及
-  SUCCESS/FAILED。
-
-本地已经达到的验收：
-
-- 已从 clean commit `7dc0491d84419771b4b5e14d2f8daf39f36e68d1`
-  导出
-  `artifacts/bundles/gpu-bundle-7dc0491d8441-6ad46d8577/`；
-- `git_worktree_dirty_at_export=false`；
-- bundle 内所有文件的 `SHA256SUMS` 已通过；
-- 5 个模型 checkpoint 和 8 个实验结构 PDB/mmCIF 已按
-  `ASSET_SHA256SUMS` 在本地资产根目录逐一通过；
-- `make verify-reproducibility` 已通过 shell parsing、manifest、
-  Ruff、format、strict mypy、42 个 pytest 和 bundle verification。
-
-仍未达到的目标节点验收：
-
-- `bootstrap_gpu_node.sh` 尚未在目标 GPU 节点验证完全隔离安装和 GPU
-  imports；
-- `sync_assets.sh` 的逐资产 hash 路径尚未在第二台机器完成真实传输验收；
-- 尚无真实 candidate shards；
-- 尚未验证 tmux launcher 对实际 benchmark 的退出码、日志和失败现场；
-- 正式 DCA job export/ingest 未完成；
-- 大规模结构预测 provider 只有通用交换接口，没有在目标软件上真实跑通。
-
-当前基础 bundle 的 `missing_assets` 只有尚在下载的 Atlas 正式 JSON；
-脚本正确地将其列为缺失而没有嵌入未完成 `.part`。因此答案是：迁移操作
-指南、clean bundle 导出、本地内部校验和现有资产校验已完成；第二台机器的
-真实传输、环境恢复和 GPU 运行仍未完成，不能称为目标 GPU 迁移验收完成。
-
-## 7. 从中断点恢复的执行顺序
-
-1. 完成已恢复的 Atlas 下载；
-2. 真实 Atlas process → cluster → MSA → conservation；
-3. 导出并验证 GPU bundle；
-4. 更新 ExecPlan、STATUS、DECISIONS，按已验证功能分小 commit；
-5. 全部质量门通过后 push；
-6. 在 GPU 节点执行三模型 GPU smoke、正式大规模采样/回折和 DCA。
-
-## 8. 证据边界
-
-截至当前更新：
-
-- Level 0：仓库、I/O、fixture workflow、真实结构下载/QC 已有证据；
-- Level 1：尚无针对完整 Atlas 的正式候选新颖性结果；
-- Level 2：已有真实 ESM-IF1 score/constrained sample、72-candidate ESM
-  pilot benchmark、ProteinMPNN 和 RNA-context LigandMPNN smoke；完整
-  匹配新颖度的多方法 benchmark 尚未完成；
-- Level 3：尚无多模型/回折支持结果；
-- Level 4：不在本项目当前范围内，且没有 wet-lab 结果。
-
-## 9. 中断后继续推进的更新
-
-本审计写入后，已从中断点继续执行并取得以下新结果：
-
-- 修复了 ESM 环境的 user-site 泄漏；
-- `fair-esm` 现在从固定 ESM commit 的本地源码构建，安装路径位于
-  `.tools/envs/esm_if1`；
-- bootstrap 和 smoke 脚本强制 `PYTHONNOUSERSITE=1`；
-- 采用项目 backend 中与固定上游实现等价的 ESM tensor/coordinate batch
-  适配，结构 I/O 使用本项目已测试的 PDB/mmCIF parser，未修改
-  `third_party/esm`；
-- 真实 CPU ESM-IF1 toy score/sample 通过；
-- 全固定 toy constrained sampling 精确恢复，固定位置违反数为 0；
-- 6E9F chain A（864 aa）真实 score：
-  conditional log-likelihood `-1813.9333906933316`，
-  perplexity `8.161760905453558`；
-- 5XWP chain A（1125 aa）真实 score：
-  conditional log-likelihood `-2553.345790145657`，
-  perplexity `9.675923652828677`；
-- 结果写入 `artifacts/system/esm_if1_real_smoke.json`，`is_mock=false`，
-  最大证据为 Level 2 inverse-folding compatibility；
-- 推理设备为 CPU。GPU smoke 仍因当前 WSL 缺少 `/dev/dxg` 而
-  `not_run`。
-
-这些结果更新了本文件前部“尚无 Level 2”的时间点状态：现在已有真实
-ESM-IF1 Level 2 score 证据，但仍没有 Level 1 候选新颖性、Level 3
-多模型/回折证据或 Level 4 wet-lab 证据。
-
-ProteinMPNN 后续真实 CPU smoke 也已通过：
-
-- checkpoint：
-  `models/proteinmpnn/v_48_020.pt`，SHA256
-  `c9cb4a671d79604111231f8dbfc7c590e06f1197453b7e0eada8b796d5a0eae9fd4`；
-- 6E9F A 链严格坐标序列为 864 aa；
-- 上游 ProteinMPNN residue-number tensor 为 893 位，其中 29 个内部
-  缺坐标槽位为 `X` 并被 mask；
-- 去除 `X` 后与严格坐标序列一致；
-- 逐位置概率已保存；
-- CPU 耗时约 9.90 秒，`is_mock=false`；
-- 结果：`artifacts/system/proteinmpnn_real_smoke.json`。
-
-第一次 ProteinMPNN smoke 失败是验证器错误：它要求上游 893 位编号张量
-必须等于 864 位严格坐标序列。修正后不删除缺失槽位，而是同时审计两种
-长度并验证 mask，真实模型运行随即通过。
-
-LigandMPNN 真实 CPU smoke 随后通过：
-
-- checkpoint：
-  `models/ligandmpnn/ligandmpnn_v_32_010_25.pt`，SHA256
-  `161cd264061fda9680cbb940255522ae42f2966c552d045d87913d9452a80970`；
-- 设计链为 6E9F A（864 aa），上下文链为 RNA B/C；
-- 上游 parser 保留 1680 个 B/C 非蛋白原子，残基/离子类型包括
-  A、C、G、U、Mg；
-- 固定残基 A58 保持；
-- per-residue statistics 和包含 RNA context 的 backbone 输出均存在；
-- CPU 耗时约 9.80 秒，`is_mock=false`；
-- 结果：`artifacts/system/ligandmpnn_real_smoke.json`。
-
-前两次 LigandMPNN smoke 均在推理前失败，原因依次为缺失 `dm-tree` 和
-NumPy 1.26 已移除上游代码使用的 `np.int`。已依据 pinned 上游
-requirements 将隔离环境补入 `dm-tree` 并固定 NumPy 1.23.5，重新导出
-locks；没有修改 `third_party/LigandMPNN` 源码。
-
-实验结构 ESM-IF1 pilot benchmark 已完成：
-
-- 权威成功 run：
-  `results/runs/20260731-benchmark-experimental-a998ff40aa-7599be0-r003`；
-- 2 个 scaffold（6E9F、5XWP）× 3 个方法条件 × 3 个 temperature ×
-  4 个 seed/sample，共 72 个真实 CPU 候选；
-- 72/72 个 `candidate_id` 唯一，最大 ID 重数为 1；
-- 所有方法合计固定位置违反数为 0；
-- wall time 约 1409.0 秒，设备为 CPU，`is_mock=false`、Level 2；
-- 输出包括每候选 trace、每位置 native score、区域注释、Markdown 和
-  HTML benchmark；
-- 项目汇总报告：
-  `results/runs/20260731-benchmark-experimental-bcfd0be469-7599be0/report/`。
-
-历史失败/被替代 run 均保留：
-
-- `r001` 的模型计算本身成功，但旧 candidate ID 没有编码 temperature 和
-  constraint 条件，72 行只有 16 个唯一 ID，因此只保留作审计，不用于
-  后续 refold manifest；
-- `r002` 在模型加载前因 wrapper 使用相对 config 路径失败；
-- `r003` 修正 config 规范化、不可覆盖 run ID 和 sampling-condition
-  digest 后通过。
-
-当前 raw recovery 是不同固定位置比例下的 pilot 描述值，不能直接解释为
-某方法优于另一方法；正式论文比较仍必须匹配设计位置和新颖度。
-
-其他恢复后通过的本地检查：
-
-- 真实 PyTorch Geometric GCNConv CPU smoke；
-- fixture paired-MSA MI/APC、20 次 bootstrap、20 次 permutation smoke；
-- MI/APC 输出明确标注 `is_mock=true`，正式 DCA 为 `not_run`；
-- mock preflight 固定位置违反为 0；
-- Ruff、format、strict mypy、42 个 pytest 和 70.08% branch coverage。
+1. 完成本轮 docs/STATUS/DECISIONS/ExecPlan 更新；
+2. 导出包含真实 Atlas hash 的最新 clean GPU bundle 并验证；
+3. 重跑最终 lint、typecheck、test、CPU smoke 和 reproducibility gate；
+4. push 并验证 GitHub Actions；
+5. 本机继续 VI-D scaffold-to-MSA mapping 和小规模 matched baseline；
+6. GPU 节点执行三模型 GPU smoke，再进入大规模采样/回折。
