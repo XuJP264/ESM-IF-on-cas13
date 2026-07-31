@@ -35,6 +35,7 @@ from cas13_if.evolution.coevolution import (
     permuted_cross_block_maxima,
 )
 from cas13_if.evolution.pipeline import compute_subtype_conservation
+from cas13_if.novelty.pipeline import NoveltyThresholds, run_candidate_novelty_pipeline
 from cas13_if.provenance import (
     RunExistsError,
     RunRecorder,
@@ -719,7 +720,81 @@ def sequence_qc(config: ConfigOption) -> None:
 @app.command()
 def novelty(config: ConfigOption) -> None:
     """Search candidates against the full declared Atlas sequence resource."""
-    _fail_not_run("novelty", config)
+    recorder: RunRecorder | None = None
+    try:
+        resolved, recorder = _start_run("novelty", config, is_mock=False)
+        inputs = _mapping(resolved, "inputs")
+        search = _mapping(resolved, "search")
+        filters = _mapping(resolved, "filters")
+        report = _mapping(resolved, "report")
+        candidate_jsonl = _path(
+            inputs.get("candidate_jsonl"), key="inputs.candidate_jsonl"
+        )
+        atlas_fasta = _path(inputs.get("atlas_fasta"), key="inputs.atlas_fasta")
+        executable = _path(search.get("executable"), key="search.executable")
+        canonical_summary = _path(
+            report.get("canonical_summary"), key="report.canonical_summary"
+        )
+        if canonical_summary.exists():
+            raise FileExistsError(
+                f"refusing to overwrite canonical novelty summary: {canonical_summary}"
+            )
+        _record_inputs(recorder, [candidate_jsonl, atlas_fasta, executable])
+        output_dir = recorder.run_dir / "novelty"
+        summary = run_candidate_novelty_pipeline(
+            candidate_jsonl=candidate_jsonl,
+            atlas_fasta=atlas_fasta,
+            output_dir=output_dir,
+            executable=executable,
+            threads=int(search.get("threads", 16)),
+            sensitivity=float(search.get("sensitivity", 7.5)),
+            minimum_query_coverage=float(search.get("minimum_query_coverage", 0.8)),
+            maximum_evalue=float(search.get("maximum_evalue", 1000.0)),
+            maximum_sequences=int(search.get("maximum_sequences", 5000)),
+            thresholds=NoveltyThresholds(
+                maximum_parent_identity=float(filters["max_parent_identity"]),
+                maximum_atlas_identity=float(filters["max_atlas_identity"]),
+                maximum_homopolymer_length=int(filters["max_homopolymer_length"]),
+                maximum_low_complexity_windows=int(
+                    filters["max_low_complexity_windows"]
+                ),
+                minimum_designed_position_entropy=float(
+                    filters["min_designed_position_entropy"]
+                ),
+                low_complexity_window=int(
+                    _mapping(filters, "low_complexity")["window"]
+                ),
+                low_complexity_maximum_fraction=float(
+                    _mapping(filters, "low_complexity")["max_single_residue_fraction"]
+                ),
+            ),
+        )
+        atomic_write_text(
+            canonical_summary,
+            json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        )
+        recorder.finish(
+            success=True,
+            metrics=summary,
+            outputs=[_file_entry(path) for path in _tree_files(output_dir)]
+            + [_file_entry(canonical_summary)],
+        )
+        console.print_json(json.dumps(summary))
+    except (
+        ConfigError,
+        RunExistsError,
+        FileNotFoundError,
+        FileExistsError,
+        RuntimeError,
+        ValueError,
+        OSError,
+        KeyError,
+    ) as exc:
+        if recorder is not None:
+            recorder.record_failure("novelty", str(exc))
+            recorder.finish(success=False)
+        console.print(f"[red]error:[/red] {exc}")
+        raise typer.Exit(code=2) from exc
 
 
 @app.command()

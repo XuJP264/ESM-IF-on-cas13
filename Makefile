@@ -7,6 +7,7 @@ RUN := conda run -p $(ANALYSIS_ENV)
 .PHONY: fetch-structures lint typecheck test smoke-cpu smoke-pyg smoke-esm-if1
 .PHONY: smoke-proteinmpnn smoke-ligandmpnn process-atlas cluster msa
 .PHONY: conservation coevolution-smoke benchmark-experimental generate-pilot
+.PHONY: candidate-novelty
 .PHONY: report export-gpu-bundle verify-reproducibility
 
 bootstrap:
@@ -75,6 +76,9 @@ benchmark-experimental:
 
 generate-pilot:
 	$(RUN) cas13-if sample --config configs/esm_if1_sampling.yaml
+
+candidate-novelty:
+	$(RUN) cas13-if novelty --config configs/candidate_filtering.yaml
 
 report:
 	$(RUN) cas13-if report --config configs/benchmark_experimental.yaml

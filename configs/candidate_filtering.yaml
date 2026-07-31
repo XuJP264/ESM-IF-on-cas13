@@ -2,11 +2,24 @@ experiment:
   name: candidate-filtering
   evidence_level_max: 2
   is_mock: false
+  seed: 20260731
+inputs:
+  candidate_jsonl: results/runs/20260731-benchmark-experimental-a998ff40aa-ab6c9c5/benchmark/candidates.jsonl
+  atlas_fasta: data/processed/atlas/v1.0/clusters/cas13_exact_unique.fasta
+search:
+  tool: mmseqs
+  executable: .tools/envs/bioinformatics/bin/mmseqs
+  threads: 16
+  sensitivity: 7.5
+  minimum_query_coverage: 0.8
+  maximum_evalue: 1000.0
+  maximum_sequences: 5000
 filters:
   require_fixed_position_violations: 0
   max_parent_identity: 0.8
   max_atlas_identity: 0.8
   max_homopolymer_length: 7
+  max_low_complexity_windows: 0
   min_designed_position_entropy: 0.0
   require_standard_amino_acids: true
   low_complexity:
@@ -15,4 +28,4 @@ filters:
 report:
   label: computational_candidate
   forbidden_labels: [validated_cas13, effective_cas13]
-
+  canonical_summary: reports/tables/candidate_novelty.json
