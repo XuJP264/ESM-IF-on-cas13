@@ -40,8 +40,9 @@ Cas13”。
 - 正式 run 使用不可覆盖目录，记录 resolved config、seed、环境、硬件、
   git、输入/输出 hash、失败和 SUCCESS/FAILED；
 - mock、fixture、real 和证据 Level 均显式记录；
-- 当前本地 `main` 比 `origin/main` 超前；最终质量门和 bundle 验证通过后
-  才 push。
+- 本轮提交已 push 到 `origin/main`；GitHub Actions run `30633893318`
+  的 fixture-validation job 已通过 Ruff、format、shell syntax、mypy、
+  pytest/coverage 和 fixture preflight。
 
 ### 1.2 本机实测资源
 
@@ -241,6 +242,7 @@ sensitivity 7.5 和 query coverage ≥ 0.8：
 - branch-aware coverage：70.89%，门槛 70%；
 - fixture MI/APC：通过，明确 `is_mock=true`，不是 DCA；
 - mock refold E2E：通过，明确 `is_mock=true`。
+- GitHub Actions：run `30633893318` success。
 
 当前项目报告：
 

@@ -54,4 +54,5 @@ No candidate is described as a validated or effective Cas13.
 - branch-aware coverage: 70.89% (required 70%);
 - clean Atlas parse and cluster leakage gate: pass;
 - real candidate novelty audit: pass with fail-closed missing-hit semantics;
+- GitHub Actions run 30633893318: fixture-validation success;
 - target GPU validation: not run.
