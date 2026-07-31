@@ -5,10 +5,12 @@ import pytest
 from cas13_if.alignments.msa import Alignment
 from cas13_if.alignments.scaffold_mapping import (
     QUERY_IDENTIFIER,
+    coordinate_index_mapping,
     global_index_mapping,
     map_added_alignment_columns,
     scaffold_to_msa_columns,
 )
+from cas13_if.structures.parser import ResidueKey
 
 
 def test_global_mapping_distinguishes_terminal_and_internal_missing() -> None:
@@ -51,3 +53,23 @@ def test_real_fixture_mmcif_retains_insertion_code_contract() -> None:
     # The strict mapping data model always carries an insertion-code string;
     # empty strings are not silently converted to a numeric residue index.
     assert Path("tests/fixtures/minimal_complex.pdb").is_file()
+
+
+def test_coordinate_mapping_prefers_validated_author_numbers() -> None:
+    keys = [
+        ResidueKey("A", 1, "", "ALA"),
+        ResidueKey("A", 3, "", "ASP"),
+    ]
+    mapping, strategy = coordinate_index_mapping("ACD", "AD", keys)
+    assert strategy == "validated_author_residue_number"
+    assert mapping.reference_to_query == (0, None, 1)
+
+
+def test_coordinate_mapping_falls_back_for_insertion_codes() -> None:
+    keys = [
+        ResidueKey("A", 1, "", "ALA"),
+        ResidueKey("A", 1, "A", "CYS"),
+    ]
+    mapping, strategy = coordinate_index_mapping("AC", "AC", keys)
+    assert strategy == "global_sequence_alignment"
+    assert mapping.reference_to_query == (0, 1)

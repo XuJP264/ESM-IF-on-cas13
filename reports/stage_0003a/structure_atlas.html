@@ -1,0 +1,526 @@
+<!doctype html><html><head><meta charset="utf-8">
+<title>Stage 0003A Cas13d structure atlas</title><style>
+body{font-family:system-ui;margin:2rem;color:#17202a}table{border-collapse:collapse;
+font-size:12px}th,td{border:1px solid #ccd3db;padding:4px 6px;max-width:28rem;
+overflow-wrap:anywhere}th{background:#eef2f6;position:sticky;top:0}</style></head><body>
+<h1>Stage 0003A experimental Cas13d structure atlas</h1>
+<p><strong>Evidence Level 0.</strong> Real RCSB coordinates and provenance; no
+functional or wet-lab claim. Natural-parent and deposited construct sequences
+are separate fields.</p><h2>Summary</h2><pre>{
+  &quot;all_coordinates_finite&quot;: true,
+  &quot;all_rna_states_have_atoms&quot;: true,
+  &quot;config_sha256&quot;: &quot;463fb553fe7feafd62d984f79d3cde579ca89ab41ac6853f43e37ea1e53b515e&quot;,
+  &quot;evidence_level&quot;: 0,
+  &quot;generated_at&quot;: &quot;2026-08-01&quot;,
+  &quot;is_mock&quot;: false,
+  &quot;scaffolds&quot;: 4,
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+  &quot;state_units&quot;: 9,
+  &quot;states&quot;: {
+    &quot;apo&quot;: 1,
+    &quot;binary&quot;: 4,
+    &quot;ternary&quot;: 2,
+    &quot;ternary_tr1&quot;: 1,
+    &quot;ternary_tr2&quot;: 1
+  }
+}</pre><h2>Scaffolds</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scaffold_id</th>
+      <th>aliases</th>
+      <th>organism</th>
+      <th>subtype</th>
+      <th>full_natural_length</th>
+      <th>natural_sequence_strategy</th>
+      <th>natural_sequence_confidence</th>
+      <th>natural_sequence_accession</th>
+      <th>natural_sequence_note</th>
+      <th>state_count</th>
+      <th>parent_identities</th>
+      <th>nearest_other_parent_identity</th>
+      <th>is_mock</th>
+      <th>evidence_level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>EsCas13d</td>
+      <td></td>
+      <td>Eubacterium siraeum DSM 15702</td>
+      <td>VI-D</td>
+      <td>954</td>
+      <td>uniprot_fasta</td>
+      <td>high</td>
+      <td>B0MS50</td>
+      <td></td>
+      <td>2</td>
+      <td>{"CasRx": 0.44885679903730447, "DjCas13d": 0.4562874251497006, "EsCas13d": 1.0, "UrCas13d": 0.4449489216799092}</td>
+      <td>0.456287</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>UrCas13d</td>
+      <td></td>
+      <td>uncultured Ruminococcus sp.</td>
+      <td>VI-D</td>
+      <td>922</td>
+      <td>rcsb_reference_restore</td>
+      <td>medium</td>
+      <td>A0A1C5SD84</td>
+      <td>RCSB maps entity residues 1-922 to the now-empty UniProt accession; residues 923-930 are an expression tag. The declared R288A/R823A construct mutations are restored from the primary paper.</td>
+      <td>1</td>
+      <td>{"CasRx": 0.4583835946924005, "DjCas13d": 0.4549819927971189, "EsCas13d": 0.4449489216799092, "UrCas13d": 1.0}</td>
+      <td>0.458384</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>DjCas13d</td>
+      <td></td>
+      <td>Ruminococcus sp. UBA7013</td>
+      <td>VI-D</td>
+      <td>877</td>
+      <td>deposited_primary_paper_restore</td>
+      <td>medium</td>
+      <td>DJXD01000002.1</td>
+      <td>RCSB omits a mutation declaration although the primary paper states that all four catalytic residues were changed to Ala. Those residues are restored in the 877-aa natural-parent proxy. No UniProt cross-reference is present, so confidence remains medium.</td>
+      <td>4</td>
+      <td>{"CasRx": 0.43842364532019706, "DjCas13d": 1.0, "EsCas13d": 0.4562874251497006, "UrCas13d": 0.45443645083932854}</td>
+      <td>0.456287</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>CasRx</td>
+      <td>RfxCas13d</td>
+      <td>Ruminococcus sp. XPD3002</td>
+      <td>VI-D</td>
+      <td>967</td>
+      <td>deposited_primary_paper_restore</td>
+      <td>medium</td>
+      <td>SFX39573.1</td>
+      <td>RCSB omits a mutation declaration although the primary paper states that all four catalytic residues were changed to Ala. Those residues are restored in the 967-aa natural-parent proxy. No UniProt cross-reference is present, so confidence remains medium.</td>
+      <td>2</td>
+      <td>{"CasRx": 1.0, "DjCas13d": 0.43842364532019706, "EsCas13d": 0.44885679903730447, "UrCas13d": 0.4617253948967193}</td>
+      <td>0.461725</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table><h2>States</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>pdb_id</th>
+      <th>scaffold_id</th>
+      <th>subtype</th>
+      <th>state</th>
+      <th>protein_chain</th>
+      <th>crrna_chains</th>
+      <th>target_rna_chains</th>
+      <th>resolution_angstrom</th>
+      <th>experimental_method</th>
+      <th>publication</th>
+      <th>full_natural_length</th>
+      <th>natural_sequence_confidence</th>
+      <th>deposited_full_length</th>
+      <th>declared_construct_mutation</th>
+      <th>paper_declared_restorations</th>
+      <th>coordinate_length</th>
+      <th>coordinate_mapping_strategy</th>
+      <th>coordinate_residue_first</th>
+      <th>coordinate_residue_last</th>
+      <th>missing_natural_positions</th>
+      <th>natural_coordinate_substitutions</th>
+      <th>missing_backbone</th>
+      <th>chain_break_count</th>
+      <th>alternate_location_atoms_discarded</th>
+      <th>modified_residue_count</th>
+      <th>rna_atom_count</th>
+      <th>coordinates_are_finite</th>
+      <th>experimental_evidence</th>
+      <th>inclusion</th>
+      <th>inclusion_reason</th>
+      <th>download_url</th>
+      <th>accessed_at</th>
+      <th>license</th>
+      <th>cif_sha256</th>
+      <th>pdb_sha256</th>
+      <th>entry_sha256</th>
+      <th>entity_sha256</th>
+      <th>is_mock</th>
+      <th>evidence_level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>6E9E</td>
+      <td>EsCas13d</td>
+      <td>VI-D</td>
+      <td>binary</td>
+      <td>A</td>
+      <td>B</td>
+      <td></td>
+      <td>3.40</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1016/j.cell.2018.09.001", "title": "Structural Basis for the RNA-Guided Ribonuclease Activity of CRISPR-Cas13d.", "venue": "Cell", "year": 2018}</td>
+      <td>954</td>
+      <td>high</td>
+      <td>954</td>
+      <td>None</td>
+      <td>{}</td>
+      <td>863</td>
+      <td>validated_author_residue_number</td>
+      <td>58</td>
+      <td>950</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 145, 146, 147, 206, 207, 208, 209, 210, 211, 212, 213, 214, 268, 269, 270, 271, 272, 616, 617, 618, 619, 620, 621, 622, 623, 687, 688, 689, 690, 691, 951, 952, 953, 954]</td>
+      <td>[]</td>
+      <td>[]</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1088</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/6E9E.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>7ab4f81b4d469ca1d6636d831727cfff267919a57a39ca454875cd965d88dc9e</td>
+      <td>2b58a44c4d8b9fddb10088608a8823337c1a47ed7b1475d4c9a970c4a724236a</td>
+      <td>87ed3a3653d75d7c7d6a06216514aa1bbcea8563e6691184df6d8ae963c56d02</td>
+      <td>ab19a379ac06217977eb8244578f06adefc3640c498015bda10335690d6906c3</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>6E9F</td>
+      <td>EsCas13d</td>
+      <td>VI-D</td>
+      <td>ternary</td>
+      <td>A</td>
+      <td>B</td>
+      <td>C</td>
+      <td>3.30</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1016/j.cell.2018.09.001", "title": "Structural Basis for the RNA-Guided Ribonuclease Activity of CRISPR-Cas13d.", "venue": "Cell", "year": 2018}</td>
+      <td>954</td>
+      <td>high</td>
+      <td>954</td>
+      <td>R295A, H300A, R849A, H854A</td>
+      <td>{"295": "R", "300": "H", "849": "R", "854": "H"}</td>
+      <td>864</td>
+      <td>validated_author_residue_number</td>
+      <td>58</td>
+      <td>950</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 145, 146, 147, 268, 269, 270, 271, 272, 616, 617, 618, 619, 687, 688, 689, 690, 691, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 951, 952, 953, 954]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 295}, {"coordinate": "A", "natural": "H", "natural_index_1": 300}, {"coordinate": "A", "natural": "R", "natural_index_1": 849}, {"coordinate": "A", "natural": "H", "natural_index_1": 854}]</td>
+      <td>[]</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1679</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/6E9F.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>d74f62fc44db2f9f729c9bbb8ec502463b00d9fa63635259660b46a74e938c68</td>
+      <td>a5233bbf5cb88effa7f32996baa9176156f69aa224e619e0d00267ab38ecd5c7</td>
+      <td>f2db5fd6692a763e94eb53751f91f5802693a5f7c012453963e13d1fd60287e3</td>
+      <td>30d7c76d734ce2504fe3b8281218149310d6e4efd32d9b4e7c90adecaeb5a5e9</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>6IV9</td>
+      <td>UrCas13d</td>
+      <td>VI-D</td>
+      <td>binary</td>
+      <td>A</td>
+      <td>B</td>
+      <td></td>
+      <td>1.86</td>
+      <td>X-RAY DIFFRACTION</td>
+      <td>{"doi": "10.1038/s41467-019-10507-3", "title": "Two HEPN domains dictate CRISPR RNA maturation and target cleavage in Cas13d.", "venue": "Nat Commun", "year": 2019}</td>
+      <td>922</td>
+      <td>medium</td>
+      <td>930</td>
+      <td>R288A, R823A</td>
+      <td>{"288": "R", "823": "R"}</td>
+      <td>874</td>
+      <td>validated_author_residue_number</td>
+      <td>49</td>
+      <td>922</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 288}, {"coordinate": "A", "natural": "R", "natural_index_1": 823}]</td>
+      <td>[]</td>
+      <td>0</td>
+      <td>20</td>
+      <td>0</td>
+      <td>1054</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/6IV9.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>a69899c4b4bf83b60b1d0eb821da7c9c7152b2586fd9306707164229817aba86</td>
+      <td>55930c9754bdb1707cd6cb9a03907cee952ab6fe2f5c89666bb2ac4440531e5d</td>
+      <td>26a4962fa59bdae4a64687519757efcd1284df05c0648b04cd517c50b33dacad</td>
+      <td>e19886dda212b68ac39cb0ae2f5b4d5231da8d01dd8b37e52412311775aa31e8</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>9M38</td>
+      <td>DjCas13d</td>
+      <td>VI-D</td>
+      <td>apo</td>
+      <td>A</td>
+      <td></td>
+      <td></td>
+      <td>3.47</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1093/nar/gkaf986", "title": "Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d.", "venue": "Nucleic Acids Res.", "year": 2025}</td>
+      <td>877</td>
+      <td>medium</td>
+      <td>877</td>
+      <td>None</td>
+      <td>{"218": "R", "223": "H", "772": "R", "777": "H"}</td>
+      <td>716</td>
+      <td>validated_author_residue_number</td>
+      <td>92</td>
+      <td>866</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 224, 225, 226, 227, 228, 229, 230, 231, 232, 416, 417, 418, 419, 420, 421, 422, 423, 424, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 734, 735, 736, 737, 738, 739, 740, 741, 742, 743, 744, 745, 746, 747, 748, 749, 750, 867, 868, 869, 870, 871, 872, 873, 874, 875, 876, 877]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 218}, {"coordinate": "A", "natural": "H", "natural_index_1": 223}, {"coordinate": "A", "natural": "R", "natural_index_1": 772}, {"coordinate": "A", "natural": "H", "natural_index_1": 777}]</td>
+      <td>[]</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/9M38.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>6be9704eacdc4787ba8f0d5e8c51b2fb448e17338ad9550ee00d26b2dc401807</td>
+      <td>90cba59d5c495e58dcb7add9486ef9dba08c71087e3e689c1f0e0dc130f288bf</td>
+      <td>a3a563b26be5e63306a6eb1ffd85efffd58d0b72447188907d3d778c674d59cf</td>
+      <td>b560fc76862cffd28b99f3fce544f8e6fef1145e36514bf441cc00e5fc7c563f</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>9M30</td>
+      <td>DjCas13d</td>
+      <td>VI-D</td>
+      <td>binary</td>
+      <td>A</td>
+      <td>B</td>
+      <td></td>
+      <td>3.05</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1093/nar/gkaf986", "title": "Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d.", "venue": "Nucleic Acids Res.", "year": 2025}</td>
+      <td>877</td>
+      <td>medium</td>
+      <td>877</td>
+      <td>None</td>
+      <td>{"218": "R", "223": "H", "772": "R", "777": "H"}</td>
+      <td>844</td>
+      <td>validated_author_residue_number</td>
+      <td>4</td>
+      <td>875</td>
+      <td>[1, 2, 3, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 876, 877]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 218}, {"coordinate": "A", "natural": "H", "natural_index_1": 223}, {"coordinate": "A", "natural": "R", "natural_index_1": 772}, {"coordinate": "A", "natural": "H", "natural_index_1": 777}]</td>
+      <td>[]</td>
+      <td>2</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1085</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/9M30.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>d9ad1b7d7d9e3de982e837f57ddd77ed2ccc16492e8e18c037491ec12b154907</td>
+      <td>183cdadda1d8b10962d7ddace22fe941bd5fa11a96a9c3051a07eb0985b9bd91</td>
+      <td>440b7ea2799c691edbbfbf6886c1096d2c737f6d6625aafc3df073a4f226def3</td>
+      <td>13e91df22a4b39b78089cfe2081a22fc97e6ec3aafd3cba54460788172c08f36</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>9M33</td>
+      <td>DjCas13d</td>
+      <td>VI-D</td>
+      <td>ternary_tr1</td>
+      <td>A</td>
+      <td>B</td>
+      <td>C</td>
+      <td>3.27</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1093/nar/gkaf986", "title": "Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d.", "venue": "Nucleic Acids Res.", "year": 2025}</td>
+      <td>877</td>
+      <td>medium</td>
+      <td>877</td>
+      <td>None</td>
+      <td>{"218": "R", "223": "H", "772": "R", "777": "H"}</td>
+      <td>750</td>
+      <td>validated_author_residue_number</td>
+      <td>89</td>
+      <td>875</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 224, 225, 226, 227, 228, 229, 230, 231, 232, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 876, 877]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 218}, {"coordinate": "A", "natural": "H", "natural_index_1": 223}, {"coordinate": "A", "natural": "R", "natural_index_1": 772}, {"coordinate": "A", "natural": "H", "natural_index_1": 777}]</td>
+      <td>[]</td>
+      <td>3</td>
+      <td>10</td>
+      <td>0</td>
+      <td>1444</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/9M33.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>43cc959199a4db02a644288b0baff75ff709d1d6a5b9b1c7ec1cba4f84f4cbdd</td>
+      <td>dcdbb2146c00d99fcdc96986b3c083c6a72116fd635ce87618dc3ec479b14e38</td>
+      <td>c3980238e4a7e1a75de4ce65eafb490b40c11464f065d3b4c0de223c7c13dfc0</td>
+      <td>6387217eb9de7746129f914c0cb680c9d452ee96f8a7fa850bfb1eb77ba87187</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>9M34</td>
+      <td>DjCas13d</td>
+      <td>VI-D</td>
+      <td>ternary_tr2</td>
+      <td>A</td>
+      <td>B</td>
+      <td>C</td>
+      <td>3.46</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1093/nar/gkaf986", "title": "Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d.", "venue": "Nucleic Acids Res.", "year": 2025}</td>
+      <td>877</td>
+      <td>medium</td>
+      <td>877</td>
+      <td>None</td>
+      <td>{"218": "R", "223": "H", "772": "R", "777": "H"}</td>
+      <td>750</td>
+      <td>validated_author_residue_number</td>
+      <td>89</td>
+      <td>875</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 224, 225, 226, 227, 228, 229, 230, 231, 232, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 876, 877]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 218}, {"coordinate": "A", "natural": "H", "natural_index_1": 223}, {"coordinate": "A", "natural": "R", "natural_index_1": 772}, {"coordinate": "A", "natural": "H", "natural_index_1": 777}]</td>
+      <td>[]</td>
+      <td>3</td>
+      <td>10</td>
+      <td>0</td>
+      <td>1444</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/9M34.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>b1755a5e563c7696a5820be724e0164199d06371353966a860e514bf4eeb7df2</td>
+      <td>19629a1ca214f76271e76a5b786c4c1c2fc610ac5ff40c9e6e70fdb3e4590392</td>
+      <td>abaf3b1a75e046463d99a30220ceb787446c7f5d001e9e02a32ca955db278858</td>
+      <td>cfdb02364a082d76a09b51c4841376a66dd54f217a4e2ac4953fc11155f59401</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>9M31</td>
+      <td>CasRx</td>
+      <td>VI-D</td>
+      <td>binary</td>
+      <td>A</td>
+      <td>B</td>
+      <td></td>
+      <td>2.86</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1093/nar/gkaf986", "title": "Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d.", "venue": "Nucleic Acids Res.", "year": 2025}</td>
+      <td>967</td>
+      <td>medium</td>
+      <td>967</td>
+      <td>None</td>
+      <td>{"239": "R", "244": "H", "858": "R", "863": "H"}</td>
+      <td>945</td>
+      <td>validated_author_residue_number</td>
+      <td>5</td>
+      <td>956</td>
+      <td>[1, 2, 3, 4, 246, 247, 248, 249, 637, 638, 639, 957, 958, 959, 960, 961, 962, 963, 964, 965, 966, 967]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 239}, {"coordinate": "A", "natural": "H", "natural_index_1": 244}, {"coordinate": "A", "natural": "R", "natural_index_1": 858}, {"coordinate": "A", "natural": "H", "natural_index_1": 863}]</td>
+      <td>[]</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1082</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/9M31.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>c9096be2ac4b2d76a16692dc4767637089ee5e8f33bb4230c5b355171830b782</td>
+      <td>7840fb75e49d1d2af3b0fb0cf439619fafe1f274e63e93d90db72e1e44350ef4</td>
+      <td>a4734d72122ebbf48d1c69771d7719d796ade0367f1088d88ed2328198160807</td>
+      <td>0a613485e9f8c8fc76651310a02c4b589f8813c22661b3eb3f61b7614b55b0f4</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>9M8Q</td>
+      <td>CasRx</td>
+      <td>VI-D</td>
+      <td>ternary</td>
+      <td>A</td>
+      <td>B</td>
+      <td>C</td>
+      <td>3.46</td>
+      <td>ELECTRON MICROSCOPY</td>
+      <td>{"doi": "10.1093/nar/gkaf986", "title": "Mechanistic insights into Cas13d enzymes from cryo-EM structures of CasRx and DjCas13d.", "venue": "Nucleic Acids Res.", "year": 2025}</td>
+      <td>967</td>
+      <td>medium</td>
+      <td>967</td>
+      <td>None</td>
+      <td>{"239": "R", "244": "H", "858": "R", "863": "H"}</td>
+      <td>904</td>
+      <td>validated_author_residue_number</td>
+      <td>7</td>
+      <td>956</td>
+      <td>[1, 2, 3, 4, 5, 6, 245, 246, 247, 248, 249, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 682, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 957, 958, 959, 960, 961, 962, 963, 964, 965, 966, 967]</td>
+      <td>[{"coordinate": "A", "natural": "R", "natural_index_1": 239}, {"coordinate": "A", "natural": "H", "natural_index_1": 244}, {"coordinate": "A", "natural": "R", "natural_index_1": 858}, {"coordinate": "A", "natural": "H", "natural_index_1": 863}]</td>
+      <td>[]</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1696</td>
+      <td>True</td>
+      <td>experimental_structure</td>
+      <td>True</td>
+      <td>preregistered Cas13d scaffold-state with official coordinates</td>
+      <td>https://files.rcsb.org/download/9M8Q.cif</td>
+      <td>2026-08-01</td>
+      <td>CC0-1.0</td>
+      <td>b3ac2c6b274dbdf92653f0d8f8fe8924660fa393810bfe50a5373a3879f74399</td>
+      <td>018b4e5d6de6c3856013ab256b5b8556bfb3a47a5bca1f9b23caa10b9230482c</td>
+      <td>1b436223813f4da2c66e0f55ebb8716fa49adc3b4104dfc0ccc6031c3dc2ba6b</td>
+      <td>90ba2a5946cef00dc7e33fcacfcf3d379b660ae5b9ed535ce3dc0ca35fd252e0</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table></body></html>

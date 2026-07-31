@@ -1,0 +1,5 @@
+scaffold_id,state_count,intersection_hard_positions,union_risk_positions,variable_hinge_positions,fixed_position_violations,is_mock
+EsCas13d,2,94,798,148,0,False
+UrCas13d,1,131,770,0,0,False
+DjCas13d,4,4,717,265,0,False
+CasRx,2,100,814,152,0,False

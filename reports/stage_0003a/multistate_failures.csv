@@ -1,0 +1,12 @@
+scaffold_id,combination,status,reason,is_mock
+CasRx,apo only,not_applicable,state combination 'apo only' is unavailable; missing=['apo'],False
+CasRx,apo + binary,not_applicable,state combination 'apo + binary' is unavailable; missing=['apo'],False
+CasRx,apo + binary + ternary,not_applicable,state combination 'apo + binary + ternary' is unavailable; missing=['apo'],False
+EsCas13d,apo only,not_applicable,state combination 'apo only' is unavailable; missing=['apo'],False
+EsCas13d,apo + binary,not_applicable,state combination 'apo + binary' is unavailable; missing=['apo'],False
+EsCas13d,apo + binary + ternary,not_applicable,state combination 'apo + binary + ternary' is unavailable; missing=['apo'],False
+UrCas13d,apo only,not_applicable,state combination 'apo only' is unavailable; missing=['apo'],False
+UrCas13d,ternary only,not_applicable,state combination 'ternary only' is unavailable; missing=['ternary'],False
+UrCas13d,apo + binary,not_applicable,state combination 'apo + binary' is unavailable; missing=['apo'],False
+UrCas13d,binary + ternary,not_applicable,state combination 'binary + ternary' is unavailable; missing=['ternary'],False
+UrCas13d,apo + binary + ternary,not_applicable,"state combination 'apo + binary + ternary' is unavailable; missing=['apo', 'ternary']",False

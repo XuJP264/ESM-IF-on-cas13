@@ -1,0 +1,18 @@
+{
+  "all_coordinates_finite": true,
+  "all_rna_states_have_atoms": true,
+  "config_sha256": "463fb553fe7feafd62d984f79d3cde579ca89ab41ac6853f43e37ea1e53b515e",
+  "evidence_level": 0,
+  "generated_at": "2026-08-01",
+  "is_mock": false,
+  "scaffolds": 4,
+  "schema_version": "1.0",
+  "state_units": 9,
+  "states": {
+    "apo": 1,
+    "binary": 4,
+    "ternary": 2,
+    "ternary_tr1": 1,
+    "ternary_tr2": 1
+  }
+}

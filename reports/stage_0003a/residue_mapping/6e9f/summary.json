@@ -1,0 +1,65 @@
+{
+  "RNA_contact_positions": 128,
+  "RNA_second_shell_positions": 135,
+  "accepted_substitution_positions_1": [
+    295,
+    300,
+    849,
+    854
+  ],
+  "chain_id": "A",
+  "claim_scope": "Level 0 coordinate-system audit. Conservation eligibility does not establish function or wet-lab validity.",
+  "conservation_constraint_eligible_positions": 712,
+  "conservation_gate_status": "passed",
+  "coordinate_length": 864,
+  "coordinate_mapping_strategy": "validated_author_residue_number",
+  "evidence_level": 0,
+  "four_layer_exact_coverage": 0.9014675052410901,
+  "full_scaffold_length": 954,
+  "high_confidence_coverage": 0.9056603773584906,
+  "inputs": {
+    "/home/junpeng/ESM-IF/data/experimental_structures/6e9f.cif": "d74f62fc44db2f9f729c9bbb8ec502463b00d9fa63635259660b46a74e938c68",
+    "/home/junpeng/ESM-IF/data/experimental_structures/6e9f.entity_1.json": "30d7c76d734ce2504fe3b8281218149310d6e4efd32d9b4e7c90adecaeb5a5e9",
+    "/home/junpeng/ESM-IF/data/processed/atlas/v1.0/conservation/vi-d.parquet": "bb1620f95f0a3b9eba988c170eae64c528213e40de9fe071e22f7c8d127de58b",
+    "/home/junpeng/ESM-IF/data/processed/atlas/v1.0/msa/vi-d/alignment.fasta": "c55bd8cdb0a53b80070bb191cf2d48834b23cde2d346ec5d84d1b4bb77bcd1b2"
+  },
+  "is_mock": false,
+  "mafft_command": [
+    "/home/junpeng/ESM-IF/.tools/envs/bioinformatics/bin/mafft",
+    "--quiet",
+    "--thread",
+    "16",
+    "--addfull",
+    "/tmp/cas13-if-vi-d-map-xb5z3qnk/scaffold.fasta",
+    "/home/junpeng/ESM-IF/data/processed/atlas/v1.0/msa/vi-d/alignment.fasta"
+  ],
+  "manual_review_positions": 532,
+  "mapped_coordinate_positions": 864,
+  "mapping_confidence_counts": {
+    "high": 864,
+    "medium": 90
+  },
+  "mapping_status_counts": {
+    "four_layer_exact": 860,
+    "four_layer_literature_restored_substitution": 4,
+    "full_msa_only_unresolved_coordinate": 90
+  },
+  "minimum_conservation_coverage": 0.8,
+  "original_msa_columns": 3524,
+  "original_msa_columns_preserved": true,
+  "original_msa_sequences": 182,
+  "pdb_id": "6E9F",
+  "protein_core_positions": 506,
+  "query_only_msa_insertions": 0,
+  "scaffold_id": "EsCas13d",
+  "schema_version": "1.0",
+  "state": "ternary",
+  "subtype": "VI-D",
+  "unmapped_or_review_reason_counts": {
+    "literature_confirmed_construct_substitution": 4,
+    "scaffold_differs_from_msa_consensus": 497,
+    "unresolved_internal": 29,
+    "unresolved_terminal": 61
+  },
+  "unresolved_positions": 90
+}

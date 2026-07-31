@@ -1,0 +1,130 @@
+stage:
+  name: stage-0003a-cas13d-structure-atlas
+  evidence_level: 0
+  is_mock: false
+  accessed_at: 2026-08-01
+sources:
+  rcsb_files: https://files.rcsb.org/download/{pdb_id}.{extension}
+  rcsb_data_api: https://data.rcsb.org/rest/v1/core/{resource}
+  rcsb_license: https://www.rcsb.org/pages/policies
+  archive_license: CC0-1.0
+  esm_publication: https://pmc.ncbi.nlm.nih.gov/articles/PMC6179368/
+  ur_publication: https://pmc.ncbi.nlm.nih.gov/articles/PMC6559982/
+  dj_rx_publication: https://pmc.ncbi.nlm.nih.gov/articles/PMC12481013/
+msa:
+  path: data/processed/atlas/v1.0/msa/vi-d/alignment.fasta
+  conservation: data/processed/atlas/v1.0/conservation/vi-d.parquet
+  mafft_executable: .tools/envs/bioinformatics/bin/mafft
+  threads: 16
+  minimum_conservation_coverage: 0.8
+scaffolds:
+  - scaffold_id: EsCas13d
+    organism: Eubacterium siraeum DSM 15702
+    natural_sequence_strategy: uniprot_fasta
+    natural_sequence_source: data/experimental_structures/B0MS50.fasta
+    natural_sequence_accession: B0MS50
+    natural_sequence_confidence: high
+    hepn_residues: [295, 300, 849, 854]
+    states:
+      - pdb_id: 6E9E
+        state: binary
+        protein_chain: A
+        protein_entity: 2
+        crrna_chains: [B]
+        target_rna_chains: []
+        catalytic_restorations: {}
+      - pdb_id: 6E9F
+        state: ternary
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: [B]
+        target_rna_chains: [C]
+        catalytic_restorations: {295: R, 300: H, 849: R, 854: H}
+  - scaffold_id: UrCas13d
+    organism: uncultured Ruminococcus sp.
+    natural_sequence_strategy: rcsb_reference_restore
+    natural_reference_length: 922
+    natural_sequence_accession: A0A1C5SD84
+    natural_sequence_confidence: medium
+    natural_sequence_note: >-
+      RCSB maps entity residues 1-922 to the now-empty UniProt accession;
+      residues 923-930 are an expression tag. The declared R288A/R823A
+      construct mutations are restored from the primary paper.
+    hepn_residues: [288, 293, 823, 828]
+    states:
+      - pdb_id: 6IV9
+        state: binary
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: [B]
+        target_rna_chains: []
+        catalytic_restorations: {288: R, 823: R}
+  - scaffold_id: DjCas13d
+    organism: Ruminococcus sp. UBA7013
+    natural_sequence_strategy: deposited_primary_paper_restore
+    natural_sequence_confidence: medium
+    natural_sequence_accession: DJXD01000002.1
+    natural_sequence_note: >-
+      RCSB omits a mutation declaration although the primary paper states that
+      all four catalytic residues were changed to Ala. Those residues are
+      restored in the 877-aa natural-parent proxy. No UniProt cross-reference
+      is present, so confidence remains medium.
+    natural_restorations: {218: R, 223: H, 772: R, 777: H}
+    hepn_residues: [218, 223, 772, 777]
+    states:
+      - pdb_id: 9M38
+        state: apo
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: []
+        target_rna_chains: []
+        catalytic_restorations: {218: R, 223: H, 772: R, 777: H}
+      - pdb_id: 9M30
+        state: binary
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: [B]
+        target_rna_chains: []
+        catalytic_restorations: {218: R, 223: H, 772: R, 777: H}
+      - pdb_id: 9M33
+        state: ternary_tr1
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: [B]
+        target_rna_chains: [C]
+        catalytic_restorations: {218: R, 223: H, 772: R, 777: H}
+      - pdb_id: 9M34
+        state: ternary_tr2
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: [B]
+        target_rna_chains: [C]
+        catalytic_restorations: {218: R, 223: H, 772: R, 777: H}
+  - scaffold_id: CasRx
+    aliases: [RfxCas13d]
+    organism: Ruminococcus sp. XPD3002
+    natural_sequence_strategy: deposited_primary_paper_restore
+    natural_sequence_confidence: medium
+    natural_sequence_accession: SFX39573.1
+    natural_sequence_note: >-
+      RCSB omits a mutation declaration although the primary paper states that
+      all four catalytic residues were changed to Ala. Those residues are
+      restored in the 967-aa natural-parent proxy. No UniProt cross-reference
+      is present, so confidence remains medium.
+    natural_restorations: {239: R, 244: H, 858: R, 863: H}
+    hepn_residues: [239, 244, 858, 863]
+    states:
+      - pdb_id: 9M31
+        state: binary
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: [B]
+        target_rna_chains: []
+        catalytic_restorations: {239: R, 244: H, 858: R, 863: H}
+      - pdb_id: 9M8Q
+        state: ternary
+        protein_chain: A
+        protein_entity: 1
+        crrna_chains: [B]
+        target_rna_chains: [C]
+        catalytic_restorations: {239: R, 244: H, 858: R, 863: H}

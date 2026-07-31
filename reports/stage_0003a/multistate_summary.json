@@ -1,0 +1,11 @@
+{
+  "device": "cuda",
+  "evidence_level": 2,
+  "fixed_position_violations": 0,
+  "is_mock": false,
+  "not_applicable_combinations": 11,
+  "real_multistate_aggregates": 13,
+  "real_state_scores": 9,
+  "scaffolds": 4,
+  "score_policy": "mean_log_likelihood_per_resolved_residue"
+}

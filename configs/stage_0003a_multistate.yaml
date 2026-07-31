@@ -1,0 +1,30 @@
+experiment:
+  name: stage-0003a-real-multistate-native-score
+  evidence_level_max: 2
+  is_mock: false
+  normalized_score_policy: mean_log_likelihood_per_resolved_residue
+execution:
+  device: cuda
+  reason: >-
+    The isolated project environment uses PyTorch 2.4.1 cu121 and successfully
+    detects the measured 8,185 MiB RTX 4060. This is a bounded nine-state
+    ESM-IF1 score smoke, not a large structure-prediction task.
+inputs:
+  structure_config: configs/stage_0003a_structures.yaml
+  report_root: reports/stage_0003a
+models:
+  esm_if1_checkpoint: models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt
+  esm_if1_python: .tools/envs/esm_if1/bin/python
+state_combinations:
+  - apo only
+  - binary only
+  - ternary only
+  - apo + binary
+  - binary + ternary
+  - apo + binary + ternary
+mask_policy:
+  direct_rna_cutoff_angstrom: 5.0
+  second_shell_cutoff_angstrom: 8.0
+  buried_rsa_threshold: 0.2
+  hard_components: [literature_HEPN, high_confidence_RNA_contact]
+  risk_components: [mapping_gate_failure, core, RNA_contact, RNA_second_shell, chain_break]

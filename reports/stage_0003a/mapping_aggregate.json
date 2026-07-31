@@ -1,0 +1,9 @@
+{
+  "evidence_level": 0,
+  "four_layer_exact_or_restored_positions": 7507,
+  "is_mock": false,
+  "scaffolds": 4,
+  "state_units": 9,
+  "total_full_positions_across_states": 8272,
+  "weighted_high_confidence_coverage": 0.9075193423597679
+}

@@ -165,6 +165,7 @@ def add_scaffold_to_msa(
     scaffold_sequence: str,
     mafft_executable: str,
     threads: int,
+    query_identifier: str = QUERY_IDENTIFIER,
 ) -> AddedAlignment:
     """Add a full scaffold to an existing MSA while preserving old columns."""
     if threads < 1:
@@ -173,13 +174,13 @@ def add_scaffold_to_msa(
     if executable is None:
         raise FileNotFoundError(f"MAFFT executable not found: {mafft_executable}")
     original = read_aligned_fasta(msa_path)
-    if QUERY_IDENTIFIER in original.identifiers:
+    if query_identifier in original.identifiers:
         raise ValueError("reserved query identifier is already present in MSA")
     with tempfile.TemporaryDirectory(prefix="cas13-if-vi-d-map-") as temporary:
         temporary_root = Path(temporary)
         query_path = temporary_root / "scaffold.fasta"
         output_path = temporary_root / "added.fasta"
-        write_fasta([(QUERY_IDENTIFIER, scaffold_sequence)], query_path)
+        write_fasta([(query_identifier, scaffold_sequence)], query_path)
         command = (
             executable,
             "--quiet",
@@ -201,7 +202,9 @@ def add_scaffold_to_msa(
                 f"{completed.stderr.strip()}"
             )
         added = _parse_alignment_text(completed.stdout, output_path)
-        mapped = map_added_alignment_columns(original, added)
+        mapped = map_added_alignment_columns(
+            original, added, query_identifier=query_identifier
+        )
         if mapped.query_aligned.replace("-", "") != scaffold_sequence.upper():
             raise ValueError("MAFFT output lost or changed scaffold residues")
         return AddedAlignment(
@@ -246,6 +249,58 @@ def _complete_backbone_by_key(structure_path: Path) -> dict[ResidueKey, bool]:
         for key, residue_atoms in group_residues(atoms).items()
         if key.residue_name in PROTEIN_RESIDUES
     }
+
+
+def coordinate_index_mapping(
+    reference: str,
+    coordinate_sequence: str,
+    residue_keys: list[ResidueKey],
+    *,
+    minimum_author_identity: float = 0.95,
+) -> tuple[PairwiseIndexMapping, str]:
+    """Prefer validated author numbering, falling back to sequence alignment.
+
+    Cryo-EM structures often omit long internal segments, for which an
+    unconstrained pairwise alignment can place a short catalytic motif on the
+    wrong side of a gap. Author numbering is accepted only when it is unique,
+    has no insertion codes, lies inside the full sequence, and agrees at at
+    least ``minimum_author_identity`` of resolved positions.
+    """
+    if len(coordinate_sequence) != len(residue_keys):
+        raise ValueError("coordinate sequence/residue-key length mismatch")
+    reference_to_query: list[int | None] = [None] * len(reference)
+    query_to_reference: list[int | None] = [None] * len(coordinate_sequence)
+    valid = True
+    for query_index, key in enumerate(residue_keys):
+        reference_index = key.residue_number - 1
+        if (
+            key.insertion_code
+            or reference_index < 0
+            or reference_index >= len(reference)
+            or reference_to_query[reference_index] is not None
+        ):
+            valid = False
+            break
+        reference_to_query[reference_index] = query_index
+        query_to_reference[query_index] = reference_index
+    if valid and coordinate_sequence:
+        identical = sum(
+            reference[reference_index] == coordinate_sequence[query_index]
+            for query_index, reference_index in enumerate(query_to_reference)
+            if reference_index is not None
+        )
+        identity = identical / len(coordinate_sequence)
+        if identity >= minimum_author_identity:
+            return (
+                PairwiseIndexMapping(
+                    reference_to_query=tuple(reference_to_query),
+                    query_to_reference=tuple(query_to_reference),
+                ),
+                "validated_author_residue_number",
+            )
+    return global_index_mapping(
+        reference, coordinate_sequence
+    ), "global_sequence_alignment"
 
 
 def _mapping_status(
@@ -301,16 +356,27 @@ def build_scaffold_mapping(
     mafft_executable: str,
     threads: int,
     minimum_conservation_coverage: float,
+    pdb_id: str = "6E9F",
+    state: str = "unspecified",
+    full_sequence: str | None = None,
+    query_identifier: str = QUERY_IDENTIFIER,
+    accepted_substitution_positions_1: set[int] | None = None,
 ) -> dict[str, Any]:
-    """Build and write the strict 6E9F/full-scaffold/VI-D mapping audit."""
+    """Build and write a strict PDB/full-scaffold/subtype-MSA mapping audit."""
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite mapping output: {output_dir}")
     if not 0 <= minimum_conservation_coverage <= 1:
         raise ValueError("minimum conservation coverage must be in [0, 1]")
-    full_sequence = _load_full_scaffold_sequence(entity_path)
+    full_sequence = (
+        full_sequence.upper()
+        if full_sequence is not None
+        else _load_full_scaffold_sequence(entity_path)
+    )
     atoms = parse_structure(structure_path)
     coordinate_sequence, residue_keys = protein_chain_sequence(atoms, chain_id)
-    pairwise = global_index_mapping(full_sequence, coordinate_sequence)
+    pairwise, coordinate_mapping_strategy = coordinate_index_mapping(
+        full_sequence, coordinate_sequence, residue_keys
+    )
     mapped_full_indices = [
         index
         for index, coordinate_index in enumerate(pairwise.reference_to_query)
@@ -323,6 +389,7 @@ def build_scaffold_mapping(
         scaffold_sequence=full_sequence,
         mafft_executable=mafft_executable,
         threads=threads,
+        query_identifier=query_identifier,
     )
     msa_columns = scaffold_to_msa_columns(added)
     if len(msa_columns) != len(full_sequence):
@@ -331,6 +398,7 @@ def build_scaffold_mapping(
     conservation_by_column = {int(row["column"]): row for row in conservation_rows}
     backbone_complete = _complete_backbone_by_key(structure_path)
     rows: list[dict[str, Any]] = []
+    accepted_substitutions = accepted_substitution_positions_1 or set()
     for full_index, full_amino_acid in enumerate(full_sequence):
         coordinate_index = pairwise.reference_to_query[full_index]
         coordinate_amino_acid = (
@@ -357,6 +425,19 @@ def build_scaffold_mapping(
             ),
             msa_column=msa_column,
         )
+        if (
+            full_index + 1 in accepted_substitutions
+            and coordinate_index is not None
+            and coordinate_amino_acid != full_amino_acid
+            and msa_column is not None
+            and coordinate_mapping_strategy == "validated_author_residue_number"
+        ):
+            status = "four_layer_literature_restored_substitution"
+            confidence = "high"
+            reasons = [
+                reason for reason in reasons if reason != "resolved_substitution"
+            ]
+            reasons.append("literature_confirmed_construct_substitution")
         insertion_code = residue_key.insertion_code if residue_key else ""
         if insertion_code:
             reasons.append("pdb_insertion_code")
@@ -380,9 +461,10 @@ def build_scaffold_mapping(
             review_reasons.append("scaffold_differs_from_msa_consensus")
         rows.append(
             {
-                "pdb_id": "6E9F",
+                "pdb_id": pdb_id.upper(),
                 "chain_id": chain_id,
                 "subtype": subtype,
+                "state": state,
                 "full_scaffold_index_0": full_index,
                 "biological_index_1": full_index + 1,
                 "full_scaffold_amino_acid": full_amino_acid,
@@ -447,9 +529,10 @@ def build_scaffold_mapping(
         "schema_version": "1.0",
         "is_mock": False,
         "evidence_level": 0,
-        "pdb_id": "6E9F",
+        "pdb_id": pdb_id.upper(),
         "chain_id": chain_id,
         "subtype": subtype,
+        "state": state,
         "full_scaffold_length": len(full_sequence),
         "coordinate_length": len(coordinate_sequence),
         "original_msa_sequences": read_aligned_fasta(msa_path).n_sequences,
@@ -469,7 +552,9 @@ def build_scaffold_mapping(
             frame["conservation_constraint_eligible"].sum()
         ),
         "minimum_conservation_coverage": minimum_conservation_coverage,
+        "accepted_substitution_positions_1": sorted(accepted_substitutions),
         "conservation_gate_status": "passed",
+        "coordinate_mapping_strategy": coordinate_mapping_strategy,
         "mafft_command": list(added.mafft_command),
         "inputs": {
             str(path): sha256_file(path)
@@ -486,12 +571,14 @@ def build_scaffold_mapping(
     )
     html = (
         """<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>6E9F VI-D mapping audit</title>
+<html lang="en"><head><meta charset="utf-8"><title>Cas13d mapping audit</title>
 <style>body{font-family:system-ui,sans-serif;margin:2rem;color:#18202a}
 table{border-collapse:collapse;font-size:12px}th,td{border:1px solid #ccd3db;
 padding:4px 6px}th{position:sticky;top:0;background:#eef2f6}tr:nth-child(even){
 background:#f8fafc}code{background:#eef2f6;padding:2px 4px}</style></head><body>
-<h1>6E9F / EsCas13d / VI-D mapping audit</h1>
+<h1>"""
+        + html_escape_title(pdb_id, state, subtype)
+        + """ mapping audit</h1>
 <p><strong>Evidence Level 0.</strong> This report validates coordinate systems;
 it does not validate Cas13 function.</p>
 <h2>Summary</h2><pre>"""
@@ -505,3 +592,10 @@ it does not validate Cas13 function.</p>
     html_path = output_dir / "mapping.html"
     atomic_write_text(html_path, html)
     return summary
+
+
+def html_escape_title(pdb_id: str, state: str, subtype: str) -> str:
+    """Escape the small dynamic title without introducing a template dependency."""
+    import html
+
+    return html.escape(f"{pdb_id.upper()} / {state} / {subtype}")

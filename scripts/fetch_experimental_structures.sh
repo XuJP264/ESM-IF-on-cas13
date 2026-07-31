@@ -45,9 +45,32 @@ download_metadata() {
   done
 }
 
-# The two ternary structures are primary benchmark scaffolds. The matched
-# binary structures provide same-study conformational-state context.
-for pdb_id in 6E9F 5XWP 6E9E 5XWY; do
+download_uniprot_fasta() {
+  local accession="$1"
+  local destination="${destination_dir}/${accession}.fasta"
+  local temporary="${destination}.part"
+  if [[ ! -s "${destination}" ]]; then
+    curl --fail --location --retry 3 \
+      --output "${temporary}" \
+      "https://rest.uniprot.org/uniprotkb/${accession}.fasta"
+    if [[ ! -s "${temporary}" ]] || ! head -n 1 "${temporary}" | grep -q '^>'; then
+      rm -f "${temporary}"
+      printf 'UniProt FASTA is empty or malformed for %s\n' "${accession}" >&2
+      return 1
+    fi
+    mv "${temporary}" "${destination}"
+  fi
+  sha256sum "${destination}"
+}
+
+# Stage 0003A expands the original Cas13a/Cas13d benchmark to four independent
+# Cas13d parents and nine Cas13d scaffold-state units.  Keep the original
+# Cas13a structures because they remain regression benchmarks.
+for pdb_id in \
+  6E9F 5XWP 6E9E 5XWY \
+  6IV9 \
+  9M38 9M30 9M33 9M34 \
+  9M31 9M8Q; do
   download_structure "${pdb_id}" cif
   download_structure "${pdb_id}" pdb
 done
@@ -56,3 +79,15 @@ download_metadata 6E9F 3
 download_metadata 5XWP 3
 download_metadata 6E9E 2
 download_metadata 5XWY 2
+download_metadata 6IV9 2
+download_metadata 9M38 1
+download_metadata 9M30 2
+download_metadata 9M33 3
+download_metadata 9M34 3
+download_metadata 9M31 2
+download_metadata 9M8Q 3
+
+# B0MS50 remains available and is the unmutated full-length EsCas13d parent.
+# The historical UrCas13d cross-reference A0A1C5SD84 currently returns an
+# empty 200 response and is therefore not treated as a downloaded sequence.
+download_uniprot_fasta B0MS50
