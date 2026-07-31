@@ -57,16 +57,21 @@ No candidate is described as a validated or effective Cas13.
 - Ruff format: pass;
 - strict mypy: pass for 47 source files;
 - pytest: 61/61 pass;
-- branch-aware coverage: 72.17% (required 70%);
+- branch-aware coverage: 72.19% (required 70%);
 - matched-report acceptance: pass for 18 candidates, nine methods, two common
   seed blocks, one fixed/free mask, no mocks, and zero fixed violations;
 - final local commands `make lint`, `make typecheck`, `make test`,
-  `make smoke-cpu`, and `make verify-reproducibility`: pass at `acd1137`;
+  `make smoke-cpu`, and `make verify-reproducibility`: pass at `b1a33ff`;
 - clean Atlas parse and cluster leakage gate: pass;
 - real candidate novelty audit: pass with fail-closed missing-hit semantics;
 - GitHub Actions run `30633893318`: primary fixture/code validation success;
 - GitHub Actions run `30635299503`: preceding-stage final handoff/documentation
   validation success; it is not the primary code-run identifier;
+- GitHub Actions run `30642823247`: stage-0002 initial push failed strict mypy
+  because the fresh pip environment lacked pandas stubs and required explicit
+  NumPy dtype annotations; the failure remains visible;
+- GitHub Actions run `30643470631`: stage-0002 repaired code/results validation
+  success at exact commit `b1a33fffd1d7a9254a55247c449017f240f02683`;
 - tag `v0.1.0-data-pipeline` points to final data-pipeline HEAD
   `a9a530d14434e74dc0cfc47896847e201431c1c2`;
 - final-HEAD GPU bundle: `gpu-bundle-a9a530d14434-7540febfb2`, export

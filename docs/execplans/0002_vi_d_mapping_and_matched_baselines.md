@@ -176,7 +176,13 @@ verify GitHub Actions.
   strict mypy (47 source files), 61/61 tests with 72.17% branch coverage,
   fixture CPU smoke, matched-report invariants, bundle internal hashes, and
   14/14 source-asset hashes.
-- [ ] Push the verified commits/tag and verify GitHub Actions.
+- [x] 2026-07-31: Pushed `main` and annotated tag without force. Initial
+  stage-0002 CI run `30642823247` failed strict mypy in a fresh pip environment;
+  reproduced the eight errors locally, added the missing pandas stubs and
+  explicit NumPy dtype annotations, reran every local gate plus a fresh Python
+  3.11 pip-only mypy check, and obtained successful code/results CI run
+  `30643470631` at exact commit
+  `b1a33fffd1d7a9254a55247c449017f240f02683`.
 
 ## Decisions
 
@@ -227,6 +233,11 @@ verify GitHub Actions.
   was computed, the preregistration was amended to use disjoint proposal seeds
   and an identity-matched two-source consensus that never invents a residue
   outside the genuine ESM-IF1 and LigandMPNN source tokens.
+- The first pushed stage-0002 CI exposed an environment parity gap hidden by
+  the local Conda environment: pip `[dev]` omitted `pandas-stubs`, and current
+  NumPy typing required dtype-parameterized arrays. This was reproduced in two
+  clean pip environments, including Python 3.11, then corrected without any
+  runtime algorithm or report change. The repaired GitHub run passed.
 
 ## Execution details
 

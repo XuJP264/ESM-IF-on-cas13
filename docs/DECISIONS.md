@@ -208,3 +208,11 @@ GPU extension requires the later execution-code commit recorded in
 asset bundle at its pinned commit first, then checkout the recorded execution
 commit before bootstrapping and launching. Do not treat the asset-bundle commit
 as proof that later experiment code was included in that bundle.
+
+## 2026-07-31 — CI type dependencies must be explicit in pip extras
+
+Passing mypy in the Conda analysis environment is insufficient if that
+environment contains type packages absent from `.[dev]`. Keep `pandas-stubs`
+in the pip development extra and use `numpy.typing.NDArray` with explicit
+dtypes. Validate dependency-sensitive type changes once in a fresh Python 3.11
+pip-only environment so GitHub Actions does not depend on hidden Conda state.
