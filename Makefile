@@ -9,7 +9,7 @@ RUN := conda run -p $(ANALYSIS_ENV)
 .PHONY: map-vi-d
 .PHONY: conservation coevolution-smoke benchmark-experimental generate-pilot
 .PHONY: candidate-novelty
-.PHONY: matched-baselines
+.PHONY: matched-baselines verify-matched-report
 .PHONY: report export-gpu-bundle verify-reproducibility
 
 bootstrap:
@@ -87,6 +87,9 @@ candidate-novelty:
 
 matched-baselines:
 	$(RUN) python scripts/run_matched_baselines.py --config $(CONFIG)
+
+verify-matched-report:
+	$(RUN) python scripts/verify_matched_report.py
 
 report:
 	$(RUN) cas13-if report --config configs/benchmark_experimental.yaml

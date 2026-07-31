@@ -86,8 +86,8 @@ The common hard set comprises structurally non-designable positions plus
 manually reviewed catalytic residues that map unambiguously. To satisfy both
 the requested method list and the invariant mask, `unconstrained_esm_if1`
 means no evolutionary/RNA proposal bias beyond this common safety mask, while
-`catalytic_only_fixed_esm_if1` is an independently seeded technical replicate
-using the same common mask. Their contrast is a reproducibility/control
+`catalytic_only_fixed_esm_if1` is a same-seed deterministic technical control
+using the same common mask. Their equality is a reproducibility/control
 contrast, not evidence for a distinct biological treatment. This limitation
 must be visible in the methods table and report.
 
@@ -167,8 +167,12 @@ verify GitHub Actions.
   ProteinMPNN, 5XWP RNA-context LigandMPNN, and LigandMPNN's protein and
   soluble checkpoints. Every accepted artifact records CUDA unavailable for
   that forced-CPU process.
-- [ ] Complete and validate the preregistered small real matrix and report.
-- [ ] Pass local acceptance, push, and verify GitHub Actions.
+- [x] 2026-07-31: Completed the final preregistered real small matrix at
+  `results/runs/20260731-vi-d-matched-baselines-3e2655746e-f5932f7/`.
+  All nine methods contributed two selected candidates, all 18 received real
+  ESM-IF1 scores, 14 passed Level-1 novelty/QC, mock count was zero, and the
+  common four-fixed/860-free mask had zero violations.
+- [ ] Pass final local acceptance, push, and verify GitHub Actions.
 
 ## Decisions
 
@@ -183,9 +187,10 @@ verify GitHub Actions.
   mapping are medium; substitutions, ambiguity, or query-only insertions are
   low/failed. Only high-confidence, coverage-qualified positions are eligible
   for automatic conservation proposal bias, never automatic catalytic truth.
-- The formal local scale is intentionally small because this node lacks GPU
-  access. It demonstrates a real, fair pipeline and provides descriptive
-  estimates; it is not powered to declare a method winner.
+- The formal local scale is intentionally small and forced to CPU. GPU access
+  recovered during the stage, but the local 8,188 MiB device was not used to
+  expand the preregistered task. The result demonstrates a real, fair pipeline
+  and provides descriptive estimates; it is not powered to declare a winner.
 - All nine methods share the same hard/free position manifest. Requested labels
   do not override that comparability invariant.
 
@@ -295,14 +300,34 @@ data remain under `results/runs/`.
 
 ## Blockers and recovery
 
-The known local GPU blocker is missing WSL `/dev/dxg`; it affects scale, not the
-small real CPU matrix. Paired-repeat DCA remains blocked by absent trustworthy
-Atlas repeat orientation and is not part of this stage. If a model cannot
-produce the balanced CPU count within the preregistered identity bins, retain
-the failed formal run and execute only the exported one-command tmux job on a
-GPU node; do not insert mocks or loosen the registered comparison post hoc.
+Local GPU access recovered, but the 8,188 MiB device is not accepted as the
+large-scale target and no large GPU task was launched. Paired-repeat DCA remains
+blocked by absent trustworthy Atlas repeat orientation and is not part of this
+stage. If a larger model matrix is needed, execute only the exported one-command
+tmux job on a suitable GPU node; do not insert mocks or loosen the registered
+comparison post hoc.
 
 ## Outcomes and retrospective
 
-Not yet complete. Update this section with exact real, failed, not-run, and
-deferred outputs only after validation.
+The strict mapping gate passed for 864/954 (90.566%) four-layer positions; the
+remaining 90 full-sequence positions are coordinate-unresolved (61 terminal,
+29 internal) but retain full-to-MSA mappings. Conservation proposal bias was
+released only for 712 resolved, high-confidence, coverage-qualified positions.
+
+The final CPU matrix selected 18 genuine candidates (nine methods, two seed
+blocks), with one common hard-position hash and one common free-position hash.
+All 18 had zero fixed-position violations and real ESM-IF1 compatibility
+scores; 14 passed every Level-1 novelty/QC gate. Three failures were
+fail-closed missing Atlas coverage hits and one was a low-complexity failure.
+All 18 unselected but identity-eligible oversampled proposals remain in the
+failure table. With only two seed blocks, all statistical results are labelled
+low-power descriptive; no adjusted exploratory p-value was below 1.0.
+
+Two initial runs failed before sampling because the legacy ESM environment did
+not include pandas and because nullable integer CSV fields used decimal text.
+A later run failed before endpoint scoring when the consensus missed the common
+identity interval and exposed overlapping actual seeds. All failures are
+retained. A successful pre-handoff run and the final run reproduced all six
+core scientific tables byte-for-byte; the final rerun corrected only GPU
+handoff metadata. The larger ten-seed GPU extension remains explicitly
+`not_run` and is not part of the reported result.

@@ -48,6 +48,9 @@ if [[ -x "${repo_root}/.tools/envs/analysis/bin/python" ]]; then
   conda run -p "${repo_root}/.tools/envs/analysis" mypy "${repo_root}/src"
   conda run -p "${repo_root}/.tools/envs/analysis" pytest \
     -m "not real_model and not network and not slow" "${repo_root}/tests"
+  conda run -p "${repo_root}/.tools/envs/analysis" python \
+    "${repo_root}/scripts/verify_matched_report.py" \
+    --report-dir "${repo_root}/reports/matched_baselines"
 else
   echo "ERROR: analysis environment missing; run make bootstrap" >&2
   exit 11

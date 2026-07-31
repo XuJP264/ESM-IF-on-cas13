@@ -7,9 +7,10 @@
 证据分级；结构预测或多模型一致性最高支持 Level 3，不能称为 wet-lab
 验证有效的 Cas13。
 
-本地 RTX 4060 Laptop 实测只有 8188 MiB 显存，而且当前 WSL 缺少
-`/dev/dxg`。大规模采样、回折、正式 DCA 和领域适配应迁移；Atlas 下载、
-流式解析、MMseqs2/MAFFT 及报告可以留在 CPU 节点。
+本地 RTX 4060 Laptop 实测只有 8188 MiB 显存。阶段 0002 中 GPU 访问已经
+恢复，但预注册小矩阵仍强制使用 CPU，且没有启动大规模 GPU 任务。大规模
+采样、回折、正式 DCA 和领域适配仍应迁移；Atlas 下载、流式解析、
+MMseqs2/MAFFT 及报告可以留在 CPU 节点。
 
 ## 1. 源节点准备
 
@@ -231,3 +232,23 @@ artifacts/bundles/gpu-bundle-a9a530d14434-7540febfb2/
 真实验收未完成”，而不是“GPU 实验已完成”。此外，Atlas 缺失
 direct-repeat orientation 是源数据阻断；把 DCA 任务搬到 GPU 不能解决
 0 个高置信配对的问题。
+
+## 7. VI-D matched-baseline GPU 扩展
+
+权威资产 bundle 固定在数据管线 commit
+`a9a530d14434e74dc0cfc47896847e201431c1c2`；它负责校验和同步 14 项大
+资产。matched-baseline 实现位于更晚的代码 commit，精确值记录在
+`reports/matched_baselines/gpu_hpc_job_manifest.jsonl` 的
+`required_code_commit`。正确顺序是：在 a9a commit 验证并同步 bundle，随后
+checkout `required_code_commit`，再运行环境 bootstrap 和三个 GPU smoke。
+
+目标节点完成上述一次性准备后，正式扩展唯一需要执行的实验命令是：
+
+```bash
+bash scripts/launch_gpu_tmux.sh configs/matched_baselines_gpu.yaml matched-baselines
+```
+
+该配置使用 10 个 seed block，输出到独立的
+`reports/matched_baselines_gpu/`，不会覆盖 CPU 小矩阵。任务当前状态为
+`not_run`；不得把 job manifest 当作 GPU 结果。完成后必须核对固定/free
+position hash 与 manifest 一致，并确认 mock=0、固定位置违反为 0。

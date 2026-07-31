@@ -169,9 +169,10 @@ identical free set. Conservation or RNA-interface information may bias allowed
 residues or proposal probabilities only inside the common free set; it may not
 change the evaluated design positions. `unconstrained_esm_if1` means no such
 proposal bias beyond the common safety mask. The requested
-`catalytic_only_fixed_esm_if1` condition is an independently seeded technical
-replicate of that same mask and is not interpreted as a separate biological
-treatment. Conservation remains disabled until a high-confidence full
+`catalytic_only_fixed_esm_if1` condition is a same-seed deterministic control
+of that same mask and is not interpreted as a separate biological treatment;
+its equality with `unconstrained_esm_if1` is expected and must not be counted as
+independent evidence. Conservation remains disabled until a high-confidence full
 scaffold-to-VI-D-MSA mapping passes its audit.
 
 ## 2026-07-31 — Identity matching uses a preregistered common interval
@@ -185,3 +186,25 @@ Limit the local conservation and RNA-contact proposal filters to the top 48
 mapped positions each so a real small CPU matrix can meet the same novelty
 interval without post-hoc sequence editing. The larger GPU extension may add
 seeds but may not change this matching rule after seeing performance metrics.
+
+## 2026-07-31 — Consensus matching may choose only genuine source tokens
+
+The ESM-IF1/LigandMPNN consensus preserves exact source agreement. Where the
+sources disagree and exactly one retains the parent token, it ranks those
+parent choices by the source-confidence advantage until the preregistered
+parent-identity target is reached as closely as feasible. Other disagreements
+use the higher-confidence source token. It never invents a third amino acid.
+This identity-only amendment was registered after a fail-closed proposal audit
+and before conditional likelihood, novelty, recovery, or other endpoint
+calculation. Oversampling seeds are `seed_block + 1,000,000 * proposal_index`
+to prevent adjacent blocks from sharing an actual model seed.
+
+## 2026-07-31 — GPU asset and execution commits are distinct
+
+The verified 14-asset bundle intentionally pins the requested immutable
+data-pipeline commit `a9a530d14434e74dc0cfc47896847e201431c1c2`. The matched
+GPU extension requires the later execution-code commit recorded in
+`reports/matched_baselines/gpu_hpc_job_manifest.jsonl`. Verify/synchronize the
+asset bundle at its pinned commit first, then checkout the recorded execution
+commit before bootstrapping and launching. Do not treat the asset-bundle commit
+as proof that later experiment code was included in that bundle.

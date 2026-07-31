@@ -18,7 +18,12 @@ position_policy:
   minimum_msa_coverage_for_conservation: 0.8
   conservation_never_automatically_defines_catalytic_truth: true
   unconstrained_label_semantics: no evolutionary_or_RNA_bias_beyond_common_safety_mask
-  catalytic_only_label_semantics: independently_seeded_technical_replicate_of_common_mask
+  catalytic_only_label_semantics: same_seed_deterministic_control_of_common_mask
+  catalytic_only_registration_correction: >-
+    The initial prose said independently seeded, but the executed paired
+    implementation deliberately used the same actual seed and identical mask.
+    This is recorded as a deterministic control, not a biological contrast or
+    an independent replicate; no candidate or endpoint was changed.
 methods:
   - matched_random_mutation
   - msa_profile_sampling
