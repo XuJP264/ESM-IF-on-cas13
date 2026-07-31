@@ -13,6 +13,7 @@ from typing import Any
 import yaml
 
 from cas13_if.backends.esm_if1 import TRACE_ALPHABET, EsmIf1ConstrainedBackend
+from cas13_if.evaluation.matching import proposal_seed
 from cas13_if.provenance import atomic_write_text
 from cas13_if.schemas import SampleRequest
 from cas13_if.structures.contacts import annotate_rna_contacts
@@ -202,7 +203,7 @@ def main() -> int:
         for seed_block_value in sampling["seed_blocks"]:
             seed_block = int(seed_block_value)
             for proposal_index in range(int(sampling["proposals_per_seed"])):
-                actual_seed = seed_block + proposal_index
+                actual_seed = proposal_seed(seed_block, proposal_index)
                 candidate = backend.sample(
                     SampleRequest(
                         scaffold_id="6E9F-A",

@@ -54,8 +54,28 @@ calibration:
   rationale: >-
     Identity is the registered matching variable, not a performance endpoint.
     The broad common interval was fixed before the formal run so methods with
-    different native sampling temperatures can be compared without post-hoc
-    sequence editing.
+    different native sampling temperatures can be compared under one declared
+    selection rule.
+  amendments:
+    - registered_at: "2026-07-31"
+      trigger: >-
+        The first endpoint-free proposal audit revealed both overlapping
+        oversampling seeds and a consensus candidate just outside the common
+        identity interval.
+      endpoint_metrics_inspected: false
+      changes:
+        - >-
+          Derive proposal seed as seed_block + 1000000 * proposal_index so
+          adjacent seed blocks never share an actual model seed.
+        - >-
+          Construct the ESM-IF1/LigandMPNN consensus only from the two genuine
+          source tokens, preserving source agreements and ranking
+          parent-retaining disagreements by confidence until the registered
+          target parent identity is reached as closely as feasible.
+      rationale: >-
+        These changes repair independence and enforce the already registered
+        identity-matching variable. No conditional likelihood, recovery,
+        novelty, or other performance endpoint had been computed or inspected.
 proposal_settings:
   random_mutation_probability: 0.78
   msa_profile_temperature: 2.0

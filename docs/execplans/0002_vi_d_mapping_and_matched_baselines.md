@@ -207,6 +207,17 @@ verify GitHub Actions.
 - The first full test audit had 55/55 passing tests but only 65.90% coverage,
   below the 70% gate. Adding production-path fixture tests (without excluding
   modules or lowering the gate) yielded 59/59 tests and 72.03% coverage.
+- The first two formal-run attempts stopped before proposal generation because
+  the legacy ESM environment intentionally lacks pandas and nullable mapping
+  indices were serialized as decimal integer strings. Both I/O defects were
+  corrected without changing any sampling or endpoint rule, and their FAILED
+  run records remain in `results/runs/`.
+- The next endpoint-free identity audit exposed duplicate actual seeds across
+  adjacent seed blocks and a consensus proposal just above the common identity
+  interval. Before any conditional likelihood, novelty, or recovery endpoint
+  was computed, the preregistration was amended to use disjoint proposal seeds
+  and an identity-matched two-source consensus that never invents a residue
+  outside the genuine ESM-IF1 and LigandMPNN source tokens.
 
 ## Execution details
 

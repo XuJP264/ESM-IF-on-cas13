@@ -3,8 +3,10 @@ import pytest
 from cas13_if.evaluation.matching import (
     add_identity_metrics,
     exact_paired_permutation_p_value,
+    identity_matched_source_consensus,
     paired_seed_statistics,
     position_set_hash,
+    proposal_seed,
     select_balanced_candidates,
 )
 
@@ -98,3 +100,43 @@ def test_identity_hash_and_seed_level_statistics() -> None:
     assert statistics[0]["independent_unit_count"] == 2
     assert statistics[0]["paired_mean_difference"] == 1.5
     assert exact_paired_permutation_p_value([1.0, 2.0]) == 0.5
+
+
+def test_proposal_seeds_do_not_overlap_adjacent_seed_blocks() -> None:
+    seeds = {
+        proposal_seed(seed_block, proposal_index)
+        for seed_block in (20260731, 20260732)
+        for proposal_index in range(2)
+    }
+    assert seeds == {20260731, 20260732, 21260731, 21260732}
+    with pytest.raises(ValueError, match="non-negative"):
+        proposal_seed(1, -1)
+
+
+def test_source_consensus_matches_identity_without_inventing_tokens() -> None:
+    parent = "AAAAAAAAAA"
+    first = "AACCCCCCCC"
+    second = "CCADDDDDDD"
+    sequence, metadata = identity_matched_source_consensus(
+        parent_sequence=parent,
+        first_sequence=first,
+        second_sequence=second,
+        first_confidences=[0.9] * len(parent),
+        second_confidences=[0.8] * len(parent),
+        target_identity=0.2,
+    )
+    assert sum(token == "A" for token in sequence) == 2
+    assert metadata["achieved_parent_identity"] == 0.2
+    assert all(
+        token in {left, right}
+        for token, left, right in zip(sequence, first, second, strict=True)
+    )
+    with pytest.raises(ValueError, match="identical non-zero lengths"):
+        identity_matched_source_consensus(
+            parent_sequence="AA",
+            first_sequence="A",
+            second_sequence="AA",
+            first_confidences=[1.0],
+            second_confidences=[1.0, 1.0],
+            target_identity=0.5,
+        )

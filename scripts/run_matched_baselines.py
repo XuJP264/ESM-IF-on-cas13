@@ -28,8 +28,10 @@ from cas13_if.backends.baselines import (
 from cas13_if.config import ConfigDict, load_config
 from cas13_if.evaluation.matching import (
     add_identity_metrics,
+    identity_matched_source_consensus,
     paired_seed_statistics,
     position_set_hash,
+    proposal_seed,
     select_balanced_candidates,
 )
 from cas13_if.evaluation.metrics import native_recovery
@@ -215,7 +217,7 @@ def _local_baseline_proposals(
         for seed_block_value in sampling["seed_blocks"]:
             seed_block = int(seed_block_value)
             for proposal_index in range(int(sampling["proposals_per_seed"])):
-                actual_seed = seed_block + proposal_index
+                actual_seed = proposal_seed(seed_block, proposal_index)
                 candidate = backend.sample(
                     SampleRequest(
                         scaffold_id="6E9F-A",
@@ -263,7 +265,9 @@ def _local_baseline_proposals(
     return rows
 
 
-def _consensus_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _consensus_proposals(
+    proposals: list[dict[str, Any]], *, target_identity: float
+) -> list[dict[str, Any]]:
     by_key = {
         (str(row["method"]), int(row["seed_block"]), int(row["proposal_index"])): row
         for row in proposals
@@ -279,25 +283,14 @@ def _consensus_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]
         ligand = by_key[("ligandmpnn", seed_block, proposal_index)]
         esm_confidence = esm["metadata"]["selected_token_probabilities"]
         ligand_confidence = ligand["metadata"]["selected_token_probabilities"]
-        tokens: list[str] = []
-        agreements = 0
-        selected_confidences: list[float] = []
-        for index, (esm_token, ligand_token) in enumerate(
-            zip(esm["sequence"], ligand["sequence"], strict=True)
-        ):
-            if esm_token == ligand_token:
-                token = esm_token
-                agreements += 1
-                confidence = max(esm_confidence[index], ligand_confidence[index])
-            elif esm_confidence[index] >= ligand_confidence[index]:
-                token = esm_token
-                confidence = esm_confidence[index]
-            else:
-                token = ligand_token
-                confidence = ligand_confidence[index]
-            tokens.append(token)
-            selected_confidences.append(float(confidence))
-        sequence = "".join(tokens)
+        sequence, consensus_metadata = identity_matched_source_consensus(
+            parent_sequence=str(esm["parent_sequence"]),
+            first_sequence=str(esm["sequence"]),
+            second_sequence=str(ligand["sequence"]),
+            first_confidences=[float(value) for value in esm_confidence],
+            second_confidences=[float(value) for value in ligand_confidence],
+            target_identity=target_identity,
+        )
         fixed = {
             int(index): str(token) for index, token in esm["fixed_positions"].items()
         }
@@ -321,9 +314,7 @@ def _consensus_proposals(proposals: list[dict[str, Any]]) -> list[dict[str, Any]
                 "proposal_index": proposal_index,
                 "actual_model_seed": int(esm["actual_model_seed"]),
                 "source_candidate_ids": [esm["candidate_id"], ligand["candidate_id"]],
-                "source_model_exact_agreement": agreements / len(sequence),
-                "disagreement_rule": "higher_selected_token_probability",
-                "selected_token_probabilities": selected_confidences,
+                **consensus_metadata,
             },
         ).model_dump(mode="json")
         rows.append(
@@ -661,7 +652,11 @@ def main() -> int:
                 conservation_path=conservation_path,
             ),
         ]
-        proposals.extend(_consensus_proposals(proposals))
+        proposals.extend(
+            _consensus_proposals(
+                proposals, target_identity=float(config["matching"]["target_identity"])
+            )
+        )
         expected_proposals = (
             len(METHODS)
             * len(sampling["seed_blocks"])

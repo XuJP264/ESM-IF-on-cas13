@@ -43,10 +43,18 @@ Methods share scaffolds, designable positions, fixed residues, random-seed
 registry, and matched novelty bins. ProteinMPNN and LigandMPNN receive the same
 protein backbone; only the latter receives retained RNA atomic context.
 
+For the VI-D small matrix, proposal oversampling seeds are disjoint across seed
+blocks. The ESM-IF1/LigandMPNN consensus preserves exact source agreement and
+otherwise selects only one of the two real source tokens. At disagreements
+where one source retains the parent token, confidence ranking is used to reach
+the preregistered parent-identity target as closely as feasible. This is a
+declared proposal construction rule, not post-hoc residue repair, and it was
+registered after an identity-only failed audit but before any performance
+endpoint was computed.
+
 ## Statistics
 
 Report scaffold-aware bootstrap confidence intervals, paired effects, effect
 sizes, multiplicity-adjusted comparisons, permutation nulls, matched-novelty
 analyses, sensitivity analyses, and seed variability. Keep all failed runs in
 the audit.
-
