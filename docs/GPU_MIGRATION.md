@@ -212,6 +212,19 @@ manifest，大小为 5,267,508,328 bytes，SHA256 为
 本阶段最终验收会从最新 clean commit 再导出一次 bundle，并要求 Atlas
 出现在 `ASSET_SHA256SUMS` 而不是 `missing_assets`。
 
+该验收现已完成。当前 Atlas-complete source bundle 是：
+
+```text
+artifacts/bundles/gpu-bundle-3e53026923aa-7540febfb2/
+```
+
+其 manifest 固定 commit
+`3e53026923aacdc9a87de1b7005dfa844d837934`，导出时
+`git_worktree_dirty_at_export=false`。bundle 本体约 372 KiB，
+`missing_assets=[]`；5 个 checkpoint、Atlas JSON 和 8 个 PDB/mmCIF
+资产均已在源节点通过 `ASSET_SHA256SUMS`。目标节点必须 checkout manifest
+中的精确 commit，而不是假定当前 branch tip 与 bundle 相同。
+
 当前状态是“操作指南、源节点 bundle 机制和本地校验完成，目标 GPU 节点
 真实验收未完成”，而不是“GPU 实验已完成”。此外，Atlas 缺失
 direct-repeat orientation 是源数据阻断；把 DCA 任务搬到 GPU 不能解决

@@ -329,6 +329,19 @@ sensitivity 7.5 和 query coverage ≥ 0.8：
 - tmux launcher 记录唯一 session、run dir、完整日志、退出码和现场；
 - 不无限静默重试。
 
+本轮 Atlas-complete clean bundle：
+
+`artifacts/bundles/gpu-bundle-3e53026923aa-7540febfb2/`
+
+- manifest commit：
+  `3e53026923aacdc9a87de1b7005dfa844d837934`；
+- export dirty：false；
+- bundle size：约 372 KiB；
+- internal SHA256：passed；
+- 5 个 checkpoint、Atlas JSON、8 个 PDB/mmCIF asset hash：passed；
+- `missing_assets=[]`；
+- 大资产没有嵌入 bundle。
+
 尚未完成的是目标 GPU 节点验收：
 
 - 第二台机器真实资产传输；
@@ -360,8 +373,7 @@ bash scripts/launch_gpu_tmux.sh \
 ## 7. 下一阶段顺序
 
 1. 完成本轮 docs/STATUS/DECISIONS/ExecPlan 更新；
-2. 导出包含真实 Atlas hash 的最新 clean GPU bundle 并验证；
-3. 重跑最终 lint、typecheck、test、CPU smoke 和 reproducibility gate；
-4. push 并验证 GitHub Actions；
-5. 本机继续 VI-D scaffold-to-MSA mapping 和小规模 matched baseline；
-6. GPU 节点执行三模型 GPU smoke，再进入大规模采样/回折。
+2. 重跑最终 lint、typecheck、test、CPU smoke 和 reproducibility gate；
+3. push 并验证 GitHub Actions；
+4. 本机继续 VI-D scaffold-to-MSA mapping 和小规模 matched baseline；
+5. GPU 节点执行三模型 GPU smoke，再进入大规模采样/回折。
