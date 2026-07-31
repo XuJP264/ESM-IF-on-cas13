@@ -169,6 +169,13 @@ class SampleRequest(BaseModel):
                 raise ValueError(f"allowed-residue position {index} outside range")
             if not allowed or not set(allowed).issubset(STANDARD_AA):
                 raise ValueError(f"invalid allowed-residue set at {index}")
+            fixed = self.fixed_positions.get(index)
+            if fixed is not None and fixed.upper() not in {
+                token.upper() for token in allowed
+            }:
+                raise ValueError(
+                    f"fixed token {fixed!r} is disallowed at position {index}"
+                )
         return self
 
 

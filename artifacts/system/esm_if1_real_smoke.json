@@ -1,0 +1,56 @@
+{
+  "cas13_5xwp_a": {
+    "conditional_log_likelihood": -2553.345790145657,
+    "inference_seconds": 6.099910468998132,
+    "length": 1125,
+    "mean_conditional_log_likelihood": -2.269640702351695,
+    "perplexity": 9.675923652828677,
+    "protein_chains": [
+      "A"
+    ],
+    "rna_chains_excluded_from_esm_if1": [
+      "C",
+      "D"
+    ]
+  },
+  "cas13_6e9f_a": {
+    "conditional_log_likelihood": -1813.9333906933316,
+    "inference_seconds": 4.481202650000341,
+    "length": 864,
+    "mean_conditional_log_likelihood": -2.099459942932097,
+    "perplexity": 8.161760905453558,
+    "protein_chains": [
+      "A"
+    ],
+    "rna_chains_excluded_from_esm_if1": [
+      "B",
+      "C"
+    ]
+  },
+  "checkpoint": {
+    "path": "models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt",
+    "sha256": "be4ba36edec22a9bfaa4946ff6b2815f1f19d8a3d7e0eada8b796d5a0eae9fd4",
+    "size_bytes": 1700450121
+  },
+  "evidence_level": 2,
+  "is_mock": false,
+  "runtime": {
+    "cuda_available": false,
+    "cuda_runtime": "12.1",
+    "device": "cpu",
+    "gpu": null,
+    "load_seconds": 3.543192976001592,
+    "platform": "Linux-6.6.114.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "python": "3.10.20 | packaged by conda-forge | (main, Jun 11 2026, 03:31:56) [GCC 14.3.0]",
+    "torch": "2.4.1"
+  },
+  "schema_version": "1.0",
+  "toy": {
+    "conditional_log_likelihood": -4.176253437995911,
+    "fixed_all_recovery": true,
+    "fixed_position_violations": 0,
+    "perplexity": 8.069784023189047,
+    "sample": "AA",
+    "sequence": "AG"
+  }
+}

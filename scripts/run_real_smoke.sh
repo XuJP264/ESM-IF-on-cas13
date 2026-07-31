@@ -2,19 +2,23 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export PYTHONNOUSERSITE=1
 backend="${1:-}"
 case "${backend}" in
   esm-if1)
     prefix="${repo_root}/.tools/envs/esm_if1"
     script="${repo_root}/scripts/smoke_esm_if1.py"
+    second_script="${repo_root}/scripts/smoke_constrained_cas13.py"
     ;;
   proteinmpnn)
     prefix="${repo_root}/.tools/envs/ligandmpnn"
     script="${repo_root}/scripts/smoke_proteinmpnn.py"
+    second_script=""
     ;;
   ligandmpnn)
     prefix="${repo_root}/.tools/envs/ligandmpnn"
     script="${repo_root}/scripts/smoke_ligandmpnn.py"
+    second_script=""
     ;;
   *)
     echo "Usage: $0 {esm-if1|proteinmpnn|ligandmpnn}" >&2
@@ -27,4 +31,6 @@ if [[ ! -x "${prefix}/bin/python" ]]; then
   exit 20
 fi
 conda run -p "${prefix}" python "${script}"
-
+if [[ -n "${second_script}" ]]; then
+  conda run -p "${prefix}" python "${second_script}"
+fi

@@ -107,14 +107,19 @@ class RunRecorder:
 
     def __post_init__(self) -> None:
         git = git_metadata(self.repo_root)
-        run_id = make_run_id(
+        base_run_id = make_run_id(
             self.experiment, self.resolved_config, str(git["short_sha"])
         )
-        self.run_dir = self.root / run_id
-        try:
-            self.run_dir.mkdir(parents=True, exist_ok=False)
-        except FileExistsError as exc:
-            raise RunExistsError(f"refusing to overwrite run: {self.run_dir}") from exc
+        for retry in range(1000):
+            run_id = base_run_id if retry == 0 else f"{base_run_id}-r{retry:03d}"
+            self.run_dir = self.root / run_id
+            try:
+                self.run_dir.mkdir(parents=True, exist_ok=False)
+                break
+            except FileExistsError:
+                continue
+        else:
+            raise RunExistsError(f"no available immutable retry ID for {base_run_id}")
         atomic_write_text(
             self.run_dir / "resolved_config.yaml",
             yaml.safe_dump(self.resolved_config, sort_keys=True),

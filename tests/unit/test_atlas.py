@@ -4,6 +4,7 @@ from pathlib import Path
 from cas13_if.data.atlas import (
     exact_deduplicate,
     extract_cas13_records,
+    extract_crispr_arrays,
     iter_json_array,
     pair_cas13_direct_repeat,
     process_atlas,
@@ -27,6 +28,25 @@ def test_pairing_routes_ambiguity() -> None:
     assert ambiguous is not None
     assert ambiguous.pairing_confidence == "ambiguous"
     assert ambiguous.ambiguity_reason == "array_count=2"
+
+
+def test_unknown_orientation_is_ambiguous_and_reverse_is_oriented() -> None:
+    records = list(iter_json_array(FIXTURE, chunk_size=128))
+    unknown = json.loads(json.dumps(records[0]))
+    unknown["crispr"][0].pop("orientation")
+    unknown["crispr"][0].pop("orientation_source")
+    pair = pair_cas13_direct_repeat(unknown)
+    assert pair is not None
+    assert pair.pairing_confidence == "ambiguous"
+    assert pair.ambiguity_reason == "orientation_not_recovered"
+    assert pair.orientation_source == "not_provided_by_atlas_v1.0"
+
+    reverse = json.loads(json.dumps(records[0]))
+    reverse["crispr"][0]["orientation"] = "reverse"
+    reverse["crispr"][0]["crispr_repeat"] = "AAGT"
+    oriented = extract_crispr_arrays(reverse)[0]
+    assert oriented.direct_repeat_raw == "AAGU"
+    assert oriented.direct_repeat == "ACUU"
 
 
 def test_exact_dedup_and_fixture_pipeline(tmp_path: Path) -> None:

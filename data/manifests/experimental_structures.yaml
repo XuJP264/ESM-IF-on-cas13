@@ -1,0 +1,629 @@
+schema_version: '1.0'
+generated_at: '2026-07-31'
+source: RCSB PDB official download and Data API
+is_mock: false
+evidence_level: 0
+structures:
+- pdb_id: 6E9F
+  title: EsCas13d-crRNA-target RNA ternary complex
+  publication:
+    title: Structural Basis for the RNA-Guided Ribonuclease Activity of CRISPR-Cas13d.
+    doi: 10.1016/j.cell.2018.09.001
+    year: 2018
+    venue: Cell
+  experimental_method: ELECTRON MICROSCOPY
+  resolution_angstrom: 3.3
+  protein_chains:
+  - A
+  rna_chains:
+  - B
+  - C
+  target_rna_chains:
+  - C
+  crrna_chains:
+  - B
+  cas13_subtype: VI-D
+  selected_design_chain: A
+  selected_coordinate_sequence: TKSMAKAAGVKSVFAVGNTVYMTSFGRGNDAVLEQKIVDTSHEPLNIDDPAYQLNVVTMNGYSVTGHRGETVSAVTDNPLRRFNGRKPEQSVPTDMLCLKPTLEKKFFGKEFDDNIHIQLIYNILDIEKILAVYSTNAIYALNNMSADENIENSDFFMKRTTDETFDDFEKKKESTNSREKADFDAFEKFIGNYRLAYFADAFYVNKKAKNVLREDKELYSVLTLIGKLAHWCVASEEGRAEFWLYKLDELKDDFKNVLDVVYNRPVEEINNRFIENNKVNIQILGSVYKNTDIAELVRSYYEFLITKKYKNMGFSIKKLRESMLEGKGYADKEYDSVRNKLYQMTDFILYTGYINEDSDRADDLVNTLRSSLKEDDKTTVYCKEADYLWKKYRESIREVADALDGDNIKKLSKSNIEIQEDKLRKCFISYADSVSEFTKLIYLLTRFLSGKEINDLVTTLINKFDNIRSFLEIMDELGLDRTFTAEYSFFEGSTKYLAELVELNSFVKSCSFDINAKRTMYRDALDILGIESDKTEEDIEKMIDNILQIDKKLKKNNGLRNFIASNVIDSNRFKYLVRYGNPKKIRETAKCKPAVRFVLNEIPDAQIERYYEACCPCSANKRREKLADMIAEIKFENFSRTSEAEIKRKNQAIIRLYLTVMYIMLKNLVNVNARYVIAFHCVERDTKLYAESGLEVGNIEKNKTNLTMAVMGVKLENGIIKTEFDKSFAENAANRYLRNARWYKLILDNLKKSERAVVNEFANTVCALNAIRNININIKEIKEVENYFALYHYLIQKHLENRFADKKVERDTGDFISKLEEHKTYCKDFVKAYCTPFGYNLVRYKNLTIDGLFDKNYPGKDDS
+  selected_residue_range:
+    first:
+      number: 58
+      insertion_code: ''
+    last:
+      number: 950
+      insertion_code: ''
+  seqres_mapping:
+    seqres_length: 954
+    coordinate_length: 864
+    unmodeled_or_unmapped_count: 90
+    aligned_coordinate_count: 864
+    aligned_identity: 1.0
+    mapping_confidence: high
+  uniprot_ids:
+  - B0MS50
+  missing_backbone_atoms: []
+  chain_breaks:
+  - left:
+      chain: A
+      residue_number: 144
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 148
+      insertion_code: ''
+    ca_distance_angstrom: 8.646847644181248
+  - left:
+      chain: A
+      residue_number: 267
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 273
+      insertion_code: ''
+    ca_distance_angstrom: 9.014288331047878
+  - left:
+      chain: A
+      residue_number: 686
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 692
+      insertion_code: ''
+    ca_distance_angstrom: 11.830730197582833
+  - left:
+      chain: A
+      residue_number: 713
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 726
+      insertion_code: ''
+    ca_distance_angstrom: 21.190198290180092
+  modified_residues: []
+  alternate_location_atoms_discarded: 0
+  coordinates_are_finite: true
+  biological_assembly: 1
+  assembly_count: 1
+  state: crRNA_target_ternary
+  role: primary_benchmark
+  inclusion: true
+  inclusion_reason: primary preregistered experimental complex
+  files:
+    mmcif:
+      path: data/experimental_structures/6e9f.cif
+      size_bytes: 973225
+      sha256: d74f62fc44db2f9f729c9bbb8ec502463b00d9fa63635259660b46a74e938c68
+    pdb:
+      path: data/experimental_structures/6e9f.pdb
+      size_bytes: 747387
+      sha256: a5233bbf5cb88effa7f32996baa9176156f69aa224e619e0d00267ab38ecd5c7
+    rcsb_entry_metadata:
+      path: data/experimental_structures/6e9f.entry.json
+      size_bytes: 10908
+      sha256: f2db5fd6692a763e94eb53751f91f5802693a5f7c012453963e13d1fd60287e3
+- pdb_id: 5XWP
+  title: Crystal structure of LbuCas13a-crRNA-target RNA ternary complex
+  publication:
+    title: The Molecular Architecture for RNA-Guided RNA Cleavage by Cas13a.
+    doi: 10.1016/j.cell.2017.06.050
+    year: 2017
+    venue: Cell
+  experimental_method: X-RAY DIFFRACTION
+  resolution_angstrom: 3.086
+  protein_chains:
+  - A
+  - B
+  rna_chains:
+  - C
+  - D
+  - E
+  - F
+  target_rna_chains:
+  - D
+  crrna_chains:
+  - C
+  cas13_subtype: VI-A
+  selected_design_chain: A
+  selected_coordinate_sequence: SMKVTKVGGISHKKYTSEGRLVKSESEENRTDERLSALLNMRLDMYIKNPSSTETKENQKRIGKLKKFFSNKMVYLKDNTLSLKNGKKENIDREYSETDVRDKKNFAVLKKIYLNENVNSEELEVFRNDIKKKLNKINSLKYSFEKNKANYQKINENNIEKVEGKSKRNIIYDYYRESAKRDAYVSNVKEAFDKLYKEEDIAKLVLEIENLTKLEKYKIREFYHEIIGRKNDKENFAKIIYEEIQNVNNMKELIEKVPDMSELKKSQVFYKYYLDKEELNDKNIKYAFCHFVEIEMSQLLKNYVYKRSNDKIKRIFEYQNLKKLIENKLLNKLDTYVRNCGKYNYYLQDGEIATSDFIARNRQNEAFLRNIIGVSSVAYFSLRNILETENENDITGRMRGKTVKNNKGEEKYVSGEVDKIYNENKKNEVKENLKMFYSYDFNMDNKNEIEDFFANIDEAISSIRHGIVHFNLELEGKDIFAFKNIAPSEISKKMFQNEINEKKLKLKIFRQLNSANVFRYLEKYKILNYLKRTRFEFVNKNIPFVPSFTKLYSRIDDLKNSLGIYWKTPKTNDDNKTKEIIDAQIYLLKNIYYGEFLNYFMSNNGNFFEISKEIIELNKNDFEDIQEKIPKEYLANIQSLYMINAGDTYIDFIQKIFLKGFMTYLANNGRLSLIYIGSDEETNTSLAEKKQEFDKFLKKYEQNNNIKIPYEINEFLREIKLGNILKYTERLNMFYLILKLLNHKELTNLKGSLEKYQSANKEEAFSDQLELINLLNLDNNRVTEDFELEADEIGKFLDFNGNKVKDNKELKKFDTNKIYFDGENIIKHRAFYNIKKYGMLNLLEKIADKAGYKISIEELKKYSNKKNEIEKNHKMQENLHRKYARPRKDEKFTDEDYESYKQAIENIEEYTHLKNKVEFNELNLLQGLLLRILHRLVGYTSIWERDLRFRLKGEFPENQYIEEIFNFENKKNVKYKGGQIVEKYIKFYKELHQNDEVKINKYSSANIKVLKQEKKDLYIANYIAAFNYIPHAEISLLEVLENLRKLLSYDRKLKNAVMKSVVDILKEYGFVATFKIGADKKIGIQTLESEKIVHLKNLKKKKLMTDRNSEELCKLVKIMFEYKME
+  selected_residue_range:
+    first:
+      number: 0
+      insertion_code: ''
+    last:
+      number: 1153
+      insertion_code: ''
+  seqres_mapping:
+    seqres_length: 1160
+    coordinate_length: 1125
+    unmodeled_or_unmapped_count: 35
+    aligned_coordinate_count: 1125
+    aligned_identity: 1.0
+    mapping_confidence: high
+  uniprot_ids:
+  - C7NBY4
+  missing_backbone_atoms: []
+  chain_breaks:
+  - left:
+      chain: A
+      residue_number: 97
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 103
+      insertion_code: ''
+    ca_distance_angstrom: 9.706941708190277
+  - left:
+      chain: A
+      residue_number: 311
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 316
+      insertion_code: ''
+    ca_distance_angstrom: 7.913227868738669
+  - left:
+      chain: A
+      residue_number: 629
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 643
+      insertion_code: ''
+    ca_distance_angstrom: 12.326595551764914
+  - left:
+      chain: A
+      residue_number: 667
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 675
+      insertion_code: ''
+    ca_distance_angstrom: 8.371994269218424
+  - left:
+      chain: B
+      residue_number: 92
+      insertion_code: ''
+    right:
+      chain: B
+      residue_number: 102
+      insertion_code: ''
+    ca_distance_angstrom: 16.61310803368449
+  - left:
+      chain: B
+      residue_number: 311
+      insertion_code: ''
+    right:
+      chain: B
+      residue_number: 317
+      insertion_code: ''
+    ca_distance_angstrom: 11.843212282063574
+  - left:
+      chain: B
+      residue_number: 632
+      insertion_code: ''
+    right:
+      chain: B
+      residue_number: 651
+      insertion_code: ''
+    ca_distance_angstrom: 28.10202605155546
+  - left:
+      chain: B
+      residue_number: 666
+      insertion_code: ''
+    right:
+      chain: B
+      residue_number: 675
+      insertion_code: ''
+    ca_distance_angstrom: 9.220508243168263
+  modified_residues:
+  - chain: A
+    residue_number: 1
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 40
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 44
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 72
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 254
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 264
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 300
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 406
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 443
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 451
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 502
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 609
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 663
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 690
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 761
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 867
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 903
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 1086
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 1132
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 1147
+    insertion_code: ''
+    residue_name: MSE
+  - chain: A
+    residue_number: 1152
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 1
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 40
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 44
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 72
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 254
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 264
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 300
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 406
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 443
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 451
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 502
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 609
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 663
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 690
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 761
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 867
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 903
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 1086
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 1132
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 1147
+    insertion_code: ''
+    residue_name: MSE
+  - chain: B
+    residue_number: 1152
+    insertion_code: ''
+    residue_name: MSE
+  alternate_location_atoms_discarded: 0
+  coordinates_are_finite: true
+  biological_assembly: 1
+  assembly_count: 2
+  state: crRNA_target_ternary
+  role: primary_benchmark
+  inclusion: true
+  inclusion_reason: primary preregistered experimental complex
+  files:
+    mmcif:
+      path: data/experimental_structures/5xwp.cif
+      size_bytes: 2432097
+      sha256: 5929c3305bad7b53d0b91b5ceb8c9aca249472b89f4223f72f12605d6ffbeced
+    pdb:
+      path: data/experimental_structures/5xwp.pdb
+      size_bytes: 1901151
+      sha256: 53211a1c7a585479260ecf992ce859ee261f39b847a1aae4e3b07a89d6b4b377
+    rcsb_entry_metadata:
+      path: data/experimental_structures/5xwp.entry.json
+      size_bytes: 10884
+      sha256: fc602a8cb5988a792145f079ea8c1f312ef68e0b2a671527691e738b6c3f55a6
+  symmetry_related_copies:
+    protein:
+    - B
+    crrna:
+    - E
+    target:
+    - F
+- pdb_id: 6E9E
+  title: EsCas13d-crRNA binary complex
+  publication:
+    title: Structural Basis for the RNA-Guided Ribonuclease Activity of CRISPR-Cas13d.
+    doi: 10.1016/j.cell.2018.09.001
+    year: 2018
+    venue: Cell
+  experimental_method: ELECTRON MICROSCOPY
+  resolution_angstrom: 3.4
+  protein_chains:
+  - A
+  rna_chains:
+  - B
+  target_rna_chains: []
+  crrna_chains:
+  - B
+  cas13_subtype: VI-D
+  selected_design_chain: A
+  selected_coordinate_sequence: TKSMAKAAGVKSVFAVGNTVYMTSFGRGNDAVLEQKIVDTSHEPLNIDDPAYQLNVVTMNGYSVTGHRGETVSAVTDNPLRRFNGRKPEQSVPTDMLCLKPTLEKKFFGKEFDDNIHIQLIYNILDIEKILAVYSTNAIYALNNMDFFMKRTTDETFDDFEKKKESTNSREKADFDAFEKFIGNYRLAYFADAFYVNKKAKNVLREDKELYSVLTLIGKLRHWCVHSEEGRAEFWLYKLDELKDDFKNVLDVVYNRPVEEINNRFIENNKVNIQILGSVYKNTDIAELVRSYYEFLITKKYKNMGFSIKKLRESMLEGKGYADKEYDSVRNKLYQMTDFILYTGYINEDSDRADDLVNTLRSSLKEDDKTTVYCKEADYLWKKYRESIREVADALDGDNIKKLSKSNIEIQEDKLRKCFISYADSVSEFTKLIYLLTRFLSGKEINDLVTTLINKFDNIRSFLEIMDELGLDRTFTAEYSFFEGSTKYLAELVELNSFVKSCSFDINAKRTMYRDALDILGIESDKTEEDIEKMIDNILQIKKNNGLRNFIASNVIDSNRFKYLVRYGNPKKIRETAKCKPAVRFVLNEIPDAQIERYYEACCPCSANKRREKLADMIAEIKFENFSDAGNYQKANVTSRTSEAEIKRKNQAIIRLYLTVMYIMLKNLVNVNARYVIAFHCVERDTKLYAESGLEVGNIEKNKTNLTMAVMGVKLENGIIKTEFDKSFAENAANRYLRNARWYKLILDNLKKSERAVVNEFRNTVCHLNAIRNININIKEIKEVENYFALYHYLIQKHLENRFADKKVERDTGDFISKLEEHKTYCKDFVKAYCTPFGYNLVRYKNLTIDGLFDKNYPGKDDS
+  selected_residue_range:
+    first:
+      number: 58
+      insertion_code: ''
+    last:
+      number: 950
+      insertion_code: ''
+  seqres_mapping:
+    seqres_length: 954
+    coordinate_length: 863
+    unmodeled_or_unmapped_count: 91
+    aligned_coordinate_count: 863
+    aligned_identity: 1.0
+    mapping_confidence: high
+  uniprot_ids:
+  - B0MS50
+  missing_backbone_atoms: []
+  chain_breaks:
+  - left:
+      chain: A
+      residue_number: 144
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 148
+      insertion_code: ''
+    ca_distance_angstrom: 10.190362205890835
+  - left:
+      chain: A
+      residue_number: 205
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 215
+      insertion_code: ''
+    ca_distance_angstrom: 13.97571264001969
+  - left:
+      chain: A
+      residue_number: 267
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 273
+      insertion_code: ''
+    ca_distance_angstrom: 7.930316899207825
+  - left:
+      chain: A
+      residue_number: 615
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 624
+      insertion_code: ''
+    ca_distance_angstrom: 11.35448363693443
+  - left:
+      chain: A
+      residue_number: 686
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 692
+      insertion_code: ''
+    ca_distance_angstrom: 13.247367306944275
+  modified_residues: []
+  alternate_location_atoms_discarded: 0
+  coordinates_are_finite: true
+  biological_assembly: 1
+  assembly_count: 1
+  state: crRNA_binary
+  role: matched_multistate_context
+  inclusion: true
+  inclusion_reason: same-study matched structural state
+  files:
+    mmcif:
+      path: data/experimental_structures/6e9e.cif
+      size_bytes: 902202
+      sha256: 7ab4f81b4d469ca1d6636d831727cfff267919a57a39ca454875cd965d88dc9e
+    pdb:
+      path: data/experimental_structures/6e9e.pdb
+      size_bytes: 695790
+      sha256: 2b58a44c4d8b9fddb10088608a8823337c1a47ed7b1475d4c9a970c4a724236a
+    rcsb_entry_metadata:
+      path: data/experimental_structures/6e9e.entry.json
+      size_bytes: 10882
+      sha256: 87ed3a3653d75d7c7d6a06216514aa1bbcea8563e6691184df6d8ae963c56d02
+- pdb_id: 5XWY
+  title: Electron cryo-microscopy structure of LbuCas13a-crRNA binary complex
+  publication:
+    title: The Molecular Architecture for RNA-Guided RNA Cleavage by Cas13a.
+    doi: 10.1016/j.cell.2017.06.050
+    year: 2017
+    venue: Cell
+  experimental_method: ELECTRON MICROSCOPY
+  resolution_angstrom: 3.2
+  protein_chains:
+  - A
+  rna_chains:
+  - B
+  target_rna_chains: []
+  crrna_chains:
+  - B
+  cas13_subtype: VI-A
+  selected_design_chain: A
+  selected_coordinate_sequence: MKVTKVGGISHKKYTSEGRLVKSESEENRTDERLSALLNMRLDMYINQKRIGKLKKFFSNKMVYLKDNTLSLKNGFAVLKKIYLNENSEELEVFRNDIKKKLNKINSLKYSFEKNKANYQKINENNIEKVEGKSKRNIIYDYYRESAKRDAYVSNVKEAFDKLYKEEDIAKLVLEIENLTKLEKYKIREFYHEIIGRKNDKENFAKIIYEEIQNVNNMKELIEKVPDMSELKKSQVFYKYYLDKEELNDKNIKYAFCHFVEIEMSQLLKNYVYKRLSNISNDKIKRIFEYQNLKKLIENKLLNKLDTYVRNCGKYNYYLQDGEIATSDFIARNRQNEAFLRNIIGVSSVAYFSLRNILETENENDITGRMRGKTVKNNKGEEKYVSGEVDKIYNENKKNEVKENLKMFYSYDFNMDNKNEIEDFFANIDEAISSIRHGIVHFNLELEGKDIFAFKNIAPSEISKKMFQNEINEKKLKLKIFRQLNSANVFRYLEKYKILNYLKRTRFEFVNKNIPFVPSFTKLYSRIDDLKNSLGIYWKTPKTNDDNKTKEIIDAQIYLLKNIYYGEFLNYFMSNNGNFFEISKEIIELNKNDKRNLKTGFYKLQKFEDIQEKIPKEYLANIQSLYMINAGNQDEEEKDTYIDFIQKIFLKGFMTYLANNGRLSLIYIGSDEETNTSLAEKKQEFDKFLKKYEQNNNIKIPYEINEFLREIKLGNILKYTERLNMFYLILKLLNHKELTNLKGSLEKYQSANKEEAFSDQLELINLLNLDNNRVTEDFELEADEIGKFLDFNGNKVKDNKELKKFDTNKIYFDGENIIKHRAFYNIKKYGMLNLLEKIADKAGYKISIEELKKYSNKKNEIEKNHKMQENLHRKYARPRKDEKFTDEDYESYKQAIENIEEYTHLKNKVEFNELNLLQGLLLRILHRLVGYTSIWERDLRFRLKGEFPENQYIEEIFNFENKKNVKYKGGQIVEKYIKFYKELHQNDEVKINKYSSANIKVLKQEKKDLYIANYIAAFNYIPHAEISLLEVLENLRKLLSYDRKLKNAVMKSVVDILKEYGFVATFKIGADKKIGIQTLESEKIVHLKNLKKKKLMTDRNSEELCKLVKIMFEYKME
+  selected_residue_range:
+    first:
+      number: 1
+      insertion_code: ''
+    last:
+      number: 1153
+      insertion_code: ''
+  seqres_mapping:
+    seqres_length: 1159
+    coordinate_length: 1117
+    unmodeled_or_unmapped_count: 42
+    aligned_coordinate_count: 1117
+    aligned_identity: 1.0
+    mapping_confidence: high
+  uniprot_ids:
+  - C7NBY4
+  missing_backbone_atoms: []
+  chain_breaks:
+  - left:
+      chain: A
+      residue_number: 46
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 57
+      insertion_code: ''
+    ca_distance_angstrom: 13.260789856825948
+  - left:
+      chain: A
+      residue_number: 85
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 110
+      insertion_code: ''
+    ca_distance_angstrom: 21.530548352216172
+  - left:
+      chain: A
+      residue_number: 120
+      insertion_code: ''
+    right:
+      chain: A
+      residue_number: 123
+      insertion_code: ''
+    ca_distance_angstrom: 9.869433237917672
+  modified_residues: []
+  alternate_location_atoms_discarded: 0
+  coordinates_are_finite: true
+  biological_assembly: 1
+  assembly_count: 1
+  state: crRNA_binary
+  role: matched_multistate_context
+  inclusion: true
+  inclusion_reason: same-study matched structural state
+  files:
+    mmcif:
+      path: data/experimental_structures/5xwy.cif
+      size_bytes: 1146911
+      sha256: 743f45b1cd4e9c201321d7bab3baa05123a13ebe4ef5a4ae361d118708a9bcae
+    pdb:
+      path: data/experimental_structures/5xwy.pdb
+      size_bytes: 889785
+      sha256: 3457e910799731c415233dec0f12658455fe4d975e8a39fd37a3cdefb8e8cd67
+    rcsb_entry_metadata:
+      path: data/experimental_structures/5xwy.entry.json
+      size_bytes: 10965
+      sha256: ba75eb0b561933dac1717a1fc430b122aef96589116930a9553253e31e4980bd
+related_structure_query:
+- pdb_id: 6IV8
+  subtype: VI-D
+  state: pre-crRNA_binary
+  query_status: identified_not_in_bootstrap_benchmark
+- pdb_id: 6IV9
+  subtype: VI-D
+  state: crRNA_binary
+  query_status: identified_not_in_bootstrap_benchmark
+- pdb_id: 6AAY
+  subtype: VI-B
+  state: crRNA_binary
+  query_status: identified_not_in_bootstrap_benchmark
+- pdb_id: 7OS0
+  subtype: VI-A
+  state: crRNA_binary
+  query_status: identified_not_in_bootstrap_benchmark
+- pdb_id: 7VTI
+  subtype: Cas13bt3
+  state: crRNA_binary
+  query_status: identified_not_in_bootstrap_benchmark
+- pdb_id: 7VTN
+  subtype: Cas13bt3
+  state: crRNA_target_ternary
+  query_status: identified_not_in_bootstrap_benchmark

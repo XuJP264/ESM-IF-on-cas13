@@ -8,6 +8,7 @@ from cas13_if.structures.parser import (
     protein_chain_sequence,
     structure_qc,
 )
+from cas13_if.structures.sasa import relative_solvent_accessibility
 
 PDB = Path("tests/fixtures/minimal_complex.pdb")
 
@@ -37,3 +38,9 @@ def test_rna_contact_annotation() -> None:
     assert contacts[0].direct_rna_contact
     assert contacts[0].contacted_rna_chains == ("R",)
     assert contacts[0].minimum_rna_distance == pytest.approx(1.526433752)
+
+
+def test_relative_sasa_maps_protein_residues() -> None:
+    values = relative_solvent_accessibility(PDB, chain_id="A", n_points=20)
+    assert len(values) == 2
+    assert all(0.0 <= value <= 1.0 for value in values.values())

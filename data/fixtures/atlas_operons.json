@@ -13,7 +13,9 @@
     "crispr": [
       {
         "crispr_repeat": "GAAACACCGUUGAAAGUG",
-        "crispr_spacers": ["ACGUACGU"]
+        "crispr_spacers": ["ACGUACGU"],
+        "orientation": "forward",
+        "orientation_source": "fixture_declared"
       }
     ],
     "cas": [
@@ -37,8 +39,18 @@
       "taxonomy": "d__Bacteria;p__Fixture"
     },
     "crispr": [
-      {"crispr_repeat": "GAAAAC", "crispr_spacers": ["AAAA"]},
-      {"crispr_repeat": "GUUUUC", "crispr_spacers": ["CCCC"]}
+      {
+        "crispr_repeat": "GAAAAC",
+        "crispr_spacers": ["AAAA"],
+        "orientation": "forward",
+        "orientation_source": "fixture_declared"
+      },
+      {
+        "crispr_repeat": "GUUUUC",
+        "crispr_spacers": ["CCCC"],
+        "orientation": "forward",
+        "orientation_source": "fixture_declared"
+      }
     ],
     "cas": [
       {
@@ -50,4 +62,3 @@
     ]
   }
 ]
-

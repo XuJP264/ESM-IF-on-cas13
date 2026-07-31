@@ -3,13 +3,22 @@ experiment:
   evidence_level_max: 2
   is_mock: false
   seed: 20260731
+model:
+  backend: esm_if1
+  checkpoint: models/esm_if1/esm_if1_gvp4_t16_142M_UR50.pt
+  environment: .tools/envs/esm_if1
+  device: auto
+  offline: true
 structures:
   pdb_ids: [6E9F, 5XWP]
+  manifest: data/manifests/experimental_structures.yaml
+  functional_manifest: data/manifests/cas13_functional_residues.yaml
   format: mmcif
   biological_assembly: 1
   require_backbone_atoms: [N, CA, C]
   rna_contact_cutoff_angstrom: 5.0
   second_shell_cutoff_angstrom: 8.0
+  buried_rsa_threshold: 0.2
   exclude_unresolved_design_positions: true
 backends:
   - esm_if1
@@ -21,9 +30,9 @@ backends:
 sampling:
   temperatures: [0.1, 0.5, 1.0]
   samples_per_condition: 4
+  methods: [unconstrained, catalytic_only_fixed, catalytic_rna_fixed]
   reject_homopolymer_length: 8
 statistics:
   bootstrap_replicates: 1000
   permutation_replicates: 1000
   independent_unit: scaffold
-

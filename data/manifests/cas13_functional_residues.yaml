@@ -1,0 +1,78 @@
+schema_version: "1.0"
+reviewed_at: 2026-07-31
+review_status: manual_literature_review
+is_mock: false
+policy: >-
+  These residues are literature-supported functional constraints. They are
+  mapped by author/PDB residue number and checked against the deposited
+  coordinate sequence. A regular-expression motif hit alone is never accepted
+  as a catalytic annotation.
+structures:
+  6E9F:
+    subtype: VI-D
+    protein: EsCas13d
+    chain: A
+    source:
+      title: Structural Basis for the RNA-Guided Ribonuclease Activity of CRISPR-Cas13d
+      doi: 10.1016/j.cell.2018.09.001
+      official_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6179368/
+    construct_note: >-
+      The deposited pre-cleavage ternary construct replaces all four predicted
+      catalytic HEPN residues with alanine. Design constraints must restore and
+      preserve the literature-supported biological residues; recovery against
+      the deposited construct sequence must be reported separately.
+    residues:
+      - pdb_residue_number: 295
+        biological_amino_acid: R
+        deposited_amino_acid: A
+        annotation: HEPN1 catalytic motif
+        final_class: hard_fixed
+      - pdb_residue_number: 300
+        biological_amino_acid: H
+        deposited_amino_acid: A
+        annotation: HEPN1 catalytic motif
+        final_class: hard_fixed
+      - pdb_residue_number: 849
+        biological_amino_acid: R
+        deposited_amino_acid: A
+        annotation: HEPN2 catalytic motif
+        final_class: hard_fixed
+      - pdb_residue_number: 854
+        biological_amino_acid: H
+        deposited_amino_acid: A
+        annotation: HEPN2 catalytic motif
+        final_class: hard_fixed
+  5XWP:
+    subtype: VI-A
+    protein: LbuCas13a
+    chain: A
+    source:
+      title: The Molecular Architecture for RNA-Guided RNA Cleavage by Cas13a
+      doi: 10.1016/j.cell.2017.06.050
+      official_url: https://www.rcsb.org/structure/5XWP
+    construct_note: >-
+      The first HEPN R/H pair is present in the selected coordinate chain,
+      while the deposited structure contains alanine at the second pair used
+      to prevent cleavage. Biological and deposited sequences are tracked
+      separately.
+    residues:
+      - pdb_residue_number: 472
+        biological_amino_acid: R
+        deposited_amino_acid: R
+        annotation: HEPN1 catalytic motif
+        final_class: hard_fixed
+      - pdb_residue_number: 477
+        biological_amino_acid: H
+        deposited_amino_acid: H
+        annotation: HEPN1 catalytic motif
+        final_class: hard_fixed
+      - pdb_residue_number: 1048
+        biological_amino_acid: R
+        deposited_amino_acid: A
+        annotation: HEPN2 catalytic motif
+        final_class: hard_fixed
+      - pdb_residue_number: 1053
+        biological_amino_acid: H
+        deposited_amino_acid: A
+        annotation: HEPN2 catalytic motif
+        final_class: hard_fixed

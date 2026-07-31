@@ -27,7 +27,7 @@ rule process_atlas:
     input:
         "data/raw/atlas/v1.0/crispr-cas-atlas-v1.0.json"
     output:
-        "data/processed/atlas/data_funnel.json"
+        "data/processed/atlas/v1.0/data_funnel.json"
     shell:
         "cas13-if build-dataset --config configs/atlas_processing.yaml"
 
@@ -36,7 +36,6 @@ rule benchmark_experimental:
         "data/experimental_structures/6e9f.cif",
         "data/experimental_structures/5xwp.cif"
     output:
-        "reports/tables/experimental_structure_benchmark.csv"
+        "reports/tables/experimental_structure_benchmark.json"
     shell:
         "cas13-if benchmark --config configs/benchmark_experimental.yaml"
-
